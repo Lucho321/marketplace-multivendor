@@ -1,0 +1,16 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+#btn_comprar_home {
+    border: none;
+}
+
+#btn_comprar_home:hover {
+    background: none;
+    font-size: 1.6rem!important;
+    text-shadow: cadetblue 3px 1px 5px;
+}
