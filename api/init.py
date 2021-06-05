@@ -10,11 +10,11 @@ mysql = MySQL()
 # MySQL configurations
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = ''
-app.config['MYSQL_DATABASE_DB'] = 'bd_marketplace_multivendor'
+app.config['MYSQL_DATABASE_DB'] = 'proyecto1'
 app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 
 mysql.init_app(app)
 
 import usuarios #importamos el archivo usuarios.py
-
+import tiendas 
 #Aquí se agregarían los demás archivos vía import en caso de tener otras API’s

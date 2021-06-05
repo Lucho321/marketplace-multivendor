@@ -8,3 +8,4 @@ pip install -U flask-cors
 
 py (archivo a correr).py
 *py test.py
+python run.py
