@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import Head from 'next/head';
 import { NavbarComponent } from './NavbarComponent';
+import { Footer } from './Footer';
 
 
 export const Layout = ({children}) => {
@@ -17,14 +18,14 @@ export const Layout = ({children}) => {
                 <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin></script>
             </Head>
                 <>
-                    <Container fluid>
+                    <Container fluid >
                         <Row style={{background:"#343A40"}}>
                             <Col>
                                 <NavbarComponent/>
                             </Col>
                         </Row>
                         {children}
-                        
+                        <Footer />
                     </Container>
                     
                 </>
