@@ -17,4 +17,6 @@ mysql.init_app(app)
 
 import usuarios #importamos el archivo usuarios.py
 import tiendas 
+import facturas
+import productos
 #Aquí se agregarían los demás archivos vía import en caso de tener otras API’s

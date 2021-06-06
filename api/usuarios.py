@@ -127,3 +127,64 @@ def delete_usuarios(id):
     finally:
         cur.close()
 
+@app.route('/_login/')#para obtener todos los usuarios
+def get_usuarios(id=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        cur.execute("SELECT u.nombre_usuario, u.contrasena, u.estado FROM tbl_usuarios u")
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = {
+            'nombre_usuario':result[0], 
+            'contrasena':result[1], 
+            'estado':result[3]}
+
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+
+
+@app.route('/login', methods=['POST']) #Sólo podrá ser accedida vía POST
+def login():
+    try:
+        _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
+        _nombre_usuario = _json['nombre_usuario']
+        _contrasena = _json['contrasena'] 
+        _contrasena = _contrasena.encode("utf-8")
+        _contrasena = bcrypt.hashpw(_contrasena, bcrypt.gensalt())
+
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        cur.execute("SELECT u.nombre_usuario, u.contrasena, u.estado FROM tbl_usuarios u")
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        
+        
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            if result[0]==_nombre_usuario and bcrypt.check_password_hash(result[1], _contrasena) 
+
+
+        
+        return jsonify(json_items) 
+        
+
+
+
+
+        res = jsonify('Autenticado.') 
+        res.status_code = 200
+        return res
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()        

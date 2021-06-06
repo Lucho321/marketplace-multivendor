@@ -1,6 +1,6 @@
 ﻿/*
-Created: 2/6/2021
-Modified: 4/6/2021
+Created: 6/2/2021
+Modified: 6/4/2021
 Model: MySQL 8.0
 Database: MySQL 8.0
 */
@@ -49,15 +49,11 @@ CREATE TABLE `tbl_compradores`
 (
   `id_comprador` Bigint NOT NULL AUTO_INCREMENT,
   `id_usuario` Bigint,
-  `id_tienda` Bigint,
   PRIMARY KEY (`id_comprador`)
 )
 ;
 
 CREATE INDEX `IX_Relationship3` ON `tbl_compradores` (`id_usuario`)
-;
-
-CREATE INDEX `IX_Relationship26` ON `tbl_compradores` (`id_tienda`)
 ;
 
 -- Table tbl_productos
@@ -273,6 +269,18 @@ CREATE TABLE `tbl_factura_producto`
 ALTER TABLE `tbl_factura_producto` ADD PRIMARY KEY (`id_factura`, `id_producto`)
 ;
 
+-- Table tbl_compradores_tiendas
+
+CREATE TABLE `tbl_compradores_tiendas`
+(
+  `id_comprador` Bigint NOT NULL,
+  `id_tienda` Bigint NOT NULL
+)
+;
+
+ALTER TABLE `tbl_compradores_tiendas` ADD PRIMARY KEY (`id_comprador`, `id_tienda`)
+;
+
 -- Create foreign keys (relationships) section -------------------------------------------------
 
 ALTER TABLE `tbl_productos` ADD CONSTRAINT `Relationship1` FOREIGN KEY (`id_tienda`) REFERENCES `tbl_tiendas` (`id_tienda`) ON DELETE RESTRICT ON UPDATE RESTRICT
@@ -335,6 +343,9 @@ ALTER TABLE `tbl_factura_producto` ADD CONSTRAINT `Relationship24` FOREIGN KEY (
 ALTER TABLE `tbl_comentarios` ADD CONSTRAINT `Relationship25` FOREIGN KEY (`id_producto`) REFERENCES `tbl_productos` (`id_producto`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE `tbl_compradores` ADD CONSTRAINT `Relationship26` FOREIGN KEY (`id_tienda`) REFERENCES `tbl_tiendas` (`id_tienda`) ON DELETE RESTRICT ON UPDATE RESTRICT
+ALTER TABLE `tbl_compradores_tiendas` ADD CONSTRAINT `Relationship27` FOREIGN KEY (`id_comprador`) REFERENCES `tbl_compradores` (`id_comprador`) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE `tbl_compradores_tiendas` ADD CONSTRAINT `Relationship28` FOREIGN KEY (`id_tienda`) REFERENCES `tbl_tiendas` (`id_tienda`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
