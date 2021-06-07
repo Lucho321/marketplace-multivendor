@@ -27,6 +27,31 @@ def get_tarjetas(id=None):
     finally:
         cur.close()
 
+@app.route('/get_tarjetasByComprador/')
+@app.route('/get_tarjetasByComprador/<int:id>')
+def get_tarjetasByComprador(id=None):
+    try:
+        cur = mysql.connect().cursor()
+        if id == None:
+            cur.execute("SELECT * from tbl_tarjetas")
+        else:
+            cur.execute("SELECT * from tbl_tarjetas WHERE id_comprador=%s",(id,))
+
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            content = { 'id_tarjeta':result[0], 'nombre_propietario':result[1], 'numero_tarjeta':result[2], 'codigo_cvv':result[3], 'fecha_vence':result[4], 'saldo': result[5], 'id_comprador': [6]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
 @app.route('/insert_tarjetas', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_tarjetas():
     try:

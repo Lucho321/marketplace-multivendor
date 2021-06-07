@@ -26,6 +26,30 @@ def get_direcciones(id=None):
     finally:
         cur.close()
 
+@app.route('/get_direccionesByComprador/')
+@app.route('/get_direccionesByComprador/<int:id>')
+def get_direccionesByComprador(id=None):
+    try:
+        cur = mysql.connect().cursor()
+        if id == None:
+            cur.execute("SELECT * from tbl_direcciones_envios")
+        else:
+            cur.execute("SELECT * from tbl_direcciones_envios d WHERE id_comprador=%s",(id,))
+
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            content = { 'id_direccion':result[0], 'pais':result[1], 'provincia':result[2], 'numero_casillero':result[3], 'codigo_postal':result[4], 'observaciones':result[5], 'id_comprador': result[6]}
+            json_items.append(content)
+            content = {}
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
 @app.route('/insert_direcciones', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_direcciones():
     try:
