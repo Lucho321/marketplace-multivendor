@@ -1,6 +1,7 @@
 import React from 'react'
 import { Button, Col, Row, InputGroup, FormControl, Card } from 'react-bootstrap'
 import Image from 'next/image'
+import { ProductCard } from './Productos/ProductCard'
 
 export const HomeComponent = () => {
     return (
@@ -27,57 +28,28 @@ export const HomeComponent = () => {
             </Row>
             <Row className="pr-4 pl-4 pb-4 mr-2 ml-2" style={{background:"#dcf7f3"}}>
                 <Col md={2} className="p-2">
-                    <Card style={{border:"none"}}>
-                        <Card.Img variant="top" src="/images/yo.jpg" style={{maxHeight: "200px"}}/>
-                        <Card.Body>
-                        <Card.Text>
-                            <p><strong>Chocolate blanco</strong></p>
-                            <p><strong>Precio: </strong>1500</p>
-                        </Card.Text>
-                        </Card.Body>
-                    </Card>
+                    <ProductCard producto="hola" />
                 </Col>
                 <Col md={2} className="p-2">
-                    <Card style={{border:"none"}}>
-                        <Card.Img variant="top" src="/images/yo.jpg" style={{maxHeight: "200px"}}/>
-                        <Card.Body>
-                        <Card.Text>
-                            <p><strong>Chocolate blanco</strong></p>
-                            <p><strong>Precio: </strong>1500</p>
-                        </Card.Text>
-                        </Card.Body>
-                    </Card>
+                    <ProductCard producto="hola" />
                 </Col>
                 <Col md={2} className="p-2">
-                    <Card style={{border:"none"}}>
-                        <Card.Img variant="top" src="/images/yo.jpg" style={{maxHeight: "200px"}}/>
-                        <Card.Body>
-                        <Card.Text>
-                            <p><strong>Chocolate blanco</strong></p>
-                            <p><strong>Precio: </strong>1500</p>
-                        </Card.Text>
-                        </Card.Body>
-                    </Card>
+                    <ProductCard producto="hola" />
                 </Col>
                 <Col md={2} className="p-2">
-                    <Card style={{border:"none"}}>
-                        <Card.Img variant="top" src="/images/yo.jpg" style={{maxHeight: "200px"}}/>
-                        <Card.Body>
-                        <Card.Text>
-                            <p><strong>Chocolate blanco</strong></p>
-                            <p><strong>Precio: </strong>1500</p>
-                        </Card.Text>
-                        </Card.Body>
-                    </Card>
+                    <ProductCard producto="hola" />
                 </Col>
                 <Col md={4} className="text-center">
                     <img src="/images/image1.png" width="80%" />
                 </Col>
             </Row>
 
-            <Row>
+            <Row className="mr-2 ml-2 mt-4 mb-4">
+                <Col md={12}className="text-left mt-4 mb-3">
+                    <h4>Explora y aprovecha las grandes promociones de nuestras tiendas!!!</h4>
+                </Col>
                 <Col md={12} className="text-center">
-                    <InputGroup className="mb-4 mt-4" style={{width:"70%", margin:"auto"}}>
+                    <InputGroup className="" style={{width:"100%", margin:"auto"}}>
                         <FormControl
                             placeholder="Escribe aquí el nombre de tu tienda favorita"
                             aria-label="Recipient's username"
@@ -89,152 +61,55 @@ export const HomeComponent = () => {
                     </InputGroup>
                 </Col>
             </Row>
-            <Row>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
+            <Row className="p-4 mr-2 ml-2" style={{background:"#dcf7f3"}}>
+                <Col md={3} className="p-2" style={{justifyContent:"center"}}>
+                    <Card style={{ width: '80%', margin:"auto" }} >
+                        <Card.Img variant="top" src="/images/yo.jpg" style={{height:"150px"}}/>
                         <Card.Body>
                             <Card.Title>Nombre tienda</Card.Title>
                             <Card.Text>
                                 Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
                             </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
+                            <Button variant="outline-info" block>Ver tienda</Button>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
+                <Col md={3} className="p-2" >
+                    <Card style={{ width: '80%', margin:"auto" }} >
+                        <Card.Img variant="top" src="/images/yo.jpg" style={{height:"150px"}}/>
                         <Card.Body>
                             <Card.Title>Nombre tienda</Card.Title>
                             <Card.Text>
                                 Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
                             </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
+                            <Button variant="outline-info" block>Ver tienda</Button>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
+                <Col md={3} className="p-2" style={{justifyContent:"center"}}>
+                    <Card style={{ width: '80%', margin:"auto" }} >
+                        <Card.Img variant="top" src="/images/yo.jpg" style={{height:"150px"}} />
                         <Card.Body>
                             <Card.Title>Nombre tienda</Card.Title>
                             <Card.Text>
                                 Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
                             </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
+                            <Button variant="outline-info" block>Ver tienda</Button>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
+                <Col md={3} className="p-2" style={{justifyContent:"center"}}>
+                    <Card style={{ width: '80%', margin:"auto" }} >
+                        <Card.Img variant="top" src="/images/yo.jpg" style={{height:"150px"}} />
                         <Card.Body>
                             <Card.Title>Nombre tienda</Card.Title>
                             <Card.Text>
                                 Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
                             </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
+                            <Button variant="outline-info" block>Ver tienda</Button>
                         </Card.Body>
                     </Card>
                 </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                <Col md={2} className="p-2">
-                    <Card style={{ width: '100%' }} >
-                        <Card.Img variant="top" src="holder.js/100px180" />
-                        <Card.Body>
-                            <Card.Title>Nombre tienda</Card.Title>
-                            <Card.Text>
-                                Descripcion de la tienda .adasdasdkadklakdlakdlakdakdlkaldk
-                            </Card.Text>
-                            <Button variant="primary">Go somewhere</Button>
-                        </Card.Body>
-                    </Card>
-                </Col>
-                
             </Row>
         </>
 

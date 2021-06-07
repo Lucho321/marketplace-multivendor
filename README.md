@@ -5,6 +5,7 @@ py -3.7 -m venv myenv
 myenv\Scripts\activate
 pip install Flask-mysql
 pip install -U flask-cors
+pip install bcrypt
 
 py (archivo a correr).py
 *py test.py

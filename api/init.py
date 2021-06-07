@@ -20,4 +20,6 @@ import tiendas
 import compradores
 import tarjetas
 import direcciones_envios
+import facturas
+import productos
 #Aquí se agregarían los demás archivos vía import en caso de tener otras API’s
