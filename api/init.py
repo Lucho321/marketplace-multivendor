@@ -15,5 +15,5 @@ app.config['MYSQL_DATABASE_HOST'] = 'localhost'
 
 mysql.init_app(app)
 
-import usuarios, tiendas, compradores, tarjetas, direcciones_envios, facturas, productos, carritos
+import usuarios, tiendas, compradores, tarjetas, direcciones_envios, facturas, productos, carritos, redes_sociales, productos_fotos, comentarios
 #Aquí se agregarían los demás archivos vía import en caso de tener otras API’s
