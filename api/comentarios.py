@@ -16,12 +16,14 @@ def get_comentarios(id=None):
         json_items = []
         content = {}
         for result in rows:
-            content = { 'id_comentario':result[0], 'comentario':result[1], 'padre':result[2], 'nivel':result[3], 'id_producto':result[4] }
+            content = { 'id_comentario':result[0], 'comentario':result[1], 'nivel':result[2], 'id_producto':result[3], 'padre':result[4] }
             json_items.append(content)
             content = {}
         
+        print(result)
         return jsonify(json_items) 
 
+        
     except Exception as e:
         print(e)
     finally:
@@ -61,7 +63,7 @@ def insert_comentarios():
         _nivel = _json['nivel']
         _id_producto = _json['id_producto']
 
-        query = "INSERT INTO tbl_comentarios(comentario, padre, nivel, fecha_vence, id_producto) VALUES(%s, %s, %s, %s)"
+        query = "INSERT INTO tbl_comentarios(comentario, padre, nivel, id_producto) VALUES(%s, %s, %s, %s)"
         data = (_comentario, _padre, _nivel, _id_producto)
         conn = mysql.connect()
         cur = conn.cursor()
