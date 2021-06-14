@@ -1,6 +1,6 @@
 import React from 'react'
 
-export const MyPerfil = () => {
+export const PerfilTienda = () => {
     return (
         <div>
             

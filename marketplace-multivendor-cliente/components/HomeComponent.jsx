@@ -21,12 +21,12 @@ export const HomeComponent = () => {
                     <Button id="btn_comprar_home" variant="outline-info" style={{color:"white", fontSize:"1.5rem", marginRight:"20%"}}>COMIENZA A COMPRAR</Button>
                 </Col>
             </Row>
-            <Row className="p-4 mt-4 mr-2 ml-2" style={{background:"#dcf7f3"}}>
+            <Row className="p-4 mt-4 mr-2 ml-2" style={{background:"#eee"}}>
                 <Col md={12} >
                     <h4>Productos más vendidos<small>  top+4</small></h4>
                 </Col>
             </Row>
-            <Row className="pr-4 pl-4 pb-4 mr-2 ml-2" style={{background:"#dcf7f3"}}>
+            <Row className="pr-4 pl-4 pb-4 mr-2 ml-2" style={{background:"#eee"}}>
                 <Col md={2} className="p-2">
                     <ProductCard producto="hola" />
                 </Col>
@@ -61,7 +61,7 @@ export const HomeComponent = () => {
                     </InputGroup>
                 </Col>
             </Row>
-            <Row className="p-4 mr-2 ml-2" style={{background:"#dcf7f3"}}>
+            <Row className="p-4 mr-2 ml-2 mb-5" style={{background:"#eee"}}>
                 <Col md={3} className="p-2" style={{justifyContent:"center"}}>
                     <Card style={{ width: '80%', margin:"auto" }} >
                         <Card.Img variant="top" src="/images/yo.jpg" style={{height:"150px"}}/>
