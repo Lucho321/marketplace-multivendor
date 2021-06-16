@@ -1,25 +1,31 @@
 import React from 'react'
 import { Button, Col, Row, Image, InputGroup, FormControl, Card } from 'react-bootstrap'
+import Link from 'next/link'
 
 export const ProductoCard = () => {
     return (
-        <div style={{width:"80%", borderBottom:"1px solid grey", paddingBottom:"1rem", marginBottom:"1.5rem"}}>
+        <div  style={{width:"80%", paddingBottom:"1.5rem", marginBottom:"1.5rem"}}>
             <Row>
                 <Col>
-                    <Image src="/images/yo.jpg" height="180" width="100%" />
+                    <Image src="/images/files/spacejam3.jpg" height="180" width="100%" />
                 </Col>
             </Row>
             <Row>
                 <Col md={12} className="ml-1">
-                    <strong>Nombre producto</strong>
+                    <Link href="/producto/1">
+                        <a className="a_productocard">
+                            <strong>Nike SpaceJam Lebron</strong>
+                        </a>
+                    </Link>
+                    
                 </Col>
                 <Col md={12} className="ml-1" style={{fontSize:"0.8rem"}}>
-                    Descripcion del producto
+                    Fabolusas tennis Nike edición especial de la película SpaceJam protagonizada por el increíble Lebrom James
                 </Col>
             </Row>
             <Row className="mt-2">
                 <Col className="ml-1" style={{color:"#247d6d"}}>
-                    $1299.99
+                    $299.99
                 </Col>
                 <Col className="mr-2 mt-1 text-right">
                     <img className="d-inline-block align-top" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="15"/>
@@ -28,7 +34,7 @@ export const ProductoCard = () => {
             </Row>
             <Row className="mt-2">
                 <Col md={12}>
-                    <Button variant="outline-info" block>Ver producto</Button>
+                    <Button variant="outline-info" block>Comprar</Button>
                 </Col>
             </Row>
         </div>

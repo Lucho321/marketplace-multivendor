@@ -35,3 +35,12 @@ body {
 .a_listadeseos_card {
     cursor: pointer;
 }
+
+.a_productocard {
+    cursor: pointer;
+    color: #212529;
+}
+
+.a_productocard:hover {
+    color: #212529;
+}

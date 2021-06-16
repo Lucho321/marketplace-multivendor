@@ -52,32 +52,32 @@ export const ProductosComprador = () => {
                     </Row>
                 </Col>
             </Row>
-            <Row className="mb-5">
-                <Col md={3} >
+            <Row className="mb-5 pt-4">
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
-                <Col md={3} >
+                <Col md={3} className="d-flex justify-content-center">
                     <ProductoCard />
                 </Col>
             </Row>

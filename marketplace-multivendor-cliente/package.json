@@ -1,18 +1,22 @@
 {
-  "name": "marketplace-multivendor-cliente",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
-  "dependencies": {
-    "bootstrap": "^4.6.0",
-    "next": "10.2.3",
-    "react": "17.0.2",
-    "react-bootstrap": "^1.6.0",
-    "react-dom": "17.0.2",
-    "react-select": "^4.3.1"
-  }
+    "name": "marketplace-multivendor-cliente",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start"
+    },
+    "dependencies": {
+        "@material-ui/core": "latest",
+        "bootstrap": "^4.6.0",
+        "formidable": "^1.2.2",
+        "next": "10.2.3",
+        "react": "17.0.2",
+        "react-bootstrap": "^1.6.0",
+        "react-dom": "17.0.2",
+        "react-rating": "^2.0.5",
+        "react-rating-stars-component": "^2.2.0",
+        "react-select": "^4.3.1"
+    }
 }
