@@ -14,3 +14,33 @@ body {
     font-size: 1.6rem!important;
     text-shadow: cadetblue 3px 1px 5px;
 }
+
+.btn_perfil_comprador {
+    padding: 2%;
+    cursor: pointer;
+    width: 100%;
+    color: black;
+}
+
+.btn_perfil_comprador:hover {
+    background-color: #bdeee7;
+    text-decoration: none;
+    outline: none;
+}
+
+.btn_perfil_comprador-active {
+    background-color: #b3e7df;
+}
+
+.a_listadeseos_card {
+    cursor: pointer;
+}
+
+.a_productocard {
+    cursor: pointer;
+    color: #212529;
+}
+
+.a_productocard:hover {
+    color: #212529;
+}

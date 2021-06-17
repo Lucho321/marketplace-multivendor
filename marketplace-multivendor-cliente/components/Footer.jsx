@@ -3,7 +3,7 @@ import { Col, Row } from 'react-bootstrap'
 
 export const Footer = () => {
     return (
-        <Row className="bg-dark mt-5 p-4" style={{color:"white"}}>
+        <Row className="bg-dark p-4" style={{color:"white"}}>
             <Col md={4} className="" style={{display:"flex", alignItems:"center"}}>
                 <img className="d-inline-block align-top" src="/images/markets.png" alt="logo" width="50"/>{' '}
                 <h2 className="pt-2">LUJEPA Market</h2>
