@@ -51,6 +51,57 @@ def get_productosByTienda(id=None): #funcion que sera invoada por la ruta anteri
         print(e)
     finally:
         cur.close()
+
+@app.route('/get_productosByTiendaOrNombre/')#para obtener todos los productos
+@app.route('/get_productosByTiendaOrNombre/<string:cadena>') #por id
+def get_productosByTiendaOrNombre(cadena=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if id == None:
+            cur.execute("SELECT * FROM tbl_productos t ORDER BY t.id_producto DESC")
+        else:
+            nom = '%'+cadena+'%'
+            cur.execute("SELECT p.*, t.id_tienda, t.id_usuario, u.id_usuario, u.nombre_usuario, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON p.id_tienda = t.id_tienda JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario WHERE p.nombre_producto like %s OR u.nombre_usuario like %s OR u.nombre_real like %s", (nom, nom, nom))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_producto':result[0], 'nombre_producto':result[1], 'descripcion':result[2], 'cantidad_disponible':result[3], 'fecha_publicacion':result[4], 'ubicacion':result[5], 'precio':result[6], 'tiempo_envio':result[7], 'costo_envio':result[8], 'calificacion':result[9], 'id_tienda':result[10]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+@app.route('/get_productosByCategoria/')#para obtener todos los productos
+@app.route('/get_productosByCategoria/<string:categoria>') #por id
+def get_productosByCategoria(categoria=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if id == None:
+            cur.execute("SELECT * FROM tbl_productos t ORDER BY t.id_producto DESC")
+        else:
+            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_categorias c WHERE c.nombre=%s ORDER BY t.id_producto DESC",(categoria,))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_producto':result[0], 'nombre_producto':result[1], 'descripcion':result[2], 'cantidad_disponible':result[3], 'fecha_publicacion':result[4], 'ubicacion':result[5], 'precio':result[6], 'tiempo_envio':result[7], 'costo_envio':result[8], 'calificacion':result[9], 'id_tienda':result[10]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
         
 
 @app.route('/insert_productos', methods=['POST']) #Sólo podrá ser accedida vía POST
