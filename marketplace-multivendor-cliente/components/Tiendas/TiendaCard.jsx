@@ -15,7 +15,7 @@ export const TiendaCard = () => {
                         <Col md={9}>
                             <Row>
                                 <Col md={10} style={{fontSize:"0.8rem"}}>
-                                    <Link href="/producto/1">
+                                    <Link href="/tienda/1">
                                         <a className="a_productocard">
                                             <h4><strong>Nike</strong></h4>
                                         </a>

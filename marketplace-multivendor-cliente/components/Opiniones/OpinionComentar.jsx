@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Col, Row, Form,  } from 'react-bootstrap'
 
-export const ProductoComentar = () => {
+export const OpinionComentar = () => {
     return (
         <Row>
             <Col md={12}>
