@@ -1,6 +1,6 @@
 ﻿/*
 Created: 6/2/2021
-Modified: 6/4/2021
+Modified: 6/7/2021
 Model: MySQL 8.0
 Database: MySQL 8.0
 */
@@ -14,7 +14,7 @@ CREATE TABLE `tbl_usuarios`
   `id_usuario` Bigint NOT NULL AUTO_INCREMENT,
   `cedula` Varchar(20) NOT NULL,
   `nombre_usuario` Varchar(20) NOT NULL,
-  `contrasena` Varchar(64) NOT NULL,
+  `contrasena` Varchar(150) NOT NULL,
   `nombre_real` Varchar(64) NOT NULL,
   `pais` Varchar(20) NOT NULL,
   `direccion` Varchar(64) NOT NULL,
@@ -84,14 +84,17 @@ CREATE TABLE `tbl_comentarios`
 (
   `id_comentario` Bigint NOT NULL AUTO_INCREMENT,
   `comentario` Varchar(200) NOT NULL,
-  `padre` Varchar(200),
   `nivel` Int,
   `id_producto` Bigint,
+  `padre` Bigint,
   PRIMARY KEY (`id_comentario`)
 )
 ;
 
 CREATE INDEX `IX_Relationship25` ON `tbl_comentarios` (`id_producto`)
+;
+
+CREATE INDEX `IX_Relationship29` ON `tbl_comentarios` (`padre`)
 ;
 
 -- Table tbl_categorias
@@ -127,16 +130,16 @@ CREATE TABLE `tbl_reportes_compras`
   `id_reportes_compras` Bigint NOT NULL AUTO_INCREMENT,
   `url_factura` Varchar(100) NOT NULL,
   `descripcion` Varchar(250),
-  `id_usuario` Bigint,
   `id_tienda` Bigint,
+  `id_comprador` Bigint,
   PRIMARY KEY (`id_reportes_compras`)
 )
 ;
 
-CREATE INDEX `IX_Relationship18` ON `tbl_reportes_compras` (`id_usuario`)
+CREATE INDEX `IX_Relationship19` ON `tbl_reportes_compras` (`id_tienda`)
 ;
 
-CREATE INDEX `IX_Relationship19` ON `tbl_reportes_compras` (`id_tienda`)
+CREATE INDEX `IX_Relationship31` ON `tbl_reportes_compras` (`id_comprador`)
 ;
 
 -- Table tbl_facturas
@@ -174,8 +177,8 @@ CREATE INDEX `IX_Relationship7` ON `tbl_carrito_deseos` (`id_comprador`)
 CREATE TABLE `tbl_redes_sociales`
 (
   `id_red_social` Bigint NOT NULL AUTO_INCREMENT,
-  `nombre` Varchar(20) NOT NULL,
-  `nombre_usuario` Varchar(64) NOT NULL,
+  `tipo` Varchar(10) NOT NULL,
+  `valor` Varchar(20) NOT NULL,
   `url_perfil` Varchar(100) NOT NULL,
   `id_usuario` Bigint,
   PRIMARY KEY (`id_red_social`)
@@ -226,7 +229,8 @@ CREATE INDEX `IX_Relationship5` ON `tbl_direcciones_envios` (`id_comprador`)
 CREATE TABLE `tbl_productos_carrito`
 (
   `id_carrito_deseo` Bigint NOT NULL,
-  `id_producto` Bigint NOT NULL
+  `id_producto` Bigint NOT NULL,
+  `cantidad` Int NOT NULL
 )
 ;
 
@@ -319,9 +323,6 @@ ALTER TABLE `tbl_productos_categorias` ADD CONSTRAINT `Relationship16` FOREIGN K
 ALTER TABLE `tbl_productos_categorias` ADD CONSTRAINT `Relationship17` FOREIGN KEY (`id_categoria`) REFERENCES `tbl_categorias` (`id_categoria`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
-ALTER TABLE `tbl_reportes_compras` ADD CONSTRAINT `Relationship18` FOREIGN KEY (`id_usuario`) REFERENCES `tbl_usuarios` (`id_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT
-;
-
 ALTER TABLE `tbl_reportes_compras` ADD CONSTRAINT `Relationship19` FOREIGN KEY (`id_tienda`) REFERENCES `tbl_tiendas` (`id_tienda`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
@@ -347,5 +348,11 @@ ALTER TABLE `tbl_compradores_tiendas` ADD CONSTRAINT `Relationship27` FOREIGN KE
 ;
 
 ALTER TABLE `tbl_compradores_tiendas` ADD CONSTRAINT `Relationship28` FOREIGN KEY (`id_tienda`) REFERENCES `tbl_tiendas` (`id_tienda`) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE `tbl_comentarios` ADD CONSTRAINT `Relationship29` FOREIGN KEY (`padre`) REFERENCES `tbl_comentarios` (`id_comentario`) ON DELETE RESTRICT ON UPDATE RESTRICT
+;
+
+ALTER TABLE `tbl_reportes_compras` ADD CONSTRAINT `Relationship31` FOREIGN KEY (`id_comprador`) REFERENCES `tbl_compradores` (`id_comprador`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ;
 
