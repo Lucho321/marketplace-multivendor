@@ -102,7 +102,81 @@ def get_productosByCategoria(categoria=None): #funcion que sera invoada por la r
         print(e)
     finally:
         cur.close()
+
+@app.route('/get_productosByCarrito/')#para obtener todos los productos
+@app.route('/get_productosByCarrito/<int:id>') #por id
+def get_productosByCarrito(id=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if id == None:
+            cur.execute("SELECT * FROM tbl_productos")
+        else:
+            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_productos_carrito pc ON t.id_producto = pc.id_producto JOIN tbl_carrito_deseos c ON pc.id_carrito_deseo = c.id_carrito_deseo WHERE t.id_producto = %s",(id,))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_producto':result[0], 'nombre_producto':result[1], 'descripcion':result[2], 'cantidad_disponible':result[3], 'fecha_publicacion':result[4], 'ubicacion':result[5], 'precio':result[6], 'tiempo_envio':result[7], 'costo_envio':result[8], 'calificacion':result[9], 'id_tienda':result[10]}
+            json_items.append(content)
+            content = {}
         
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+@app.route('/get_productosByFactura/')#para obtener todos los productos
+@app.route('/get_productosByFactura/<int:id>') #por id
+def get_productosByFactura(id=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if id == None:
+            cur.execute("SELECT * FROM tbl_productos")
+        else:
+            cur.execute("SELECT * FROM tbl_productos p JOIN tbl_factura_producto fp ON p.id_producto = fp.id_producto WHERE fp.id_factura = %s",(id,))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_producto':result[0], 'nombre_producto':result[1], 'descripcion':result[2], 'cantidad_disponible':result[3], 'fecha_publicacion':result[4], 'ubicacion':result[5], 'precio':result[6], 'tiempo_envio':result[7], 'costo_envio':result[8], 'calificacion':result[9], 'id_tienda':result[10]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+        
+@app.route('/get_productosByReporte/')#para obtener todos los productos
+@app.route('/get_productosByReporte/<int:id>') #por id
+def get_productosByReporte(id=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if id == None:
+            cur.execute("SELECT * FROM tbl_productos")
+        else:
+            cur.execute("SELECT * FROM tbl_productos p JOIN tbl_productos_reportes pr ON p.id_producto = pr.id_producto WHERE pr.id_reportes_compras = %s",(id,))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_producto':result[0], 'nombre_producto':result[1], 'descripcion':result[2], 'cantidad_disponible':result[3], 'fecha_publicacion':result[4], 'ubicacion':result[5], 'precio':result[6], 'tiempo_envio':result[7], 'costo_envio':result[8], 'calificacion':result[9], 'id_tienda':result[10]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
 
 @app.route('/insert_productos', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_productos():

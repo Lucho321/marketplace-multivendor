@@ -1,6 +1,6 @@
 ﻿/*
 Created: 6/2/2021
-Modified: 6/7/2021
+Modified: 6/13/2021
 Model: MySQL 8.0
 Database: MySQL 8.0
 */
@@ -266,7 +266,8 @@ ALTER TABLE `tbl_productos_reportes` ADD PRIMARY KEY (`id_reportes_compras`, `id
 CREATE TABLE `tbl_factura_producto`
 (
   `id_factura` Bigint NOT NULL,
-  `id_producto` Bigint NOT NULL
+  `id_producto` Bigint NOT NULL,
+  `cantidad_producto` Int
 )
 ;
 

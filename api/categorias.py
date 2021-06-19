@@ -20,7 +20,32 @@ def get_categorias(id=None):
             json_items.append(content)
             content = {}
         
-        print(result)
+        return jsonify(json_items) 
+
+        
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+@app.route('/get_categoriasByProducto/')
+@app.route('/get_categoriasByProducto/<int:id>')
+def get_categoriasByProducto(id=None):
+    try:
+        cur = mysql.connect().cursor()
+        if id == None:
+            cur.execute("SELECT * from tbl_categorias")
+        else:
+            cur.execute("SELECT * from tbl_categorias c JOIN tbl_productos_categorias pc ON c.id_categoria = pc.id_categoria WHERE pc.id_producto=%s",(id,))
+
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            content = { 'id_categoria':result[0], 'nombre':result[1], 'descripcion':result[2] }
+            json_items.append(content)
+            content = {}
+        
         return jsonify(json_items) 
 
         

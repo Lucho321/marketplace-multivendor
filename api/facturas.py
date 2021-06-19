@@ -8,9 +8,9 @@ def get_facturas(id=None): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if id == None:
-            cur.execute("SELECT * FROM tbl_facturas t ORDER BY t.id_factura DESC")
+            cur.execute("SELECT * FROM tbl_facturas")
         else:
-            cur.execute("SELECT * FROM tbl_facturas t WHERE id=%s ORDER BY t.id_factura DESC",(id,))
+            cur.execute("SELECT * FROM tbl_facturas t WHERE id_factura=%s ",(id,))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []
@@ -27,6 +27,55 @@ def get_facturas(id=None): #funcion que sera invoada por la ruta anterior
     finally:
         cur.close()
         
+@app.route('/get_facturasByTienda/')#para obtener todos los facturas
+@app.route('/get_facturasByTienda/<int:id>') #por id
+def get_facturasByTienda(id=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if id == None:
+            cur.execute("SELECT * FROM tbl_facturas")
+        else:
+            cur.execute("SELECT * FROM tbl_facturas t WHERE id_tienda=%s ",(id,))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4] }
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+@app.route('/get_facturasByProducto/')#para obtener todos los facturas
+@app.route('/get_facturasByProducto/<int:id>') #por id
+def get_facturasByProducto(id=None): #funcion que sera invoada por la ruta anterior
+    try:
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if id == None:
+            cur.execute("SELECT * FROM tbl_facturas")
+        else:
+            cur.execute("SELECT * FROM tbl_facturas f JOIN tbl_factura_producto fp ON fp.id_factura = f.id_factura WHERE fp.id_producto=%s ",(id,))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4] }
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
 
 @app.route('/insert_facturas', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_facturas():
