@@ -37,13 +37,13 @@ def insert_facturas():
         _fecha_generada = _json['fecha_generada']
         _id_tienda = _json['id_tienda']
         query = "INSERT INTO tbl_facturas(descripcion, direccion_url, fecha_generada, id_tienda) VALUES(%s, %s, %s, %s)"
-        data = (_descripcion, _direccion_url, _direccion_url, _id_tienda,)
+        data = (_descripcion, _direccion_url, _fecha_generada, _id_tienda,)
         print(data)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('factura agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
+        res = jsonify('Factura agregada exitosamente.') #Se retorna un mensaje de éxito en formato JSON
         res.status_code = 200
         
         return res
@@ -63,12 +63,12 @@ def update_facturas():
         _fecha_generada = _json['fecha_generada']
         _id_tienda = _json['id_tienda']
         query = "UPDATE tbl_facturas SET descripcion=%s, direccion_url=%s, fecha_generada=%s, id_tienda=%s WHERE id_factura=%s"
-        data = (_calificacion, _descripcion, _id_usuario, _id_factura,)
+        data = (_descripcion, _direccion_url, _fecha_generada, _id_tienda, _id_factura,)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('factura actualizada exitosamente.')
+        res = jsonify('Factura actualizada exitosamente.')
         res.status_code = 200
 
         return res
@@ -84,7 +84,7 @@ def delete_facturas(id):
         cur = conn.cursor()
         cur.execute("DELETE FROM tbl_facturas WHERE id_factura=%s", (id,))
         conn.commit()
-        res = jsonify('factura eliminado exitosamente.')
+        res = jsonify('Factura eliminada exitosamente.')
         res.status_code = 200
         return res
 

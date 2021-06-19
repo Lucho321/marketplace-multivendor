@@ -83,10 +83,10 @@ def get_productosByTiendaOrNombre(cadena=None): #funcion que sera invoada por la
 def get_productosByCategoria(categoria=None): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
-        if id == None:
-            cur.execute("SELECT * FROM tbl_productos t ORDER BY t.id_producto DESC")
+        if categoria == None:
+            cur.execute("SELECT * FROM tbl_productos")
         else:
-            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_categorias c WHERE c.nombre=%s ORDER BY t.id_producto DESC",(categoria,))
+            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_productos_categorias pc ON t.id_producto = pc.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria WHERE c.nombre LIKE %s",(categoria,))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []

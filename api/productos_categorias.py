@@ -3,29 +3,20 @@ from init import app
 from init import mysql
 
 @app.route('/get_productos_categorias/')
-@app.route('/get_productos_categorias/<int:id_producto>/<int:id_categoria>/')
-def get_productos_categorias(id_producto=None, id_categoria=None):
+@app.route('/get_productos_categoriasByProducto/<int:id>/')
+def get_productos_categoriasByProducto(id=None):
     try:
         cur = mysql.connect().cursor()
-        print("SELECT * from tbl_productos_categorias WHERE id_producto=%s")
-        print("SELECT * from tbl_productos_categorias WHERE id_tienda=%s")
-        print("SELECT * from tbl_productos_categorias WHERE id_producto=%s AND id_categoria=%s")
-        print("SELECT * from tbl_productos_categorias")
-
-        if id_producto != None and id_categoria == None:
-            cur.execute("SELECT * from tbl_productos_categorias WHERE id_producto=%s")
-        elif id_producto == None and id_categoria != None:
-            cur.execute("SELECT * from tbl_productos_categorias WHERE id_categoria=%s")
-        elif id_producto != None and id_categoria != None:
-            cur.execute("SELECT * from tbl_productos_categorias WHERE id_producto=%s AND id_categoria=%s")
-        elif id_producto == None and id_categoria == None:
-            cur.execute("SELECT * from tbl_productos_categorias")
+        if id == None:
+            cur.execute("SELECT pc.*, p.nombre_producto, c.nombre from tbl_productos_categorias pc JOIN tbl_productos p ON pc.id_producto = p.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria")
+        else:
+            cur.execute("SELECT pc.*, p.nombre_producto, c.nombre from tbl_productos_categorias pc JOIN tbl_productos p ON pc.id_producto = p.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria WHERE pc.id_producto=%s",(id,))
 
         rows = cur.fetchall()
         json_items = []
         content = {}
         for result in rows:
-            content = { 'id_producto':result[0], 'id_categoria':result[1] }
+            content = { 'id_producto':result[0], 'id_categoria':result[1], 'nombre_producto':result[2], 'categoria':result[3] }
             json_items.append(content)
             content = {}
         
@@ -38,22 +29,47 @@ def get_productos_categorias(id_producto=None, id_categoria=None):
     finally:
         cur.close()
 
-@app.route('/insert_comentarios', methods=['POST']) #Sólo podrá ser accedida vía POST
+@app.route('/get_productos_categorias/')
+@app.route('/get_producto_categoriasByCategoria/<int:id>/')
+def get_productos_categoriasByCategoria(id=None):
+    try:
+        cur = mysql.connect().cursor()
+        if id == None:
+            cur.execute("SELECT pc.*, p.nombre_producto, c.nombre from tbl_productos_categorias pc JOIN tbl_productos p ON pc.id_producto = p.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria")
+        else:
+            cur.execute("SELECT pc.*, p.nombre_producto, c.nombre from tbl_productos_categorias pc JOIN tbl_productos p ON pc.id_producto = p.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria WHERE pc.id_categoria=%s",(id,))
+
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            content = { 'id_producto':result[0], 'id_categoria':result[1], 'nombre_producto':result[2], 'categoria':result[3] }
+            json_items.append(content)
+            content = {}
+        
+        print(result)
+        return jsonify(json_items) 
+
+        
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+@app.route('/insert_productos_categorias', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_productos_categorias():
     try:
         _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
-        _comentario = _json['comentario']
-        _padre = _json['padre']
-        _nivel = _json['nivel']
         _id_producto = _json['id_producto']
+        _id_categoria = _json['id_categoria']
 
-        query = "INSERT INTO tbl_comentarios(comentario, padre, nivel, id_producto) VALUES(%s, %s, %s, %s)"
-        data = (_comentario, _padre, _nivel, _id_producto)
+        query = "INSERT INTO tbl_productos_categorias(id_producto, id_categoria) VALUES(%s, %s)"
+        data = (_id_producto, _id_categoria)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('Comentario agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
+        res = jsonify('Registro agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
         res.status_code = 200
         
         return res
@@ -63,23 +79,22 @@ def insert_productos_categorias():
     finally:
         cur.close()
 
-@app.route('/update_comentarios', methods=['PUT']) #Sólo podrá ser accedida vía PUT
+@app.route('/update_productos_categorias', methods=['PUT']) #Sólo podrá ser accedida vía PUT
 def update_productos_categorias():
     try:
         _json = request.get_json(force=True)
-        _id_comentario = _json['id_comentario']
-        _comentario = _json['comentario']
-        _padre = _json['padre']
-        _nivel = _json['nivel']
         _id_producto = _json['id_producto']
+        _id_categoria = _json['id_categoria']
+        _new_id_producto = _json['new_id_producto']
+        _new_id_categoria = _json['new_id_categoria']
 
-        query = "UPDATE tbl_comentarios SET comentario=%s, padre=%s, nivel=%s, id_producto=%s WHERE id_comentario=%s"
-        data = (_comentario, _padre, _nivel, _id_producto, _id_comentario)
+        query = "UPDATE tbl_productos_categorias SET id_producto=%s, id_categoria=%s WHERE id_producto=%s AND id_categoria =%s"
+        data = (_new_id_producto, _new_id_categoria, _id_producto, _id_categoria)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('Comentario actualizado exitosamente.')
+        res = jsonify('Registro actualizado exitosamente.')
         res.status_code = 200
 
         return res
@@ -88,14 +103,14 @@ def update_productos_categorias():
     finally:
         cur.close()
 
-@app.route('/delete_comentarios/<int:id>', methods=['DELETE']) #Sólo podrá ser accedida vía DELETE
-def delete_productos_categorias(id):
+@app.route('/delete_productos_categorias/<int:id_producto>/<int:id_categoria>', methods=['DELETE']) #Sólo podrá ser accedida vía DELETE
+def delete_productos_categorias(id_producto, id_categoria):
     try:
         conn = mysql.connect()
         cur = conn.cursor()
-        cur.execute("DELETE FROM tbl_comentarios WHERE id_comentario=%s", (id,))
+        cur.execute("DELETE FROM tbl_productos_categorias WHERE id_producto=%s AND id_categoria=%s", (id_producto, id_categoria))
         conn.commit()
-        res = jsonify('Comentario eliminado exitosamente.')
+        res = jsonify('Registro eliminado exitosamente.')
         res.status_code = 200
         
         return res
