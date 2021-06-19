@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Col, Row, InputGroup, FormControl, Card, Form, Image } from 'react-bootstrap'
 
 
-export const ProductoComentario = ({nombre}) => {
+export const OpinionComentario = ({nombre}) => {
     return (
         <Col md={12} className="mb-1">
             <Row>

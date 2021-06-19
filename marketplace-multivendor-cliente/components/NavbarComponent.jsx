@@ -17,7 +17,7 @@ export const NavbarComponent = () => {
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
                     <Nav.Link href="/productos">Productos</Nav.Link>
-                    <Nav.Link href="#pricing">Tiendas</Nav.Link>
+                    <Nav.Link href="/tiendas">Tiendas</Nav.Link>
                 </Nav>
                 <Nav>
                     <Nav.Link href="#deets">

@@ -2,6 +2,7 @@ from flask import jsonify, request #nos permite formatear los resultados en JSON
 from init import app
 from init import mysql
 import bcrypt
+from werkzeug.security import generate_password_hash, check_password_hash
 
 @app.route('/get_usuarios/')#para obtener todos los usuarios
 @app.route('/get_usuarios/<int:id>') #por id
@@ -48,8 +49,7 @@ def insert_usuarios():
         _cedula = _json['cedula']
         _nombre_usuario = _json['nombre_usuario']
         _contrasena = _json['contrasena'] 
-        _contrasena = _contrasena.encode("utf-8")
-        _contrasena = bcrypt.hashpw(_contrasena, bcrypt.gensalt())
+        _contrasena = generate_password_hash(_contrasena)
         _nombre_real = _json['nombre_real']
         _pais = _json['pais']
         _direccion = _json['direccion']
@@ -82,8 +82,8 @@ def update_usuarios():
         _id_usuario = _json['id_usuario']
         _cedula = _json['cedula']
         _nombre_usuario = _json['nombre_usuario']
-        _contrasena = _contrasena.encode("utf-8")
-        _contrasena = bcrypt.hashpw(_contrasena, bcrypt.gensalt())
+        _contrasena = _json['contrasena']
+        _contrasena = generate_password_hash(_contrasena)
         _nombre_real = _json['nombre_real']
         _pais = _json['pais']
         _direccion = _json['direccion']
@@ -127,64 +127,37 @@ def delete_usuarios(id):
     finally:
         cur.close()
 
-# @app.route('/_login/')#para obtener todos los usuarios
-# def get_usuarios(id=None): #funcion que sera invoada por la ruta anterior
-#     try:
-#         cur = mysql.connect().cursor() #Nos conectamos a mysql
-#         cur.execute("SELECT u.nombre_usuario, u.contrasena, u.estado FROM tbl_usuarios u")
 
-#         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
-#         json_items = []
-#         content = {}
-#         for result in rows: #obtenemos el arreglo de resultados de la consulta
-#             content = {
-#             'nombre_usuario':result[0], 
-#             'contrasena':result[1], 
-#             'estado':result[3]}
 
-#             json_items.append(content)
-#             content = {}
+@app.route('/login', methods=['POST'])
+def login():
+    try:
+        _json = request.get_json(force=True) 
+        _nombre_usuario = _json['nombre_usuario']
+        _contrasena = _json['contrasena']  
+
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        cur.execute("SELECT u.nombre_usuario, u.contrasena FROM tbl_usuarios u")
+        bandera = False
+        rows = cur.fetchall() 
+        for result in rows: 
+            if result[0]==_nombre_usuario:
+                if check_password_hash(result[1], _contrasena):
+                    print("Password correcta")
+                    bandera=True
+                else:
+                    print("Password INCORRECTA")
+            
+        if bandera:
+            res = jsonify('login successfully')
+        else:
+            res = jsonify('login error') 
+        print('logeado como ' + _nombre_usuario)    
+        res.status_code = 200
+        return res
+    
+    except Exception as e:
+        print(e)
         
-#         return jsonify(json_items) 
-
-#     except Exception as e:
-#         print(e)
-#     finally:
-#         cur.close()
-
-
-
-# @app.route('/login', methods=['POST']) #Sólo podrá ser accedida vía POST
-# def login():
-#     try:
-#         _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
-#         _nombre_usuario = _json['nombre_usuario']
-#         _contrasena = _json['contrasena'] 
-#         _contrasena = _contrasena.encode("utf-8")
-#         _contrasena = bcrypt.hashpw(_contrasena, bcrypt.gensalt())
-
-#         cur = mysql.connect().cursor() #Nos conectamos a mysql
-#         cur.execute("SELECT u.nombre_usuario, u.contrasena, u.estado FROM tbl_usuarios u")
-
-#         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
-        
-        
-#         for result in rows: #obtenemos el arreglo de resultados de la consulta
-#             if result[0]==_nombre_usuario and bcrypt.check_password_hash(result[1], _contrasena) 
-
-
-        
-#         return jsonify(json_items) 
-        
-
-
-
-
-#         res = jsonify('Autenticado.') 
-#         res.status_code = 200
-#         return res
-
-#     except Exception as e:
-#         print(e)
-#     finally:
-#         cur.close()        
+    finally:
+        cur.close()

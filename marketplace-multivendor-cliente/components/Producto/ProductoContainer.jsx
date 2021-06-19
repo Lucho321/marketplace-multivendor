@@ -2,9 +2,9 @@ import React from 'react'
 import { Button, Col, Row, InputGroup, FormControl, Card } from 'react-bootstrap'
 import {ProductoCarousels} from './ProductoCarousels'
 import ReactStars from "react-rating-stars-component";
-import { ProductoCalificar } from './ProductoCalificar';
-import { ProductoComentar } from './ProductoComentar';
-import { ProductoComentario } from './ProductoComentario';
+import { OpinionCalificar } from '../Opiniones/OpinionCalificar';
+import { OpinionComentar } from '../Opiniones/OpinionComentar';
+import { OpinionComentario } from '../Opiniones/OpinionComentario';
 
 export const ProductoContainer = ({productoId}) => {
     return (
@@ -95,7 +95,7 @@ export const ProductoContainer = ({productoId}) => {
                                 </Col>
                             </Row>
                             
-                            <ProductoCalificar />
+                            <OpinionCalificar modalidad="producto" />
                         </Col> 
                         <Col md={9} className="pl-5" style={{borderLeft:"1px solid #343a40"}}>
                             <Row className="mb-2">
@@ -103,7 +103,7 @@ export const ProductoContainer = ({productoId}) => {
                                     <h5>¡Escribe un comentario de este producto!</h5>
                                 </Col>
                             </Row>
-                            <ProductoComentar />
+                            <OpinionComentar modalidad="producto" />
                         </Col>
                     </Row>
                 </Col>
@@ -114,8 +114,8 @@ export const ProductoContainer = ({productoId}) => {
                         </Col>
                     </Row>
                     <Row>
-                        <ProductoComentario nombre="alvarado" />
-                        <ProductoComentario nombre="cristiano" />
+                        <OpinionComentario modalidad="producto" nombre="alvarado" />
+                        <OpinionComentario modalidad="producto" nombre="cristiano" />
                     </Row>
                 </Col>
             </Row>

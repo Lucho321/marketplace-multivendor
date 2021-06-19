@@ -2,7 +2,7 @@ import React from 'react'
 import ReactStars from "react-rating-stars-component"
 import { Button, Col, Row, InputGroup, FormControl, Card } from 'react-bootstrap'
 
-export const ProductoCalificar = () => {
+export const OpinionCalificar = () => {
     const ratingChanged = (newRating) => {
         console.log(newRating);
       };
