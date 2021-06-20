@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useForm } from '../../context/hooks/useForm';
 import { useRouter } from 'next/router';
+import fetch from 'node-fetch';
 
 
 export const Login = () => {
@@ -17,6 +18,20 @@ export const Login = () => {
     const handleLogin = async(e) => {
         e.preventDefault();
         try {
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre_usuario: email, contrasena:password })
+            };
+            const loginRes = await fetch('http://127.0.0.1:5000/login', requestOptions)
+                .then(response => response.json())
+                // .then(data => setPostId(data.id));
+
+                console.log(loginRes);
+                
+            // const loginRes = await fetch(
+            //     'https://jsonplaceholder.typicode.com/todos'
+            //   ).then((response) => response.json());
             router.push('/');
         } catch (e) {
             console.log(e);
@@ -67,7 +82,7 @@ export const Login = () => {
                                             <Col md={12}>
                                                 <Form.Group controlId="formBasicEmail">
                                                     <Form.Label>Email</Form.Label>
-                                                    <Form.Control value={ email } onChange={ handleInputChange } name="email" type="email" placeholder="Enter email" />
+                                                    <Form.Control value={ email } onChange={ handleInputChange } name="email" placeholder="Enter email" />
                                                 </Form.Group>
                                                 <Form.Group controlId="formBasicPassword">
                                                     <Form.Label>Contraseña</Form.Label>
