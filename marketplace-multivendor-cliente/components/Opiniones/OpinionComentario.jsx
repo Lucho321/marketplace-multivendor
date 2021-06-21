@@ -23,7 +23,7 @@ export const OpinionComentario = ({nombre}) => {
                             02/06/2021
                         </Col>
                     </Row>
-                    <Form.Group controlId="exampleForm.ControlTextarea1">
+                    <Form.Group >
                         {
                             nombre == "cristiano" && <Form.Control readOnly value="Las mejores tennis que me he podido comprar, SIUUUUUU!"/>
                         }

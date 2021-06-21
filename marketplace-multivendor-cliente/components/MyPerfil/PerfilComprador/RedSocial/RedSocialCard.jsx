@@ -19,7 +19,7 @@ export const RedSocialCard = () => {
                 <img className="mr-2" src="/images/facebook.png" alt="logo" width="36"/>
             </Col>
             <Col md={9}>
-                <Form.Group controlId="validationCustomUsername">
+                <Form.Group >
                     <InputGroup hasValidation>
                         <InputGroup.Prepend>
                         <InputGroup.Text id="inputGroupPrepend">facebook.com/</InputGroup.Text>

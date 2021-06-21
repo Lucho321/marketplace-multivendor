@@ -66,7 +66,7 @@ export const RedSocialModal = (props) => {
                         <img className="mr-2" src={`/images/${socialRed}.png`} alt="logo" width="36"/>
                     </Col>
                     <Col md={11} >
-                        <Form.Group controlId="validationCustomUsername">
+                        <Form.Group >
                             <InputGroup hasValidation>
                                 <InputGroup.Prepend>
                                     <InputGroup.Text id="inputGroupPrepend">{socialRedPrepend}</InputGroup.Text>

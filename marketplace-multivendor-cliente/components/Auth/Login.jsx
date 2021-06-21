@@ -25,14 +25,10 @@ export const Login = () => {
             };
             const loginRes = await fetch('http://127.0.0.1:5000/login', requestOptions)
                 .then(response => response.json())
-                // .then(data => setPostId(data.id));
 
-                console.log(loginRes);
+            console.log(loginRes);
                 
-            // const loginRes = await fetch(
-            //     'https://jsonplaceholder.typicode.com/todos'
-            //   ).then((response) => response.json());
-            router.push('/');
+            //router.push('/');
         } catch (e) {
             console.log(e);
         }
@@ -80,11 +76,11 @@ export const Login = () => {
                                     <Form onSubmit={ handleLogin }>
                                         <Row>
                                             <Col md={12}>
-                                                <Form.Group controlId="formBasicEmail">
+                                                <Form.Group >
                                                     <Form.Label>Email</Form.Label>
                                                     <Form.Control value={ email } onChange={ handleInputChange } name="email" placeholder="Enter email" />
                                                 </Form.Group>
-                                                <Form.Group controlId="formBasicPassword">
+                                                <Form.Group >
                                                     <Form.Label>Contraseña</Form.Label>
                                                     <Form.Control value={ password } onChange={ handleInputChange } name="password" type="password" placeholder="Password" />
                                                 </Form.Group>
