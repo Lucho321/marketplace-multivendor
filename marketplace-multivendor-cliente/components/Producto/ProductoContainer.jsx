@@ -6,6 +6,7 @@ import { OpinionCalificar } from '../Opiniones/OpinionCalificar';
 import { OpinionComentar } from '../Opiniones/OpinionComentar';
 import { OpinionComentario } from '../Opiniones/OpinionComentario';
 import { getProductoById } from '../../services/productos.service';
+import Link from 'next/link'
 
 export const ProductoContainer = ({productoId}) => {
 
@@ -62,9 +63,11 @@ export const ProductoContainer = ({productoId}) => {
                         <Col>
                             <Row>
                                 <Col>
-                                    <a className="a_productocard">
-                                        Visita la tienda <strong>NIKE</strong>
-                                    </a>
+                                    <Link href={`/tienda/${producto.id_tienda}`}>
+                                        <a className="a_productocard">
+                                            Visita la tienda <strong>{producto.nombre_tienda}</strong>
+                                        </a>
+                                    </Link>
                                 </Col>
                             </Row>
                             <Row>

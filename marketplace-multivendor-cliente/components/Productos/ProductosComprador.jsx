@@ -15,12 +15,11 @@ export const ProductosComprador = () => {
     const [ productos, setProductos ] = useState([]);
 
 
-    const getProductos = async()=>{
-        let prods = await getAllProductos();
-        return prods;
+    const getProductos = ()=>{
+        getAllProductos().then(p=>setProductos(p));
     }
     useEffect(() => {
-        let prods = getProductos().then(p=>setProductos(p));
+        getProductos();
     }, [])
 
 

@@ -22,3 +22,10 @@ export const getProductoById = async(productoId) => {
 
     return response;
 }
+
+export const getProductosByTienda = async(tiendaId) => {
+    const response = await fetch(`${API_URL}/get_productosByTienda/${tiendaId}`)
+        .then(response => response.json());
+
+    return response;
+}

@@ -57,7 +57,7 @@ export const TiendaContainer = ({tiendaId}) => {
                         style={{color:"#212529!important"}}
                     >
                         <Tab eventKey="productos" title="Productos">
-                            <ProductosTienda />
+                            <ProductosTienda tienda={tiendaId} />
                         </Tab>
                         <Tab eventKey="opiniones" title="Comentarios y más">
                             <OpinionesTienda />
