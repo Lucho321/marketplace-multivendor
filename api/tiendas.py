@@ -42,7 +42,7 @@ def insert_tiendas():
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('Tienda agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
+        res = jsonify('Tienda agregada exitosamente.') #Se retorna un mensaje de éxito en formato JSON
         res.status_code = 200
         
         return res
