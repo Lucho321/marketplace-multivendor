@@ -57,7 +57,7 @@ def get_productosByTienda(id=None): #funcion que sera invoada por la ruta anteri
 def get_productosByTiendaOrNombre(cadena=None): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
-        if id == None:
+        if cadena == None:
             cur.execute("SELECT * FROM tbl_productos t ORDER BY t.id_producto DESC")
         else:
             nom = '%'+cadena+'%'

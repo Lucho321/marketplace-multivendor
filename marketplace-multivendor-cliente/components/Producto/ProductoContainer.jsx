@@ -1,17 +1,40 @@
-import React from 'react'
-import { Button, Col, Row, InputGroup, FormControl, Card } from 'react-bootstrap'
+import React, { useState, useEffect } from 'react'
+import { Button, Col, Row, InputGroup, FormControl, Card, Spinner } from 'react-bootstrap'
 import {ProductoCarousels} from './ProductoCarousels'
 import ReactStars from "react-rating-stars-component";
 import { OpinionCalificar } from '../Opiniones/OpinionCalificar';
 import { OpinionComentar } from '../Opiniones/OpinionComentar';
 import { OpinionComentario } from '../Opiniones/OpinionComentario';
+import { getProductoById } from '../../services/productos.service';
 
 export const ProductoContainer = ({productoId}) => {
+
+    const [ producto, setProducto ] = useState({});
+
+    const [ loading, setLoading ] = useState(true);
+
+    const getProducto = async()=>{
+        let pro = await getProductoById(productoId);
+        return pro;
+    }
+
+    useEffect(() => {
+        let pro = getProducto().then(p=>{setProducto(p[0]); setLoading(false);});
+    }, [])
+
+    if(loading){
+        return  <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                </Spinner>
+    }
+    console.log(producto);
+
+
     return (
         <>
             <Row className="mt-3 mb-5">
                 <Col md={4} className="text-center">
-                    <ProductoCarousels />
+                    <ProductoCarousels idProducto={producto.id_producto}/>
                 </Col>
                 <Col md={8}>
                     <Row>
@@ -21,13 +44,13 @@ export const ProductoContainer = ({productoId}) => {
                     </Row>
                     <Row>
                         <Col md={9}>
-                            <h1>Nike SpaceJam Lebron</h1>
-                            <span><h3 style={{color:"#247d6d"}}>$299.99<small style={{fontSize:"0.75rem", color:"#212529"}}> + envío: $6</small></h3></span>
+                            <h1>{producto.nombre_producto}</h1>
+                            <span><h3 style={{color:"#247d6d"}}>{`$${producto.precio}`}<small style={{fontSize:"0.75rem", color:"#212529"}}>{` + envío: $${producto.costo_envio}`}</small></h3></span>
                             
                         </Col>
                         <Col md={3} className="pt-1 text-center">
                             <ReactStars
-                                value={4.5}
+                                value={parseInt(producto.calificacion)}
                                 count={5}
                                 edit={false}
                                 size={35}
@@ -46,7 +69,7 @@ export const ProductoContainer = ({productoId}) => {
                             </Row>
                             <Row>
                                 <Col>
-                                    Unidades disponibles: 15
+                                    {`Unidades disponibles: ${producto.cantidad_disponible}`}
                                 </Col>
                             </Row>
                             
@@ -54,12 +77,12 @@ export const ProductoContainer = ({productoId}) => {
                         <Col>
                             <Row>
                                 <Col>
-                                    Ubicación: USA
+                                    {`Ubicación: ${producto.ubicacion}`}
                                 </Col>
                             </Row>
                             <Row>
                                 <Col>
-                                    Duración envío: 6 días
+                                    {`Duración envío: ${producto.tiempo_envio} días`}
                                 </Col>
                             </Row>
                         </Col>
@@ -69,9 +92,7 @@ export const ProductoContainer = ({productoId}) => {
                     </Row>
                     <Row className="pt-3">
                         <Col>
-                            Fabolusas tennis Nike edición especial de la película SpaceJam protagonizada por el increíble Lebrom James,
-                            atrévete a jugar como Lebron, y usa sus tennis...¡Bugs Bunny te espera en el equipo! Confortables, con estilo y la 
-                            suspensión necesaria para saltar al espacio exterior.
+                            {producto.descripcion}
                         </Col>
                     </Row>
                     <Row className="pt-5">

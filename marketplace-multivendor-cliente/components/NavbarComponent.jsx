@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar, Nav, NavDropdown} from 'react-bootstrap';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,6 +6,28 @@ import { useRouter } from 'next/router';
 
 export const NavbarComponent = () => {
     const router = useRouter();
+
+    const [ usuario, setUsuario ] = useState({});
+    let usuarioLogeado;
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
+            if(usuarioLogeado != undefined){
+                if(usuarioLogeado.nombre_usuario){
+                    setUsuario(usuarioLogeado);
+                }
+            }else{
+                localStorage.removeItem("_user");
+                return router.push('/auth/login');
+            }
+            
+        }
+    }, [])
+
+    const handleLogout = (e)=>{
+        localStorage.removeItem("_user");
+        return router.push('/auth/login');
+    }
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
@@ -26,12 +48,12 @@ export const NavbarComponent = () => {
                     <Nav.Link href="#deets">
                         <img className="d-inline-block align-top" src="/images/micarrito.png" title="Mi carrito de compras" alt="logo" height="25"/>
                     </Nav.Link>
-                    <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
+                    <NavDropdown title={usuario.nombre_usuario} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="/myperfil">Mi Perfil</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">Mis deseos</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.3">Mi carrito</NavDropdown.Item>
                         <NavDropdown.Divider />
-                        <NavDropdown.Item href="#action/3.4">Cerrar sesión</NavDropdown.Item>
+                        <NavDropdown.Item onClick={handleLogout}>Cerrar sesión</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
             </Navbar.Collapse>

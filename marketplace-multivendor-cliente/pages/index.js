@@ -6,11 +6,8 @@ import { Ejemplo } from '../components/ejemplo';
 export default function Home() {
   return (
     <Layout>
-      <Ejemplo />
+      <HomeComponent />
     </Layout>
   )
 }
 
-{/* <Layout>
-      <HomeComponent />
-    </Layout> */}

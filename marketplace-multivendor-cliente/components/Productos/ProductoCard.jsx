@@ -1,31 +1,52 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Col, Row, Image, InputGroup, FormControl, Card } from 'react-bootstrap'
 import Link from 'next/link'
+import { getImageByProducto } from '../../services/productos.service';
 
-export const ProductoCard = () => {
+export const ProductoCard = ({producto}) => {
+
+    const [ images, setImages ] = useState([]);
+
+
+    const getImages = async(productoID)=>{
+        let imgs = await getImageByProducto(productoID);
+        return imgs;
+    }
+    useEffect(() => {
+        let imgs = getImages(producto.id_producto).then(i=>setImages(i));
+    }, [])
+
+    const getImageToShow = ()=>{
+        if(images.length > 0){
+            return images[0].url_foto;
+        }else{
+            return 'no-disponible.jpg';
+        }
+    }
+
     return (
         <div  style={{width:"80%", paddingBottom:"1.5rem", marginBottom:"1.5rem"}}>
             <Row>
                 <Col>
-                    <Image src="/images/files/spacejam3.jpg" height="180" width="100%" />
+                    <Image src={`/images/files/${getImageToShow()}`} height="180" width="100%" />
                 </Col>
             </Row>
             <Row>
-                <Col md={12} className="ml-1">
-                    <Link href="/producto/1">
+                <Col md={12} className="mt-2 ml-1">
+                    <Link href={`/producto/${producto.id_producto}`}>
                         <a className="a_productocard">
-                            <strong>Nike SpaceJam Lebron</strong>
+                            <strong>{producto.nombre_producto}</strong>
                         </a>
                     </Link>
                     
                 </Col>
                 <Col md={12} className="ml-1" style={{fontSize:"0.8rem"}}>
-                    Fabolusas tennis Nike edición especial de la película SpaceJam protagonizada por el increíble Lebrom James
+                    {producto.descripcion}
                 </Col>
             </Row>
             <Row className="mt-2">
                 <Col className="ml-1" style={{color:"#247d6d"}}>
-                    $299.99
+                    {`$${producto.precio}`}
                 </Col>
                 <Col className="mr-2 mt-1 text-right">
                     <img className="d-inline-block align-top" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="15"/>

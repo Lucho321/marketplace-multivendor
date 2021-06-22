@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Col, Row, InputGroup, FormControl, Card } from 'react-bootstrap'
 import { ProductoCard } from './ProductoCard'
 import Select from 'react-select'
+import { getAllProductos } from '../../services/productos.service';
 
 export const ProductosComprador = () => {
 
@@ -10,6 +11,17 @@ export const ProductosComprador = () => {
         { value: 'strawberry', label: 'Strawberry' },
         { value: 'vanilla', label: 'Vanilla' }
     ];
+
+    const [ productos, setProductos ] = useState([]);
+
+
+    const getProductos = async()=>{
+        let prods = await getAllProductos();
+        return prods;
+    }
+    useEffect(() => {
+        let prods = getProductos().then(p=>setProductos(p));
+    }, [])
 
 
     return (
@@ -53,33 +65,12 @@ export const ProductosComprador = () => {
                 </Col>
             </Row>
             <Row className="mb-5 pt-4">
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
-                <Col md={3} className="d-flex justify-content-center">
-                    <ProductoCard />
-                </Col>
+                {productos.map( producto => (
+                    <Col md={3} className="d-flex justify-content-center">
+                        <ProductoCard key={producto.id_producto} producto={producto}/>
+                    </Col>
+                ))}
+                
             </Row>
         </>
     )

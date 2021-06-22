@@ -1,4 +1,4 @@
-import { Layout } from '../components/layout';
+import { Layout } from '../components/Layout';
 import { MiPerfil } from '../components/MyPerfil/MiPerfil';
 
 export default function MyPerfil() {

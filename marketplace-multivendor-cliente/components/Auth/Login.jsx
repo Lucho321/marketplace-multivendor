@@ -2,7 +2,10 @@ import React, { useEffect } from 'react';
 import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import { useForm } from '../../context/hooks/useForm';
 import { useRouter } from 'next/router';
-import fetch from 'node-fetch';
+import { login } from '../../services/auth.service';
+import Swal from 'sweetalert2'
+
+
 
 
 export const Login = () => {
@@ -18,17 +21,31 @@ export const Login = () => {
     const handleLogin = async(e) => {
         e.preventDefault();
         try {
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nombre_usuario: email, contrasena:password })
-            };
-            const loginRes = await fetch('http://127.0.0.1:5000/login', requestOptions)
-                .then(response => response.json())
-
-            console.log(loginRes);
+            
+            let res = await login(email, password); 
+            if(res){
+                Swal.fire({
+                    icon: 'success',
+                    title: `Bienvenido`,
+                    text: `Espera un momento para ingresar`,
+                    showConfirmButton: false,
+                    timer: 2500
+                });
                 
-            //router.push('/');
+                setTimeout(() => {
+                    router.push('/');
+                }, 2500);
+                
+            }else{
+                Swal.fire({
+                    icon: 'error',
+                    title: `Opps!`,
+                    text: `Por favor registrate para ingresar a Lujepa Market`,
+                    showConfirmButton: false,
+                    timer: 2500
+                  });
+            }
+            
         } catch (e) {
             console.log(e);
         }

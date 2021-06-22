@@ -1,4 +1,4 @@
-import { Layout } from '../components/layout';
+import { Layout } from '../components/Layout';
 import { TiendasComprador } from '../components/Tiendas/TiendasComprador';
 
 export default function Tiendas() {
