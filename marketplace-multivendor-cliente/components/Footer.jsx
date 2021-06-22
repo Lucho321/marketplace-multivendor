@@ -16,7 +16,7 @@ export const Footer = () => {
 
             </Col>
             <Col md={12} className="mt-4 text-center">
-                <h10>Disclaimer</h10>
+                <p>Disclaimer</p>
                 <p style={{fontSize:"0.7rem", paddingTop:"5px"}}>
                     lujepamarket.com es solo una herramienta que prentender mejorar el comercio nacional 
                     dándole herramientas a pequeñas y medianas empresas (PYMES) de ofrecer sus productos 

@@ -137,24 +137,29 @@ def login():
         _contrasena = _json['contrasena']  
 
         cur = mysql.connect().cursor() #Nos conectamos a mysql
-        cur.execute("SELECT u.nombre_usuario, u.contrasena FROM tbl_usuarios u")
+        cur.execute("SELECT u.nombre_usuario, u.contrasena, u.id_usuario, u.tipo_usuario FROM tbl_usuarios u")
         bandera = False
+
+        json_items = []
+        content = {}
         rows = cur.fetchall() 
         for result in rows: 
             if result[0]==_nombre_usuario:
                 if check_password_hash(result[1], _contrasena):
                     print("Password correcta")
                     bandera=True
+                    content = { 
+                    'nombre_usuario':result[0], 
+                    'id_usuario':result[2], 
+                    'tipo_usuario':result[3]}
+                    json_items.append(content)
+                    content = {}
                 else:
-                    print("Password INCORRECTA")
-            
+                    print("Password INCORRECTA")   
         if bandera:
-            res = jsonify('login successfully')
+            return jsonify(json_items) 
         else:
-            res = jsonify('login error') 
-        print('logeado como ' + _nombre_usuario)    
-        res.status_code = 200
-        return res
+            return jsonify('login error') 
     
     except Exception as e:
         print(e)

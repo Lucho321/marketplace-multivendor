@@ -13,9 +13,9 @@ export const Layout = ({children}) => {
         <>
             <Head>
                 <title>Market Place</title>
-                <script src="https://unpkg.com/react/umd/react.production.min.js" crossorigin></script>
-                <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossorigin></script>
-                <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossorigin></script>
+                <script src="https://unpkg.com/react/umd/react.production.min.js" crossOrigin="true"></script>
+                <script src="https://unpkg.com/react-dom/umd/react-dom.production.min.js" crossOrigin="true"></script>
+                <script src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js" crossOrigin="true"></script>
             </Head>
                 <>
                     <Container fluid >

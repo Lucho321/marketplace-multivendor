@@ -52,7 +52,6 @@ export const TiendaContainer = ({tiendaId}) => {
             <Row className="mt-3">
                 <Col md={12} style={{color:"#212529"}}>
                     <Tabs
-                        id="controlled-tab-example"
                         activeKey={key}
                         onSelect={(k) => setKey(k)}
                         style={{color:"#212529!important"}}

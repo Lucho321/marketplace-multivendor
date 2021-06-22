@@ -1,9 +1,9 @@
-﻿/*
-Created: 6/2/2021
-Modified: 6/13/2021
-Model: MySQL 8.0
-Database: MySQL 8.0
-*/
+﻿
+--Created: 6/2/2021
+--Modified: 6/13/2021
+--Model: MySQL 8.0
+--Database: MySQL 8.0
+
 
 -- Create tables section -------------------------------------------------
 

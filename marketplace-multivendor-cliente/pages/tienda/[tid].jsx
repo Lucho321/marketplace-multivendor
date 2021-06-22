@@ -2,15 +2,15 @@ import { useRouter } from 'next/router'
 import { Layout } from '../../components/Layout';
 import { TiendaContainer } from '../../components/Tienda/TiendaContainer';
 
-const Producto = () => {
+const Tienda = () => {
   const router = useRouter()
-  const { pid } = router.query
+  const { tid } = router.query
 
   return(
     <Layout>
-        <TiendaContainer tiendaId = {pid} />
+        <TiendaContainer tiendaId = {tid} />
     </Layout>
   )
 }
 
-export default Producto
+export default Tienda
