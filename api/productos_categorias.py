@@ -29,8 +29,7 @@ def get_productos_categoriasByProducto(id=None):
     finally:
         cur.close()
 
-@app.route('/get_productos_categorias/')
-@app.route('/get_producto_categoriasByCategoria/<int:id>/')
+@app.route('/get_productos_categoriasByCategoria/<int:id>/')
 def get_productos_categoriasByCategoria(id=None):
     try:
         cur = mysql.connect().cursor()

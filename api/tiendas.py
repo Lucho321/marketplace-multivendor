@@ -8,15 +8,15 @@ def get_tiendas(id=None): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if id == None:
-            cur.execute("SELECT * FROM tbl_tiendas t ORDER BY t.id_tienda DESC")
+            cur.execute("SELECT DISTINCT t.*, u.nombre_real, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda")
         else:
-            cur.execute("SELECT * FROM tbl_tiendas t WHERE id=%s ORDER BY t.id_tienda DESC",(id,))
+            cur.execute("SELECT DISTINCT t.*, u.nombre_real, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda WHERE t.id_tienda=%s",(id,))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []
         content = {}
         for result in rows: #obtenemos el arreglo de resultados de la consulta
-            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] }
+            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'nombre_tienda':result[4], 'cant_productos':result[5]}
             json_items.append(content)
             content = {}
         
@@ -27,6 +27,32 @@ def get_tiendas(id=None): #funcion que sera invoada por la ruta anterior
     finally:
         cur.close()
         
+@app.route('/get_tiendasByNombre/')#para obtener todos los tiendas
+@app.route('/get_tiendasByNombre/<string:nombre>') #por id
+def get_tiendasByNombre(nombre=None): #funcion que sera invoada por la ruta anterior
+    try:
+        
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        if nombre == None:
+            cur.execute("SELECT DISTINCT t.*, u.nombre_real, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda")
+        else:
+            nom = '%' + nombre + '%'
+            cur.execute("SELECT DISTINCT t.*, u.nombre_real, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda WHERE u.nombre_real LIKE %s or u.nombre_usuario LIKE %s",(nom, nom))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'nombre_tienda':result[4], 'cant_productos':result[5]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
 
 @app.route('/insert_tiendas', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_tiendas():

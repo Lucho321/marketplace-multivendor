@@ -28,7 +28,7 @@ def get_categorias(id=None):
     finally:
         cur.close()
 
-@app.route('/get_categoriasByProducto/')
+@app.route('/get_categoriasByProducto/') 
 @app.route('/get_categoriasByProducto/<int:id>')
 def get_categoriasByProducto(id=None):
     try:

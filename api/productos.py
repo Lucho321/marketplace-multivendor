@@ -8,7 +8,7 @@ def get_productos(id=None): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if id == None:
-            cur.execute("SELECT * FROM tbl_productos t ORDER BY t.id_producto DESC")
+            cur.execute("SELECT p.*, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON t.id_tienda = p.id_tienda JOIN tbl_usuarios u ON u.id_usuario = t.id_tienda")
         else:
             cur.execute("SELECT p.*, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON t.id_tienda = p.id_tienda JOIN tbl_usuarios u ON u.id_usuario = t.id_tienda WHERE p.id_producto = %s; ",(id,))
 
@@ -19,7 +19,7 @@ def get_productos(id=None): #funcion que sera invoada por la ruta anterior
             content = { 'id_producto':result[0], 'nombre_producto':result[1], 'descripcion':result[2], 'cantidad_disponible':result[3], 'fecha_publicacion':result[4], 'ubicacion':result[5], 'precio':result[6], 'tiempo_envio':result[7], 'costo_envio':result[8], 'calificacion':result[9], 'id_tienda':result[10], 'nombre_tienda':result[11] }
             json_items.append(content)
             content = {}
-        
+        print(json_items)
         return jsonify(json_items) 
 
     except Exception as e:
