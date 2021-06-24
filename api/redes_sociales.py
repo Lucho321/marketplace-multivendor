@@ -54,13 +54,13 @@ def get_credesByUsuario(id=None):
 def insert_redes():
     try:
         _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
-        _nombre = _json['nombre']
-        _nombre_usuario = _json['nombre_usuario']
+        _tipo = _json['tipo']
+        _valor = _json['valor']
         _url_perfil = _json['url_perfil']
         _id_usuario = _json['id_usuario']
 
-        query = "INSERT INTO tbl_redes_sociales(nombre, nombre_usuario, url_perfil, id_usuario) VALUES(%s, %s, %s, %s)"
-        data = (_nombre, _nombre_usuario, _url_perfil, _id_usuario)
+        query = "INSERT INTO tbl_redes_sociales(tipo, valor, url_perfil, id_usuario) VALUES(%s, %s, %s, %s)"
+        data = (_tipo, _valor, _url_perfil, _id_usuario)
         
         conn = mysql.connect()
         cur = conn.cursor()
@@ -81,13 +81,13 @@ def update_redes():
     try:
         _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
         _id_red = _json['id_red_social']
-        _nombre = _json['nombre']
-        _nombre_usuario = _json['nombre_usuario']
+        _tipo = _json['tipo']
+        _valor = _json['valor']
         _url_perfil = _json['url_perfil']
         _id_usuario = _json['id_usuario']
 
         query = "UPDATE tbl_redes_sociales SET nombre=%s, nombre_usuario=%s, url_perfil=%s, id_usuario=%s WHERE id_red_social=%s"
-        data = (_nombre, _nombre_usuario, _url_perfil, _id_usuario, _id_red)
+        data = (_tipo, _valor, _url_perfil, _id_usuario, _id_red)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)

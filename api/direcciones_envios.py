@@ -61,7 +61,7 @@ def insert_direcciones():
         _observaciones = _json['observaciones']
         _id_comprador = _json['id_comprador']
 
-        query = "INSERT INTO tbl_direcciones_envios(pais, provincia, numero_casillero, codigo_postal, observaciones, id_comprador) VALUES(%s, %s, %s, %s, %s)"
+        query = "INSERT INTO tbl_direcciones_envios(pais, provincia, numero_casillero, codigo_postal, observaciones, id_comprador) VALUES(%s, %s, %s, %s, %s, %s)"
         data = (_pais, _provincia, _numero_casillero, _codigo_postal, _observaciones, _id_comprador)
         
         conn = mysql.connect()
