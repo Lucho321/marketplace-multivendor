@@ -65,6 +65,22 @@ def insert_compradores():
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
+
+        cur.execute("SELECT id_comprador from tbl_compradores WHERE id_usuario=%s", (_id_usuario,))
+        json_items = []
+        content = {}
+        rows = cur.fetchall() 
+        for result in rows: 
+            comprador = {'id_comprador':result[0]}
+
+        query2 = "INSERT INTO tbl_carrito_deseos(es_deseo, id_comprador) VALUES(%s, %s)";
+        data2 = (1, comprador["id_comprador"])
+        cur.execute(query2, data2)
+
+        query3 = "INSERT INTO tbl_carrito_deseos(es_deseo, id_comprador) VALUES(%s, %s)";
+        data3 = (0, comprador["id_comprador"])
+        cur.execute(query3, data3)
+
         conn.commit()
         res = jsonify('Comprador agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
         res.status_code = 200

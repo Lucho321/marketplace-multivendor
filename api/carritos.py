@@ -43,7 +43,7 @@ def get_carritosByComprador(id=None):
             content = { 'id_carrito_deseo':result[0], 'es_deseo':result[1], 'id_comprador':result[2]}
             json_items.append(content)
             content = {}
-        return jsonify(json_items) 
+        return jsonify(json_items)  
 
     except Exception as e:
         print(e)
