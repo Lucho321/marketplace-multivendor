@@ -43,7 +43,7 @@ export const PerfilComprador = ({numComponent}) => {
 
     return (
         <Row>
-            <Col md={2} className="pt-4 pb-5" style={{background:"#dcf7f3"}}>
+            <Col md={2} className="pt-4 pb-5" style={{borderRight:"solid 2px #b3e7df"}}>
                 <Row>
                     <Col className="text-center">
                         <Image src="/images/perfil.jpg" style={{width:"180px", height:"171px"}} roundedCircle />

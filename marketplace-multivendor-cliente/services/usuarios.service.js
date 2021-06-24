@@ -69,9 +69,8 @@ export const insertRedSocial = async(redsocial) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            id_red_social: redsocial.id_red_social,
-            tipo: redsocial.nombre,
-            valor: redsocial.nombre_usuario,
+            tipo: redsocial.tipo,
+            valor: redsocial.valor,
             url_perfil: redsocial.url_perfil,
             id_usuario: redsocial.id_usuario
         })
@@ -80,4 +79,39 @@ export const insertRedSocial = async(redsocial) => {
         .then(response => response.json())
 
     return res;
+}
+
+
+export const getTarjetasByUsuario = async(idUsuario) => {
+    const response = await fetch(`${API_URL}/get_tarjetasByComprador/${idUsuario}`)
+        .then(response => response.json());
+
+    return response;
+}
+
+export const insertTarjeta = async(tarjeta) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            nombre_propietario: tarjeta.nombre_propietario,
+            numero_tarjeta: tarjeta.numero_tarjeta,
+            codigo_cvv: tarjeta.codigo_cvv,
+            fecha_vence: tarjeta.fecha_vence,
+            saldo: tarjeta.saldo,
+            id_comprador: tarjeta.id_comprador
+        })
+    };
+    const res = await fetch(`${API_URL}/insert_tarjetas`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+
+export const deleteTarjeta = async(idTarjeta) => {
+    const response = await fetch(`${API_URL}/delete_tarjetas/${idTarjeta}`, { method: 'DELETE' })
+        .then(response => response.json());
+
+    return response;
 }
