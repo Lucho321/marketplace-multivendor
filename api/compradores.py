@@ -55,6 +55,32 @@ def get_compradoresbyNombre(nombre=None):
     finally:
         cur.close()
 
+@app.route('/get_compradoresByTienda/')
+@app.route('/get_compradoresByTienda/<int:id>')
+def get_compradoresbyTienda(id=None):
+    try:
+        cur = mysql.connect().cursor()
+        if id == None:
+            cur.execute("SELECT * from tbl_usuarios u JOIN tbl_compradores c on c.id_usuario = u.id_usuario")
+        else:
+            cur.execute("SELECT * from tbl_usuarios u JOIN tbl_compradores c ON c.id_usuario = u.id_usuario JOIN tbl_compradores_tiendas ct ON c.id_comprador = ct.id_comprador WHERE ct.id_tienda=%s",(id,))
+
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            content = { 'id_usuario':result[0], 'cedula':result[1], 'nombre_usuario':result[2], 'contrasena':result[3], 'nombre_real':result[4], 'pais': result[5], 'direccion': result[6],
+            'fotografia':result[7], 'telefono':result[8], 'email':result[9], 'tipo_usuario':result[10], 'abuso':result[11], 'estado':result[12], 'id_comprador':result[13]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
 @app.route('/insert_compradores', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_compradores():
     try:

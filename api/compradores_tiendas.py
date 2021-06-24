@@ -25,6 +25,29 @@ def get_compradores_tiendas():
     finally:
         cur.close()
 
+@app.route('/get_compradores_tiendasByCompradorAndTienda/<int:id_tienda>/<int:id_comprador>')
+def get_compradores_tiendasByCompradorAndTienda(id_tienda, id_comprador):
+    try:
+        cur = mysql.connect().cursor()
+        cur.execute("SELECT * from tbl_compradores_tiendas WHERE id_tienda=%s AND id_comprador=%s", (id_tienda, id_comprador))
+
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            content = { 'id_comprador':result[0], 'id_tienda':result[1] }
+            json_items.append(content)
+            content = {}
+        
+        print(result)
+        return jsonify(json_items) 
+
+        
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
 @app.route('/insert_compradores_tiendas', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_compradores_tiendas():
     try:
