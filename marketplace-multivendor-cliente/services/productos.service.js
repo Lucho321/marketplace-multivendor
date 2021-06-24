@@ -36,3 +36,10 @@ export const getProductosByNombreOrTienda = async(cadena) => {
 
     return response;
 }
+
+export const getProductosByNombreAndTienda = async(cadena, tiendaId) => {
+    const response = await fetch(`${API_URL}/get_productosByTiendaAndNombre/${cadena}/${tiendaId}`)
+        .then(response => response.json());
+
+    return response;
+}
