@@ -35,13 +35,13 @@ def get_tarjetasByComprador(id=None):
         if id == None:
             cur.execute("SELECT * from tbl_tarjetas")
         else:
-            cur.execute("SELECT * from tbl_tarjetas WHERE id_comprador=%s",(id,))
+            cur.execute("SELECT * from tbl_tarjetas t JOIN tbl_compradores c ON t.id_comprador = c.id_comprador JOIN tbl_usuarios u ON u.id_usuario = c.id_usuario WHERE u.id_usuario=%s",(id,))
 
         rows = cur.fetchall()
         json_items = []
         content = {}
         for result in rows:
-            content = { 'id_tarjeta':result[0], 'nombre_propietario':result[1], 'numero_tarjeta':result[2], 'codigo_cvv':result[3], 'fecha_vence':result[4], 'saldo': result[5], 'id_comprador': [6]}
+            content = { 'id_tarjeta':result[0], 'nombre_propietario':result[1], 'numero_tarjeta':result[2], 'codigo_cvv':result[3], 'fecha_vence':result[4], 'saldo': result[5], 'id_comprador': result[6]}
             json_items.append(content)
             content = {}
         

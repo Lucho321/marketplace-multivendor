@@ -34,7 +34,7 @@ def get_direccionesByComprador(id=None):
         if id == None:
             cur.execute("SELECT * from tbl_direcciones_envios")
         else:
-            cur.execute("SELECT * from tbl_direcciones_envios d WHERE id_comprador=%s",(id,))
+            cur.execute("SELECT * from tbl_direcciones_envios d JOIN tbl_compradores c ON d.id_comprador = c.id_comprador JOIN tbl_usuarios u ON u.id_usuario = c.id_usuario WHERE u.id_usuario=%s",(id,))
 
         rows = cur.fetchall()
         json_items = []
