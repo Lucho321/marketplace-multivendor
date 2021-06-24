@@ -1,8 +1,34 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Col, Row, InputGroup, FormControl } from 'react-bootstrap'
 import { TiendaCard } from './TiendaCard'
+import { getTiendas } from '../../services/tiendas.service';
+import { useForm } from '../../context/hooks/useForm';
 
 export const TiendasComprador = () => {
+
+    const [ tiendas, setTiendas ] = useState([]);
+    
+    const [ formValues, handleInputChange ] = useForm({
+        buscador: ''
+    });
+    const { buscador } = formValues;
+
+
+    
+
+
+    const getTiendasFilter = (tienda)=>{
+        getTiendas(tienda).then(t=>setTiendas(t));
+    }
+    useEffect(() => {
+        getTiendasFilter("");
+    }, [])
+
+    const handleBuscar = (e)=>{
+        getTiendasFilter(buscador);
+    };
+
+
     return (
         <>
             <Row className="mt-4 mb-4">
@@ -23,9 +49,12 @@ export const TiendasComprador = () => {
                                     placeholder="Escribe el nombre de la tienda"
                                     aria-label="Escribe el nombre de la tienda"
                                     aria-describedby="basic-addon2"
+                                    value={buscador}
+                                    name="buscador"
+                                    onChange={ handleInputChange }
                                 />
                                 <InputGroup.Append>
-                                    <Button variant="outline-secondary">Buscar</Button>
+                                    <Button onClick={handleBuscar} variant="outline-secondary">Buscar</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                         </Col>
@@ -33,21 +62,11 @@ export const TiendasComprador = () => {
                 </Col>
             </Row>
             <Row className="mb-5 pt-4 d-flex justify-content-center">
-                <Col md={10} className="mb-3">
-                    <TiendaCard />
-                </Col>
-                <Col md={10} className="mb-3">
-                    <TiendaCard />
-                </Col>
-                <Col md={10} className="mb-3">
-                    <TiendaCard />
-                </Col>
-                <Col md={10} className="mb-3">
-                    <TiendaCard />
-                </Col>
-                <Col md={10} className="mb-3">
-                    <TiendaCard />
-                </Col>
+                {tiendas.map( tienda => (
+                    <Col  md={10} className="mb-3">
+                        <TiendaCard key={tienda.id_tienda} tienda={tienda}/>
+                    </Col>
+                ))}
             </Row>
         </>
     )

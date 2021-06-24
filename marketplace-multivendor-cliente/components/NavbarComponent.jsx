@@ -30,7 +30,7 @@ export const NavbarComponent = () => {
     }
 
     return (
-        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+        <Navbar className="" collapseOnSelect expand="lg" bg="dark" variant="dark">
             <Navbar.Brand href="/">
                 <img className="d-inline-block align-top" src="/images/markets.png" alt="logo" width="30"/>{' '}
                 LUJEPA Market
@@ -42,19 +42,19 @@ export const NavbarComponent = () => {
                     <Nav.Link href="/tiendas">Tiendas</Nav.Link>
                 </Nav>
                 <Nav>
+                    <NavDropdown title={usuario.nombre_usuario} id="collasible-nav-dropdown">
+                        <NavDropdown.Item href="/miperfil">Mi Perfil</NavDropdown.Item>
+                        <NavDropdown.Item href="#action/3.2">Mis deseos</NavDropdown.Item>
+                        <NavDropdown.Item href="#action/3.3">Mi carrito</NavDropdown.Item>
+                        <NavDropdown.Divider />
+                        <NavDropdown.Item onClick={handleLogout}>Cerrar sesión</NavDropdown.Item>
+                    </NavDropdown>
                     <Nav.Link href="#deets">
                         <img className="d-inline-block align-top" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="25"/>
                     </Nav.Link>
                     <Nav.Link href="#deets">
                         <img className="d-inline-block align-top" src="/images/micarrito.png" title="Mi carrito de compras" alt="logo" height="25"/>
                     </Nav.Link>
-                    <NavDropdown title={usuario.nombre_usuario} id="collasible-nav-dropdown">
-                        <NavDropdown.Item href="/myperfil">Mi Perfil</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.2">Mis deseos</NavDropdown.Item>
-                        <NavDropdown.Item href="#action/3.3">Mi carrito</NavDropdown.Item>
-                        <NavDropdown.Divider />
-                        <NavDropdown.Item onClick={handleLogout}>Cerrar sesión</NavDropdown.Item>
-                    </NavDropdown>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

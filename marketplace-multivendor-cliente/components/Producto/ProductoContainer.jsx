@@ -28,7 +28,6 @@ export const ProductoContainer = ({productoId}) => {
                     <span className="sr-only">Loading...</span>
                 </Spinner>
     }
-    console.log(producto);
 
 
     return (

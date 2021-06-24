@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Col, Image, Row } from 'react-bootstrap'
 import { DireccionesEnvio } from './PerfilComprador/DireccionesEnvio/DireccionesEnvio';
 import { InformacionGeneral } from './PerfilComprador/InformacionGeneral';
@@ -8,6 +8,24 @@ import { TarjetasAsociadas } from './PerfilComprador/TarjetasAsociadas/TarjetasA
 
 export const PerfilComprador = ({numComponent}) => {
     //1-Informacion General / 2-Tarjetas Asociadas / 3-Direcciones de envío / 4-Lista de deseos / 5-Carrito
+    const [ usuario, setUsuario ] = useState({});
+    let usuarioLogeado;
+
+    
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
+            if(usuarioLogeado != undefined){
+                if(usuarioLogeado.nombre_usuario){
+                    setUsuario(usuarioLogeado);
+                }
+            }
+        }
+    }, [])
+
+
+
+
     if(numComponent === undefined){
         numComponent = 1;
     }
@@ -33,7 +51,7 @@ export const PerfilComprador = ({numComponent}) => {
                 </Row>
                 <Row className="mt-1 mb-3">
                     <Col className="text-center">
-                        <p><strong>{nombreUsuario}</strong></p>
+                        <p><strong>@{usuario.nombre_usuario}</strong></p>
                     </Col>
                 </Row>
                 <Row>

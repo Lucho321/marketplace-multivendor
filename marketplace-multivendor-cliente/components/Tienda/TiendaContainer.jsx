@@ -1,12 +1,29 @@
-import React, { useState } from 'react'
-import { Button, Col, Row, Image, Tabs, Tab } from 'react-bootstrap'
-import Link from 'next/link'
+import React, { useState, useEffect } from 'react'
+import { Button, Col, Row, Image, Tabs, Tab, Spinner } from 'react-bootstrap'
 import ReactStars from "react-rating-stars-component";
 import { ProductosTienda } from './ProductosTienda';
 import { OpinionesTienda } from './OpinionesTienda';
+import { getTiendaById } from '../../services/tiendas.service';
 
 export const TiendaContainer = ({tiendaId}) => {
     const [key, setKey] = useState('productos');
+    const [ tienda, setTienda ] = useState({});
+    const [ loading, setLoading ] = useState(true);
+
+    const getTienda = async()=>{
+        getTiendaById(tiendaId).then(t=>{setTienda(t[0]); setLoading(false);});
+    }
+
+    useEffect(() => {
+        getTienda();
+    }, [])
+
+    if(loading){
+        return  <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                </Spinner>
+    }
+
 
     return (
         <>
@@ -17,15 +34,11 @@ export const TiendaContainer = ({tiendaId}) => {
                 <Col md={9}>
                     <Row>
                         <Col md={10} style={{fontSize:"0.8rem"}}>
-                            <Link href="/tienda/1">
-                                <a className="a_productocard">
-                                    <h4><strong>Nike</strong></h4>
-                                </a>
-                            </Link>
+                            <h4><strong>{tienda.nombre_tienda}</strong></h4>
                         </Col>
                         <Col md={2} className="text-right">
                             <ReactStars
-                                value={4.5}
+                                value={tienda.calificacion}
                                 count={5}
                                 edit={false}
                                 size={20}
@@ -35,11 +48,12 @@ export const TiendaContainer = ({tiendaId}) => {
                     </Row>
                     <Row>
                         <Col className="mt-1">
-                            NIKE, llamada así por la diosa griega de la victoria, es una empresa de calzado y ropa. Diseña, desarrolla y vende una variedad de productos para ayudar en la práctica del baloncesto y el fútbol (fútbol), así como en la carrera, el entrenamiento de hombres y mujeres y otros deportes de acción.
+                            {tienda.nombre_tienda}
                         </Col>
                     </Row>
                     <Row>
                         <Col md="8" className="mt-3" style={{fontSize:"0.7rem"}}>
+                            {`Productos: ${tienda.cant_productos}`}
                             Productos: 34
                         </Col>
                         <Col md="4" className="mt-1 mp-2 text-center">

@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Button, Col, Row, InputGroup, FormControl, Card } from 'react-bootstrap'
 import { ProductoCard } from './ProductoCard'
 import Select from 'react-select'
-import { getAllProductos } from '../../services/productos.service';
+import { getAllProductos, getProductosByNombreOrTienda } from '../../services/productos.service';
+import { useForm } from '../../context/hooks/useForm';
 
 export const ProductosComprador = () => {
+
+    const [ productos, setProductos ] = useState([]);
 
     const categoriasOptions = [
         { value: 'chocolate', label: 'Chocolate' },
@@ -12,7 +15,14 @@ export const ProductosComprador = () => {
         { value: 'vanilla', label: 'Vanilla' }
     ];
 
-    const [ productos, setProductos ] = useState([]);
+    const [ formValues, handleInputChange ] = useForm({
+        buscador: ''
+    });
+
+    const { buscador } = formValues;
+
+
+    
 
 
     const getProductos = ()=>{
@@ -21,6 +31,10 @@ export const ProductosComprador = () => {
     useEffect(() => {
         getProductos();
     }, [])
+
+    const handleBuscar = (e)=>{
+        getProductosByNombreOrTienda(buscador).then(p=>setProductos(p));
+    };
 
 
     return (
@@ -43,9 +57,12 @@ export const ProductosComprador = () => {
                                     placeholder="Escribe el nombre del producto o de la tienda"
                                     aria-label="Escribe el nombre del producto o de la tienda"
                                     aria-describedby="basic-addon2"
+                                    value={buscador}
+                                    name="buscador"
+                                    onChange={ handleInputChange }
                                 />
                                 <InputGroup.Append>
-                                    <Button variant="outline-secondary">Buscar</Button>
+                                    <Button onClick={handleBuscar} variant="outline-secondary">Buscar</Button>
                                 </InputGroup.Append>
                             </InputGroup>
                         </Col>
