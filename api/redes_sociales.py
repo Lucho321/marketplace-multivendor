@@ -86,7 +86,7 @@ def update_redes():
         _url_perfil = _json['url_perfil']
         _id_usuario = _json['id_usuario']
 
-        query = "UPDATE tbl_redes_sociales SET nombre=%s, nombre_usuario=%s, url_perfil=%s, id_usuario=%s WHERE id_red_social=%s"
+        query = "UPDATE tbl_redes_sociales SET tipo=%s, valor=%s, url_perfil=%s, id_usuario=%s WHERE id_red_social=%s"
         data = (_tipo, _valor, _url_perfil, _id_usuario, _id_red)
         conn = mysql.connect()
         cur = conn.cursor()
