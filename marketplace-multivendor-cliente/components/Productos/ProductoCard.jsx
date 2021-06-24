@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react'
 import { Button, Col, Row, Image, InputGroup, FormControl, Card } from 'react-bootstrap'
 import Link from 'next/link'
 import { getImageByProducto } from '../../services/productos.service';
+import { CompraModal } from '../Compra/CompraModal';
 
 export const ProductoCard = ({producto}) => {
-
+    const [modalShow, setModalShow] = useState(false);
     const [ images, setImages ] = useState([]);
 
 
@@ -55,9 +56,10 @@ export const ProductoCard = ({producto}) => {
             </Row>
             <Row className="mt-2">
                 <Col md={12}>
-                    <Button variant="outline-info" block>Comprar</Button>
+                    <Button variant="outline-info" onClick={() => setModalShow(true)} block>Comprar</Button>
                 </Col>
             </Row>
+            <CompraModal show={modalShow} producto={producto} onHide={() => {setModalShow(false)}}/>
         </div>
     )
 }
