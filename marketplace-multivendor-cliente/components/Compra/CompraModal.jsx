@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Modal, Form, InputGroup, Button, Tabs, Tab } from 'react-bootstrap'
+import { insertarCompra } from '../../services/productos.service';
+import { validarTarjeta } from '../../services/usuarios.service';
+import Swal from 'sweetalert2'
 
 export const CompraModal = (props) => {
     const [key, setKey] = useState('Paso 1');
@@ -18,7 +21,7 @@ export const CompraModal = (props) => {
             usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
             if(usuarioLogeado != undefined){
                 if(usuarioLogeado.nombre_usuario){
-                    setIdUsuario(usuarioLogeado.id_usuario);
+                    setIdUsuario(usuarioLogeado.id_comprador);
                 }
             }
         }
@@ -52,7 +55,7 @@ export const CompraModal = (props) => {
     }
 
     const handleComprar = (e)=>{
-        let num = numberCard.replace("-", "");
+        let num = numberCard.replaceAll("-", "");
         let tarjetaG = {
             nombre_propietario: nombre,
             numero_tarjeta: num,
@@ -62,36 +65,51 @@ export const CompraModal = (props) => {
             precio:total
         }
 
-        console.log(tarjetaG);
-
-
-        let objetoGuardar = {
-            productos:[producto],
-            cantidad: cantidad,
-            precioTotal: total,
-            id_comprador: idUsuario,
-            id_tarjeta: 1,
-        }
-
-        console.log(objetoGuardar);
-
-        // insertTarjeta(tarjetaG)
-        //     .then(res=>{
-        //         if(res==="Tarjeta agregada exitosamente."){
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: `Excelente`,
-        //                 text: `Tarjeta registrada exitosamente`,
-        //                 showConfirmButton: false,
-        //                 timer: 2500
-        //             });
-        //             setNumberCard('');
-        //             setExpiritionNumber('');
-        //             setNombre('');
-        //             setCodigoSeguridad('');
-        //             setSaldo('');
-        //         }
-        //     });
+        validarTarjeta(tarjetaG)
+            .then(res=>{
+                
+                 if(res[0].id_tarjeta){
+                    let objetoGuardar = {
+                        productos:[{producto:producto.nombre_producto, id_producto:producto.id_producto, id_tienda:producto.id_tienda, cantidad: parseInt(cantidad)}],
+                        precio_total: total,
+                        id_comprador: idUsuario,
+                        id_tarjeta: res[0].id_tarjeta,
+                    }
+                    insertarCompra(objetoGuardar).then(
+                        r =>{
+                            if(r==="Compra realizada exitosamente."){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: `Excelente`,
+                                    text: `Compra realizada exitosamente`,
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                });
+                                setNumberCard('');
+                                setExpiritionNumber('');
+                                setNombre('');
+                                setCodigoSeguridad('');
+                            }else{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: `Opps`,
+                                    text: `Algo salió mal, intenta luego`,
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                });
+                            }
+                        }
+                    );   
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: `Opps`,
+                        text: `${res}`,
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
     }
 
     return (

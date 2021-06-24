@@ -65,3 +65,21 @@ export const getCategoriaByProductos = async(productoId) => {
 
     return response;
 }
+
+
+export const insertarCompra = async(compra) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            productos: compra.productos,
+            precio_total: compra.precio_total,
+            id_tarjeta: compra.id_tarjeta,
+            id_comprador: compra.id_comprador,
+        })
+    };
+    const res = await fetch(`${API_URL}/realizar_compra`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}

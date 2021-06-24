@@ -3,6 +3,8 @@ import { Button, Col, Row, Image, InputGroup, FormControl, Card } from 'react-bo
 import Link from 'next/link'
 import { getImageByProducto } from '../../services/productos.service';
 import { CompraModal } from '../Compra/CompraModal';
+import { DeseoComponent } from './DeseoComponent';
+import { CarritoComponent } from './CarritoComponent';
 
 export const ProductoCard = ({producto}) => {
     const [modalShow, setModalShow] = useState(false);
@@ -50,8 +52,8 @@ export const ProductoCard = ({producto}) => {
                     {`$${producto.precio}`}
                 </Col>
                 <Col className="mr-2 mt-1 text-right">
-                    <img className="d-inline-block align-top" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="15"/>
-                    <img className="ml-2 d-inline-block align-top" src="/images/micarrito.png" title="Mi carrito de compras" alt="logo" height="15"/>
+                    <DeseoComponent idProducto={producto.id_producto} altura={15} />
+                    <CarritoComponent altura={15} />
                 </Col>
             </Row>
             <Row className="mt-2">

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Modal, Form, InputGroup, Button } from 'react-bootstrap'
 import Swal from 'sweetalert2'
+import { insertTarjeta } from '../../../../services/usuarios.service';
 
 export const TarjetasAsociadasModal = (props) => {
     const { modalidad } = props;
@@ -10,6 +11,7 @@ export const TarjetasAsociadasModal = (props) => {
     const [ codigoSeguridad, setCodigoSeguridad ] = useState('');
     const [ saldo, setSaldo ] = useState('');
     const [ idUsuario, setIdUsuario ] = useState();
+   
  
     let usuarioLogeado;
     useEffect(() => {
@@ -17,7 +19,7 @@ export const TarjetasAsociadasModal = (props) => {
             usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
             if(usuarioLogeado != undefined){
                 if(usuarioLogeado.nombre_usuario){
-                    //setIdUsuario(usuarioLogeado.id_comprador);
+                    setIdUsuario(usuarioLogeado.id_comprador);
                 }
             }
         }
@@ -49,7 +51,7 @@ export const TarjetasAsociadasModal = (props) => {
     }
 
     const handleGuardarTarjeta = (e)=>{
-        let num = numberCard.replace("-", "");
+        let num = numberCard.replaceAll("-", "");
         let tarjetaG = {
             nombre_propietario: nombre,
             numero_tarjeta: num,
@@ -58,6 +60,7 @@ export const TarjetasAsociadasModal = (props) => {
             saldo: saldo,
             id_comprador: idUsuario
         }
+        console.log(tarjetaG);
         insertTarjeta(tarjetaG)
             .then(res=>{
                 if(res==="Tarjeta agregada exitosamente."){
@@ -73,6 +76,7 @@ export const TarjetasAsociadasModal = (props) => {
                     setNombre('');
                     setCodigoSeguridad('');
                     setSaldo('');
+                    props.alGuardar();
                 }
             });
     }

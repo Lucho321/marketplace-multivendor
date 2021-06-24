@@ -112,7 +112,7 @@ def consulta_tarjeta():
             if(int(_saldo) >= int(_precio)):
                 return jsonify(json_items)
             else:    
-                return jsonify("Lo sentimos, no tienes los suficientes fondos para realizar la compra")  
+                return jsonify("Lo sentimos, no tienes los fondos suficientes para realizar la compra")  
         else:
             return jsonify("Lo sentimos, la tarjeta no se encuentra registrada")     
         

@@ -49,12 +49,12 @@ export const TarjetasAsociadas = () => {
                 <Row>
                     {tarjetas.map( t => (
                         <Col md={12} className="mb-3">
-                            <TarjetasAsociadasCard key={t.id_tarjeta} tarjeta={t} onDelete={getTarjetas2()}/>
+                            <TarjetasAsociadasCard key={t.id_tarjeta} tarjeta={t} onDelete={getTarjetas2}/>
                         </Col>
                     ))}
                 </Row>
             </Col>
-            <TarjetasAsociadasModal modalidad="Agregar" show={modalShow} onHide={() => {setModalShow(false); getTarjetas(usuarioId)}}/>
+            <TarjetasAsociadasModal modalidad="Agregar" alGuardar={getTarjetas2} show={modalShow} onHide={() => {setModalShow(false);}}/>
         </Row>
     )
 }

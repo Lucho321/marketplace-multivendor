@@ -115,3 +115,23 @@ export const deleteTarjeta = async(idTarjeta) => {
 
     return response;
 }
+
+
+export const validarTarjeta = async(tarjeta) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            nombre_propietario: tarjeta.nombre_propietario,
+            numero_tarjeta: tarjeta.numero_tarjeta,
+            codigo_cvv: tarjeta.codigo_cvv,
+            fecha_vence: tarjeta.fecha_vence,
+            id_comprador: tarjeta.id_comprador,
+            precio: tarjeta.precio
+        })
+    };
+    const res = await fetch(`${API_URL}/consulta_tarjeta`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
