@@ -79,14 +79,14 @@ def get_productosByTiendaOrNombre(cadena=None): #funcion que sera invoada por la
         cur.close()
 
 @app.route('/get_productosByCategoria/')#para obtener todos los productos
-@app.route('/get_productosByCategoria/<string:categoria>') #por id
-def get_productosByCategoria(categoria=None): #funcion que sera invoada por la ruta anterior
+@app.route('/get_productosByCategoria/<int:id>') #por id
+def get_productosByCategoria(id=None): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
-        if categoria == None:
+        if id == None:
             cur.execute("SELECT * FROM tbl_productos")
         else:
-            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_productos_categorias pc ON t.id_producto = pc.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria WHERE c.nombre LIKE %s",(categoria,))
+            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_productos_categorias pc ON t.id_producto = pc.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria WHERE c.id_categoria  = %s ",(id,))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []

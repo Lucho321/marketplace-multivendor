@@ -2,19 +2,13 @@ import React, { useState, useEffect } from 'react'
 import { Button, Col, Row, InputGroup, FormControl, Card } from 'react-bootstrap'
 import { ProductoCard } from './ProductoCard'
 import Select from 'react-select'
-import { getAllProductos, getProductosByNombreOrTienda } from '../../services/productos.service';
+import { getAllProductos, getProductosByNombreOrTienda, getAllCategorias, getProductosByCategoria } from '../../services/productos.service';
 import { useForm } from '../../context/hooks/useForm';
 
 export const ProductosComprador = () => {
 
     const [ productos, setProductos ] = useState([]);
-
-    const categoriasOptions = [
-        { value: 'chocolate', label: 'Chocolate' },
-        { value: 'strawberry', label: 'Strawberry' },
-        { value: 'vanilla', label: 'Vanilla' }
-    ];
-
+    const [ categorias, setCategorias ] = useState([]);
     const [ formValues, handleInputChange ] = useForm({
         buscador: ''
     });
@@ -23,13 +17,30 @@ export const ProductosComprador = () => {
 
 
     
-
+    const getCategorias = ()=>{
+        getAllCategorias().then(c=>{
+            let categories = c.map(ca=>{
+                let op = {
+                    value: ca.id_categoria,
+                    label: ca.nombre,
+                };
+                return op;
+            });
+            setCategorias(categories);
+        });
+    }
 
     const getProductos = ()=>{
         getAllProductos().then(p=>setProductos(p));
     }
+    
+    const getProductosBy_Categoria = (cId)=>{
+        getProductosByCategoria(cId).then(p=>setProductos(p));
+    }
+
     useEffect(() => {
         getProductos();
+        getCategorias();
     }, [])
 
     const handleBuscar = (e)=>{
@@ -50,7 +61,7 @@ export const ProductosComprador = () => {
                         </Col>
                     </Row>
                     <Row className="mt-2">
-                        <Col md={8}>
+                        <Col md={6}>
                             Busca por producto o tienda
                             <InputGroup className="mb-3">
                                 <FormControl
@@ -69,13 +80,23 @@ export const ProductosComprador = () => {
                         <Col md={4}>
                             Busca por categoría
                             <Select
-                                isMulti
+                                isClearable={true}
                                 name="categorias"
-                                options={categoriasOptions}
+                                options={categorias}
                                 className="basic-multi-select"
                                 classNamePrefix="select"
                                 isSearchable={false}
+                                onChange = {(e)=>{
+                                    if(e){
+                                        getProductosBy_Categoria(e.value);
+                                    }else{
+                                        getProductos();
+                                    }
+                                }}
                             />
+                        </Col>
+                        <Col md={2} className="mt-4">
+                            <Button onClick={(e)=>{ getProductos(); }} variant="info" block>Ver todos</Button>
                         </Col>
                     </Row>
                 </Col>
