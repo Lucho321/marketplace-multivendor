@@ -49,6 +49,7 @@ def insert_usuarios():
         _cedula = _json['cedula']
         _nombre_usuario = _json['nombre_usuario']
         _contrasena = _json['contrasena'] 
+        password = _contrasena
         _contrasena = generate_password_hash(_contrasena)
         _nombre_real = _json['nombre_real']
         _pais = _json['pais']
@@ -59,15 +60,42 @@ def insert_usuarios():
         _tipo_usuario = _json['tipo_usuario']
         _abuso = _json['abuso']
         _estado = _json['estado']
+        _descripcion = _json['descripcion']
+        _id_usuario = ''
+        _calificacion = 0
         query = "INSERT INTO tbl_usuarios(cedula, nombre_usuario, contrasena, nombre_real, pais, direccion, fotografia, telefono, email, tipo_usuario, abuso, estado) VALUES(%s, %s, %s, %s, %s,%s, %s, %s, %s, %s, %s, %s)"
         data = (_cedula, _nombre_usuario, _contrasena, _nombre_real, _pais, _direccion, _fotografia, _telefono, _email, _tipo_usuario, _abuso, _estado)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('Usuario agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
-        res.status_code = 200
-        return res
+
+        cur.execute("SELECT u.id_usuario, u.nombre_usuario ,u.contrasena FROM tbl_usuarios u WHERE u.nombre_usuario=%s",(_nombre_usuario,))
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            if result[1]==_nombre_usuario:
+                if check_password_hash(result[2], password):
+                    _id_usuario = result[0]
+                    content = {'id_usuario':result[0]}
+                    json_items.append(content)
+                    content = {}
+        if(_tipo_usuario == "0"): #tienda
+            query2 = "INSERT INTO tbl_tiendas(calificacion, descripcion, id_usuario) VALUES(%s,%s,%s)"
+            data2 = (_calificacion, _descripcion, _id_usuario)
+            cur = conn.cursor()
+            cur.execute(query2, data2)
+            conn.commit()
+            print("tienda creada exitosamente")
+        else: #comprador    
+            query3 = "INSERT INTO tbl_compradores(id_usuario) VALUES(%s)"
+            data3 = (_id_usuario)
+            cur = conn.cursor()
+            cur.execute(query3, data3)
+            conn.commit()
+            print("usuario creado exitosamente")
+        return jsonify(json_items) 
 
     except Exception as e:
         print(e)
@@ -134,10 +162,11 @@ def login():
         _json = request.get_json(force=True) 
         _nombre_usuario = _json['nombre_usuario']
         _contrasena = _json['contrasena']  
-
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         cur.execute("SELECT u.nombre_usuario, u.contrasena, u.id_usuario, u.tipo_usuario FROM tbl_usuarios u")
         bandera = False
+        _tipo_usuario = ""
+        _id_usuario = ""
 
         json_items = []
         content = {}
@@ -146,6 +175,8 @@ def login():
             if result[0]==_nombre_usuario:
                 if check_password_hash(result[1], _contrasena):
                     print("Password correcta")
+                    _tipo_usuario: result[3]
+                    _id_usuario: result[2]
                     bandera=True
                     content = { 
                     'nombre_usuario':result[0], 
@@ -153,8 +184,40 @@ def login():
                     'tipo_usuario':result[3]}
                     json_items.append(content)
                     content = {}
+                    
                 else:
-                    print("Password INCORRECTA")   
+                    print("Password INCORRECTA")  
+        
+        if (_tipo_usuario == "1"): #comprador
+            cur2 = mysql.connect().cursor() #Nos conectamos a mysql
+            cur2.execute("SELECT c.id_comprador FROM tbl_compradores c WHERE c.id_usuario=%s",( _id_usuario,))
+            rows2 = cur2.fetchall()
+            for result in rows2: 
+                print(result[0])
+                content = {"id_comprador": result[0]}  
+                json_items.append(content)
+                content = {}
+            print("comprador")
+            
+        else: #else: #tienda
+            cur2 = mysql.connect().cursor() #Nos conectamos a mysql
+            cur2.execute("SELECT t.id_tienda FROM tbl_tiendas t WHERE t.id_usuario=%s",( _id_usuario,))  
+            rows2 = cur2.fetchall() 
+            print(rows2)
+            for result in rows2: 
+                print("for")
+                print(result[0])
+                content = {"id_tienda": result[0]}  
+                json_items.append(content)
+                content = {}
+            print("tienda")
+
+
+
+
+
+
+
         if bandera:
             return jsonify(json_items) 
         else:

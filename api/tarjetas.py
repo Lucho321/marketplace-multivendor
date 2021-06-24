@@ -79,6 +79,50 @@ def insert_tarjetas():
     finally:
         cur.close()
 
+@app.route('/consulta_tarjeta', methods=['POST']) #Sólo podrá ser accedida vía POST
+def consulta_tarjeta():
+    try:
+        _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
+        _nombre_propietario = _json['nombre_propietario']
+        _numero_tarjeta = _json['numero_tarjeta']
+        _codigo_cvv = _json['codigo_cvv']
+        _fecha_vence = _json['fecha_vence']
+        _id_comprador = _json['id_comprador']
+        _precio = _json['precio']
+        _saldo = 0
+        cur = mysql.connect().cursor()
+        cur.execute("SELECT t.* FROM `tbl_tarjetas` t WHERE t.nombre_propietario=%s AND t.numero_tarjeta=%s AND t.codigo_cvv=%s AND t.fecha_vence=%s AND t.id_comprador=%s",(_nombre_propietario, _numero_tarjeta,_codigo_cvv,_fecha_vence,_id_comprador,))
+        
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            _saldo=result[5]
+            content = { 'id_tarjeta':result[0], 
+            'nombre_propietario':result[1], 
+            'numero_tarjeta':result[2], 
+            'codigo_cvv':result[3], 
+            'fecha_vence':result[4], 
+            'saldo': result[5], 
+            'id_comprador': result[6]}
+            json_items.append(content)
+            content = {}
+        
+        if(json_items != []):
+            if(int(_saldo) >= int(_precio)):
+                return jsonify(json_items)
+            else:    
+                return jsonify("Lo sentimos, no tienes los suficientes fondos para realizar la compra")  
+        else:
+            return jsonify("Lo sentimos, la tarjeta no se encuentra registrada")     
+        
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+
 @app.route('/update_tarjetas', methods=['PUT']) #Sólo podrá ser accedida vía PUT
 def update_tarjetas():
     try:
