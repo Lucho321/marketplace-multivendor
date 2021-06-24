@@ -178,7 +178,7 @@ export const InformacionGeneral = () => {
                                 ))}
                                 
                             </Row>
-                            <RedSocialModal show={modalShow} onHide={() => setModalShow(false)} />
+                            <RedSocialModal show={modalShow} onHide={() => {setModalShow(false); getRedesSociales(usuarioId);}} />
                         </Form>
                     </Col>
                 </Row>

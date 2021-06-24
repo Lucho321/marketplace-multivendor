@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Col, Row, InputGroup, FormControl, Card, Spinner } from 'react-bootstrap'
+import { Button, Col, Row, Dropdown, Form, Spinner,  } from 'react-bootstrap'
 import {ProductoCarousels} from './ProductoCarousels'
 import ReactStars from "react-rating-stars-component";
 import { OpinionCalificar } from '../Opiniones/OpinionCalificar';
 import { OpinionComentar } from '../Opiniones/OpinionComentar';
 import { OpinionComentario } from '../Opiniones/OpinionComentario';
-import { getProductoById } from '../../services/productos.service';
+import { getProductoById, getCategoriaByProductos } from '../../services/productos.service';
 import Link from 'next/link'
 
 export const ProductoContainer = ({productoId}) => {
 
     const [ producto, setProducto ] = useState({});
-
+    const [ categorias, setCategorias ] = useState([]);
     const [ loading, setLoading ] = useState(true);
 
     const getProducto = async()=>{
@@ -19,7 +19,12 @@ export const ProductoContainer = ({productoId}) => {
         return pro;
     }
 
+    const getCategorias = async()=>{
+        getCategoriaByProductos(producto.id_producto).then(c=>{setCategorias(c)});
+    }
+
     useEffect(() => {
+        getCategorias();
         let pro = getProducto().then(p=>{setProducto(p[0]); setLoading(false);});
     }, [])
 
@@ -88,8 +93,26 @@ export const ProductoContainer = ({productoId}) => {
                                 </Col>
                             </Row>
                         </Col>
-                        <Col>
-                            Ver categorías
+                        <Col style={{fontSize:"0.85rem"}}>
+                            <Row>
+                                <Col className="pl-4">
+                                    {"    "}Categorías:
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Control readOnly  as="select" style={{width:"70%", backgroundColor:"transparent", border:"none", color:"#212529", fontSize:"0.85rem"}}>
+                                            {
+                                                categorias.map(c=>(
+                                                    <option>{c.nombre}</option>
+                                                ))
+                                            }
+                                            
+                                        </Form.Control>
+                                    </Form.Group>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
                     <Row className="pt-3">

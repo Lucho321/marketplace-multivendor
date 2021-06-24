@@ -37,8 +37,30 @@ export const getProductosByNombreOrTienda = async(cadena) => {
     return response;
 }
 
+
 export const getProductosByNombreAndTienda = async(cadena, tiendaId) => {
     const response = await fetch(`${API_URL}/get_productosByTiendaAndNombre/${cadena}/${tiendaId}`)
+        .then(response => response.json());
+
+    return response;
+}
+
+export const getProductosByCategoria = async(categoriaId) => {
+    const response = await fetch(`${API_URL}/get_productosByCategoria/${categoriaId}`)
+        .then(response => response.json());
+
+    return response;
+}
+
+export const getAllCategorias = async() => {
+    const response = await fetch(`${API_URL}/get_categorias`)
+        .then(response => response.json());
+
+    return response;
+}
+
+export const getCategoriaByProductos = async(productoId) => {
+    const response = await fetch(`${API_URL}/get_categoriasByProducto/${productoId}`)
         .then(response => response.json());
 
     return response;

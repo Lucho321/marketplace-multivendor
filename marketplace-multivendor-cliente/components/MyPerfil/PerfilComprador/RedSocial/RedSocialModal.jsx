@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Col, Row, Modal, Form, InputGroup, Button } from 'react-bootstrap'
 import Select from 'react-select';
+import { insertRedSocial } from '../../../../services/usuarios.service';
+import Swal from 'sweetalert2'
 
 export const RedSocialModal = (props) => {
 
@@ -8,11 +10,25 @@ export const RedSocialModal = (props) => {
     const [ socialRedPrepend, setSocialRedPrepend ] = useState('facebook.com/');
     const [ isSocialRedChanged, setSocialRedChanged ] = useState(false);
     const [ socialRedInput, setSocialRedInput ] = useState('');
-
+    const [ idUsuario, setIdUsuario ] = useState();
     const socialInputChange = (e)=>{
         setSocialRedInput(e.target.value);
         setSocialRedChanged(true);
     }
+
+    let usuarioLogeado;
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
+            if(usuarioLogeado != undefined){
+                if(usuarioLogeado.nombre_usuario){
+                    setIdUsuario(usuarioLogeado.id_usuario);
+                    
+                }
+            }
+        }
+    }, [])
+
 
 
     const getDefaultValue = ()=>{
@@ -29,6 +45,31 @@ export const RedSocialModal = (props) => {
         }else{
             setSocialRedPrepend(`${rs}.com/`);
         }
+
+    }
+
+    const handleSaveRedSocial=(e)=>{
+        let redsocial = {
+            id_usuario: idUsuario,
+            tipo: socialRed,
+            valor: socialRedInput,
+            url_perfil:`${socialRedPrepend}${socialRedInput}`
+        }
+
+        console.log(redsocial);
+        insertRedSocial(redsocial)
+            .then(res=>{
+                if(res==="Red social agregada exitosamente."){
+                    Swal.fire({
+                        icon: 'success',
+                        title: `Excelente`,
+                        text: `Red social registrada exitosamente`,
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                    setSocialRedInput('');
+                }
+            });
 
     }
 
@@ -86,7 +127,7 @@ export const RedSocialModal = (props) => {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button variant="primary" disabled={!socialRedInput || /^\s*$/.test(socialRedInput)}>Guardar</Button>
+                <Button onClick={handleSaveRedSocial} variant="primary" disabled={!socialRedInput || /^\s*$/.test(socialRedInput)}>Guardar</Button>
             </Modal.Footer>
         </Modal>
     )

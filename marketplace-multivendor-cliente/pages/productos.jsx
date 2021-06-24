@@ -5,7 +5,7 @@ import { ProductosTienda } from '../components/Productos/ProductosTienda';
 export default function Productos() {
   return (
     <Layout>
-        <ProductosTienda />
+        <ProductosComprador />
     </Layout>
   )
 }
