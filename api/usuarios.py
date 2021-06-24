@@ -49,6 +49,7 @@ def insert_usuarios():
         _cedula = _json['cedula']
         _nombre_usuario = _json['nombre_usuario']
         _contrasena = _json['contrasena'] 
+        password = _contrasena
         _contrasena = generate_password_hash(_contrasena)
         _nombre_real = _json['nombre_real']
         _pais = _json['pais']
@@ -66,9 +67,18 @@ def insert_usuarios():
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('Usuario agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
-        res.status_code = 200
-        return res
+
+        cur.execute("SELECT u.id_usuario, u.nombre_usuario ,u.contrasena FROM tbl_usuarios u WHERE u.nombre_usuario=%s",(_nombre_usuario,))
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            if result[1]==_nombre_usuario:
+                if check_password_hash(result[2], password):
+                    content = {'id_usuario':result[0]}
+                    json_items.append(content)
+                    content = {}
+        return jsonify(json_items) 
 
     except Exception as e:
         print(e)
