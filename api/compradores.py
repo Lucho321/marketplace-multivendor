@@ -10,7 +10,7 @@ def get_compradores(id=None):
         if id == None:
             cur.execute("SELECT * from tbl_usuarios u JOIN tbl_compradores c on c.id_usuario = u.id_usuario")
         else:
-            cur.execute("SELECT * from tbl_usuarios u JOIN tbl_compradores c on c.id_usuario = u.id_usuario WHERE id=%s",(id,))
+            cur.execute("SELECT * from tbl_usuarios u JOIN tbl_compradores c on c.id_usuario = u.id_usuario WHERE id_comprador=%s",(id,))
 
         rows = cur.fetchall()
         json_items = []
