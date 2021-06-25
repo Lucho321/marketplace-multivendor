@@ -9,6 +9,7 @@ export const MiCarritoCard = ({productoId, productoCarrito}) => {
     const [ producto, setProducto ] = useState({});
     const [ images, setImages ] = useState([]);
     const [ deseoCarritoId, setDeseoCarritoId ] = useState();
+    const [ cantidad, setCantidad ] = useState(productoCarrito.cantidad)
     
     let usuarioLogeado;
     useEffect(() => {
