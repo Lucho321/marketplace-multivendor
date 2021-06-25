@@ -89,6 +89,13 @@ export const getTarjetasByUsuario = async(idUsuario) => {
     return response;
 }
 
+export const getDireccionesByUsuario = async(idUsuario) => {
+    const response = await fetch(`${API_URL}/get_direccionesByComprador/${idUsuario}`)
+        .then(response => response.json());
+
+    return response;
+}
+
 export const insertTarjeta = async(tarjeta) => {
     const requestOptions = {
         method: 'POST',
@@ -134,4 +141,32 @@ export const validarTarjeta = async(tarjeta) => {
         .then(response => response.json())
 
     return res;
+}
+
+export const insertDireccion = async(direccion) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            pais: direccion.pais,
+            provincia: direccion.provincia,
+            numero_casillero: direccion.numero_casillero,
+            codigo_postal: direccion.codigo_postal,
+            observaciones: direccion.observaciones,
+            id_comprador: direccion.id_comprador
+        })
+        
+    };
+    console.log(requestOptions);
+    const res = await fetch(`${API_URL}/insert_direcciones`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+export const deleteDireccion = async(idDireccion) => {
+    const response = await fetch(`${API_URL}/delete_direcciones/${idDireccion}`, { method: 'DELETE' })
+        .then(response => response.json());
+
+    return response;
 }

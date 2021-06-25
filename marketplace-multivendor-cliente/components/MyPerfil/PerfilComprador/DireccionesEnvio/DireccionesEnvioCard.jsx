@@ -1,9 +1,28 @@
 import React, { useState } from 'react'
 import { Button, Card, Col, Row } from 'react-bootstrap'
 import { DireccionesEnvioModal } from './DireccionesEnvioModal';
+import { deleteDireccion } from '../../../../services/usuarios.service';
+import Swal from 'sweetalert2'
 
-export const DireccionesEnvioCard = () => {
+export const DireccionesEnvioCard = ({direccion, onDelete}) => {
     const [modalShow, setModalShow] = useState(false);
+
+    const handleEliminarDireccion = (e)=>{
+        deleteDireccion(direccion.id_direccion)
+            .then(res=>{
+                if(res==="Dirección eliminada exitosamente"){
+                    onDelete();
+                    Swal.fire({
+                        icon: 'success',
+                        title: `Excelente`,
+                        text: `Dirección eliminada exitosamente`,
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+                }
+            });
+    }
+
     return (
         <Card className="bg-light">
             <Card.Body>
@@ -14,31 +33,31 @@ export const DireccionesEnvioCard = () => {
                     <Col md={9} className="text-left pl-0 ml-0">
                         <Row>
                             <Col>
-                                <p  className="mb-0 pb-0"><strong>Detalle: </strong>Barrio Cooperativa, contiguo al Colegio Calderón Guardia, a la par de la panadería Dulce Oasis, puerta de madera con águila de vidrio</p>
+                                <p  className="mb-0 pb-0"><strong>{`Detalle: ${direccion.observaciones}`}</strong></p>
                             </Col>
                         </Row>
                         <Row className="mt-3">
                             <Col md={6} style={{fontSize:"0.8rem"}}>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>Provincia: </strong>San José</p>
+                                        <p className="mb-0 pb-0"><strong>{`Provincia: ${direccion.provincia}`}</strong></p>
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>País: </strong>Costa Rica</p>
+                                        <p className="mb-0 pb-0"><strong>{`Pais: ${direccion.pais}`}</strong></p>
                                     </Col>
                                 </Row>
                             </Col>
                             <Col md={6} style={{fontSize:"0.8rem"}}>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>Código postal: </strong>11901</p>
+                                        <p className="mb-0 pb-0"><strong>{`Código postal: ${direccion.codigo_postal}`}</strong></p>
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>Número casillero: </strong>CCR-1510</p>
+                                        <p className="mb-0 pb-0"><strong>{`Número casillero: ${direccion.numero_casillero}`}</strong></p>
                                     </Col>
                                 </Row>
                             </Col>
@@ -46,13 +65,8 @@ export const DireccionesEnvioCard = () => {
                     </Col>
                     <Col md={2} className="text-right pt-1">
                         <Row>
-                            <Col className="mr-2 pr-0">
-                                <Button variant="outline-info" onClick={() => setModalShow(true)}>
-                                    <small>Editar</small>
-                                </Button>
-                            </Col>
                             <Col className="ml-0 pl-0">
-                                <Button variant="outline-danger">
+                                <Button onClick={handleEliminarDireccion} variant="outline-danger">
                                     <small>Eliminar</small>
                                 </Button>
                             </Col>

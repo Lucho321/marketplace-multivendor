@@ -157,7 +157,7 @@ def delete_tarjetas(id):
         cur = conn.cursor()
         cur.execute("DELETE FROM tbl_tarjetas WHERE id_tarjeta=%s", (id,))
         conn.commit()
-        res = jsonify('Tarjeta eliminada exitosamente.')
+        res = jsonify('Tarjeta eliminada exitosamente')
         res.status_code = 200
         
         return res

@@ -112,7 +112,7 @@ def delete_direcciones(id):
         cur = conn.cursor()
         cur.execute("DELETE FROM tbl_direcciones_envios WHERE id_direccion=%s", (id,))
         conn.commit()
-        res = jsonify('Tarjeta eliminada exitosamente.')
+        res = jsonify('Dirección eliminada exitosamente')
         res.status_code = 200
         
         return res
