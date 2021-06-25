@@ -85,7 +85,7 @@ def insert_usuarios():
                     json_items.append(content)
                     content = {}
         insert_compradores(_id_usuario)
-        return jsonify("Usuario creado exitosamente") 
+        return jsonify(_id_usuario) 
 
     except Exception as e:
         print(e)

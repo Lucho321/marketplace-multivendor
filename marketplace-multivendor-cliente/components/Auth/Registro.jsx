@@ -3,8 +3,12 @@ import { Container, Row, Col, Form, Button, Tabs, Tab, Image } from 'react-boots
 import { useForm } from '../../context/hooks/useForm';
 import Swal from 'sweetalert2'
 import Link from 'next/link';
+import { crearUsuario, updateUsuario } from '../../services/usuarios.service';
+import { useRouter } from 'next/router';
 
 export const Registro = () => {
+    const router = useRouter();
+
     const [ modalidad, setModalidad ] = useState(0);
     const [key, setKey] = useState('Paso 1');
     const [ cedula, setCedula ] = useState('');
@@ -17,10 +21,49 @@ export const Registro = () => {
     const [ telefono, setTelefono ] = useState('');
     const [ password, setPassword ] = useState('');
     const [ password2, setPassword2 ] = useState('');
-    const [ image, setImage ] = useState('');
+    const [ image, setImage ] = useState(null);
+    const [createObjectURL, setCreateObjectURL] = useState();
+
+
+    const clean = ()=>{
+        setCedula('');
+        setDescripcion('');
+        setNombre('');
+        setUsername('');
+        setEmail('');
+        setPais('');
+        setDireccion('');
+        setTelefono('');
+        setPassword('');
+        setPassword2('');
+        setImage(null);
+        setCreateObjectURL(null);
+    }
+
+    const uploadToClient = (event) => {
+        console.log(event.target.files[0]);
+        if (event.target.files && event.target.files[0]) {
+          const i = event.target.files[0];
+    
+          setImage(i);
+          setCreateObjectURL(URL.createObjectURL(i));
+        }
+    };
+
+    const uploadToServer = async (_name) => {
+        const body = new FormData();
+        body.append("file", image);
+        body.append("_name", _name);
+        const response = await fetch("/api/file", {
+          method: "POST",
+          body
+        });
+    };
+    
+
 
     const getValidarPaso1 = ()=>{
-        if(username.length > 0 && image.length > 0){
+        if(username.length > 0 && image != null){
             return false;
         }
         return true;
@@ -34,7 +77,7 @@ export const Registro = () => {
     }
 
     const getValidarPaso1T = ()=>{
-        if(nombre.length > 0 && image.length > 0 && descripcion.length > 0){
+        if(nombre.length > 0 && descripcion.length > 0 && image != null){
             return false;
         }
         return true;
@@ -55,7 +98,67 @@ export const Registro = () => {
     }
 
     const handleCrearUsuario = (e)=>{
-
+        if(password === password2){
+            let tipo;
+            let des;
+            if(modalidad===2){
+                tipo=0;
+                des = descripcion;
+            }else{
+                tipo=1;
+                des="";
+            }
+            let user={
+                cedula: cedula,
+                nombre_usuario: username,
+                contrasena: password,
+                nombre_real: nombre,
+                pais: pais,
+                direccion: direccion,
+                fotografia: "",
+                telefono: telefono,
+                email: email,
+                tipo_usuario: tipo,
+                abuso: 0,
+                estado: 1,
+                descripcion: des
+            }
+            console.log(user);
+            crearUsuario(user)
+                .then(res=>{
+                    if(res > 0){
+                        uploadToServer(`usr-${res}-${image.name}`).then(r=>{});
+                        let usr2 = {
+                            ...user,
+                            id_usuario: res
+                        };
+                        usr2.fotografia = `usr-${res}-${image.name}`;
+                        updateUsuario(usr2).then(rex=>{
+                            if(rex==="Usuario actualizado exitosamente."){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: `Excelente`,
+                                    text: `Usuario registrado exitosamente`,
+                                    showConfirmButton: false,
+                                    timer: 2500
+                                });
+                                setTimeout(() => {
+                                    router.push('/auth/login');
+                                }, 2500);
+                            }
+                        });
+                    }
+                });
+        }else{
+            Swal.fire({
+                icon: 'error',
+                title: `Opps!`,
+                text: `Las contraseñas no coinciden`,
+                showConfirmButton: false,
+                timer: 2500
+              });
+        }
+        
     }
 
     const handleCrearUsuarioTienda = (e)=>{
@@ -82,7 +185,7 @@ export const Registro = () => {
                             <small>Ya casi eres parte de Lujepa Market, la tienda online más grande del mundo</small>
                         </Col>
                     </Row>
-                    {modalidad===0 &&   <Row className="d-flex justify-content-center pb-5 mb-5 pt-5 mt-5">
+                    {modalidad===0 &&  <> <Row className="d-flex justify-content-center pb-5 mb-5 pt-5 mt-5">
                                             <Col md={12} className="text-center mt-4 pt-5 mb-3">
                                                 <h3>¿Para qué quieres ser parte de Lujepa Market?</h3>
                                             </Col>
@@ -94,9 +197,16 @@ export const Registro = () => {
                                                 <Button onClick={(e)=>{setModalidad(2)}} variant="info" block>Vender Productos</Button>
                                             </Col>
                                         </Row>
+                                        <Row>
+                                            <Col className="text-center mt-5 p-5" style={{fontSize:"0.75rem"}}>
+                                                <Link href="/auth/login">
+                                                    <a style={{color:"white"}}>Ya tengo una cuenta</a>
+                                                </Link>
+                                            </Col>
+                                        </Row> </>
                     }
                     {modalidad===1 &&   <Row className="d-flex justify-content-center mt-5">
-                                            <Col md={6} className="pr-5 pl-5">
+                                            <Col sm={12}  md={6} className="pr-5 pl-5">
                                                 <Tabs
                                                     activeKey={key}
                                                     onSelect={(k) => setKey(k)}
@@ -109,7 +219,7 @@ export const Registro = () => {
                                                                 <Col md={12} className="pt-2">
                                                                     Elija una imagen de su ordenador
                                                                     <Form.Group className="mt-2">
-                                                                        <Form.File id="exampleFormControlFile1" onChange={(e)=>{setImage(e.target.value)}}/>
+                                                                        <Form.File id="exampleFormControlFile1" onChange={(e)=>{uploadToClient(e)}}/>
                                                                     </Form.Group>
                                                                 </Col>
                                                             </Row>
@@ -124,7 +234,7 @@ export const Registro = () => {
                                                             </Row>
                                                             <Row>
                                                                 <Col md={6} className="mt-2 text-left">
-                                                                    <Button onClick={(e)=>{setModalidad(0)}} variant="outline-info">
+                                                                    <Button onClick={(e)=>{setModalidad(0);clean();}} variant="outline-info">
                                                                         Anterior
                                                                     </Button>
                                                                 </Col>
@@ -208,7 +318,7 @@ export const Registro = () => {
                                                                 <Col>
                                                                     <Form.Group >
                                                                         <Form.Label>Contraseña</Form.Label>
-                                                                        <Form.Control name="password" value={ password } onChange={ (e)=>{setPassword(e.target.value);}} type="text" placeholder="Contraseña" />
+                                                                        <Form.Control name="password" type="password" value={ password } onChange={ (e)=>{setPassword(e.target.value);}} placeholder="Contraseña" />
                                                                         <Form.Text className="text-muted"></Form.Text>
                                                                     </Form.Group>
                                                                 </Col>
@@ -217,7 +327,7 @@ export const Registro = () => {
                                                                 <Col>
                                                                     <Form.Group >
                                                                         <Form.Label>Confirmar contraseña</Form.Label>
-                                                                        <Form.Control name="password2" value={ password2 } onChange={ (e)=>{setPassword2(e.target.value);}} type="text" placeholder="Confirma tu contraseña" />
+                                                                        <Form.Control name="password2" type="password" value={ password2 } onChange={ (e)=>{setPassword2(e.target.value);}}  placeholder="Confirma tu contraseña" />
                                                                         <Form.Text className="text-muted"></Form.Text>
                                                                     </Form.Group>
                                                                 </Col>
@@ -245,7 +355,7 @@ export const Registro = () => {
                                         </Row>
                     }
                     {modalidad===2 &&   <Row className="d-flex justify-content-center mt-5">
-                                            <Col md={6} className="pr-5 pl-5">
+                                            <Col sm={12}  md={6} className="pr-5 pl-5">
                                                 <Tabs
                                                     activeKey={key}
                                                     onSelect={(k) => setKey(k)}
@@ -258,7 +368,7 @@ export const Registro = () => {
                                                                 <Col md={12} className="pt-2">
                                                                     Elija una imagen de su ordenador para su tienda
                                                                     <Form.Group className="mt-2">
-                                                                        <Form.File id="exampleFormControlFile1" onChange={(e)=>{setImage(e.target.value)}}/>
+                                                                        <Form.File id="exampleFormControlFile1" onChange={(e)=>{uploadToClient(e)}}/>
                                                                     </Form.Group>
                                                                 </Col>
                                                             </Row>
@@ -283,7 +393,7 @@ export const Registro = () => {
                                                             </Row>
                                                             <Row>
                                                                 <Col md={6} className="mt-2 text-left">
-                                                                    <Button onClick={(e)=>{setModalidad(0)}} variant="outline-info">
+                                                                    <Button onClick={(e)=>{setModalidad(0);clean();}} variant="outline-info">
                                                                         Anterior
                                                                     </Button>
                                                                 </Col>
@@ -367,7 +477,7 @@ export const Registro = () => {
                                                                 <Col>
                                                                     <Form.Group >
                                                                         <Form.Label>Contraseña</Form.Label>
-                                                                        <Form.Control name="password" value={ password } onChange={ (e)=>{setPassword(e.target.value);}} type="text" placeholder="Contraseña" />
+                                                                        <Form.Control name="password" type="password" value={ password } onChange={ (e)=>{setPassword(e.target.value);}} placeholder="Contraseña" />
                                                                         <Form.Text className="text-muted"></Form.Text>
                                                                     </Form.Group>
                                                                 </Col>
@@ -376,7 +486,7 @@ export const Registro = () => {
                                                                 <Col>
                                                                     <Form.Group >
                                                                         <Form.Label>Confirmar contraseña</Form.Label>
-                                                                        <Form.Control name="password2" value={ password2 } onChange={ (e)=>{setPassword2(e.target.value);}} type="text" placeholder="Confirma tu contraseña" />
+                                                                        <Form.Control name="password2" type="password" value={ password2 } onChange={ (e)=>{setPassword2(e.target.value);}}  placeholder="Confirma tu contraseña" />
                                                                         <Form.Text className="text-muted"></Form.Text>
                                                                     </Form.Group>
                                                                 </Col>
@@ -390,7 +500,7 @@ export const Registro = () => {
                                                                 <Col md={3} className="mt-2 text-left">
                                                                 </Col>
                                                                 <Col md={6} className="mt-2 text-right">
-                                                                    <Button disabled={getValidarPaso3()} onClick={handleCrearUsuarioTienda} variant="info" block>
+                                                                    <Button disabled={getValidarPaso3()} onClick={handleCrearUsuario} variant="info" block>
                                                                         Guardar
                                                                     </Button>
                                                                 </Col>
