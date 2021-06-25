@@ -101,6 +101,22 @@ export const insertarDeseosOCarrito = async(carrito_deseo) => {
     return res;
 }
 
+export const updateDeseosOCarrito = async(carrito_deseo) => {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id_carrito_deseo: carrito_deseo.id_carrito_deseo,
+            id_producto: carrito_deseo.id_producto,
+            cantidad: carrito_deseo.cantidad
+        })
+    };
+    const res = await fetch(`${API_URL}/update_productos_carritos`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
 
 export const getDeseoCarrito = async(productoId, carritoId) => {
     try {

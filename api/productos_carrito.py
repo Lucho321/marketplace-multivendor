@@ -99,12 +99,10 @@ def update_productos_carritos():
         _json = request.get_json(force=True)
         _id_producto = _json['id_producto']
         _id_carrito_deseo = _json['id_carrito_deseo']
-        _new_id_producto = _json['new_id_producto']
-        _new_id_carrito_deseo = _json['new_id_carrito_deseo']
         _cantidad = ['cantidad']
 
         query = "UPDATE tbl_productos_carrito SET id_carrito_deseo=%s, id_producto=%s, cantidad=%s WHERE id_carrito_deseo=%s AND id_producto=%s"
-        data = (_new_id_carrito_deseo, _new_id_producto, _cantidad, _id_carrito_deseo, _id_producto)
+        data = (_id_carrito_deseo, _id_producto, _cantidad, _id_carrito_deseo, _id_producto)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
