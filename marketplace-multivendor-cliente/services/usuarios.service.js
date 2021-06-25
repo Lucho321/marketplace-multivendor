@@ -143,6 +143,7 @@ export const validarTarjeta = async(tarjeta) => {
     return res;
 }
 
+
 export const insertDireccion = async(direccion) => {
     const requestOptions = {
         method: 'POST',
@@ -155,10 +156,34 @@ export const insertDireccion = async(direccion) => {
             observaciones: direccion.observaciones,
             id_comprador: direccion.id_comprador
         })
-        
-    };
-    console.log(requestOptions);
+    }
     const res = await fetch(`${API_URL}/insert_direcciones`, requestOptions)
+    .then(response => response.json())
+
+    return res;
+}
+
+export const crearUsuario = async(usuario) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            cedula: usuario.cedula,
+            nombre_usuario: usuario.nombre_usuario,
+            contrasena: usuario.contrasena,
+            nombre_real: usuario.nombre_real,
+            pais: usuario.pais,
+            direccion: usuario.direccion,
+            fotografia: usuario.fotografia,
+            telefono: usuario.telefono,
+            email: usuario.email,
+            tipo_usuario: usuario.tipo_usuario,
+            abuso: usuario.abuso,
+            estado: usuario.estado,
+            descripcion: usuario.descripcion
+        })
+    };
+    const res = await fetch(`${API_URL}/insert_usuarios`, requestOptions)
         .then(response => response.json())
 
     return res;
@@ -169,4 +194,5 @@ export const deleteDireccion = async(idDireccion) => {
         .then(response => response.json());
 
     return response;
+
 }

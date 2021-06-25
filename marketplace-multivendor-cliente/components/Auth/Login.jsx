@@ -96,12 +96,12 @@ export const Login = () => {
                                         <Row>
                                             <Col md={12}>
                                                 <Form.Group >
-                                                    <Form.Label>Email</Form.Label>
-                                                    <Form.Control value={ email } onChange={ handleInputChange } name="email" placeholder="Enter email" />
+                                                    <Form.Label>Usuario</Form.Label>
+                                                    <Form.Control value={ email } onChange={ handleInputChange } name="email" placeholder="Usuario" />
                                                 </Form.Group>
                                                 <Form.Group >
                                                     <Form.Label>Contraseña</Form.Label>
-                                                    <Form.Control value={ password } onChange={ handleInputChange } name="password" type="password" placeholder="Password" />
+                                                    <Form.Control value={ password } onChange={ handleInputChange } name="password" type="password" placeholder="Contraseña" />
                                                 </Form.Group>
                                             </Col>
                                         </Row>

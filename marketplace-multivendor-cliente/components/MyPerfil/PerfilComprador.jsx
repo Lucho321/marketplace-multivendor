@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Col, Image, Row } from 'react-bootstrap'
+import { getUsuarioById } from '../../services/usuarios.service';
 import { DireccionesEnvio } from './PerfilComprador/DireccionesEnvio/DireccionesEnvio';
 import { InformacionGeneral } from './PerfilComprador/InformacionGeneral';
 import { ListaDeseos } from './PerfilComprador/ListaDeseos';
@@ -11,19 +12,26 @@ export const PerfilComprador = ({numComponent}) => {
     const [ usuario, setUsuario ] = useState({});
     let usuarioLogeado;
 
-    
+    const [ _usuario, set_Usuario ] = useState({});
     useEffect(() => {
         if (typeof window !== 'undefined') {
             usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
             if(usuarioLogeado != undefined){
                 if(usuarioLogeado.nombre_usuario){
                     setUsuario(usuarioLogeado);
+                    getUsuario(usuarioLogeado.id_usuario);
                 }
             }
         }
     }, [])
 
-
+    const getUsuario = (id)=>{
+        console.log(id);
+        getUsuarioById(id).then(res=>{
+            console.log(res);
+            set_Usuario(res[0]);
+        })
+    }
 
 
     if(numComponent === undefined){
@@ -39,14 +47,14 @@ export const PerfilComprador = ({numComponent}) => {
         return classname;
     }
 
-    const nombreUsuario = "Pablo Venegas Elizondo";
+
 
     return (
         <Row>
             <Col md={2} className="pt-4 pb-5" style={{borderRight:"solid 2px #b3e7df"}}>
                 <Row>
                     <Col className="text-center">
-                        <Image src="/images/perfil.jpg" style={{width:"180px", height:"171px"}} roundedCircle />
+                        <Image src={`/images/files/${_usuario.fotografia}`} style={{width:"180px", height:"171px"}} roundedCircle />
                     </Col>
                 </Row>
                 <Row className="mt-1 mb-3">
