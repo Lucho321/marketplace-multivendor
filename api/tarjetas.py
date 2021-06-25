@@ -16,7 +16,7 @@ def get_tarjetas(id=None):
         json_items = []
         content = {}
         for result in rows:
-            content = { 'id_tarjeta':result[0], 'nombre_propietario':result[1], 'numero_tarjeta':result[2], 'codigo_cvv':result[3], 'fecha_vence':result[4], 'saldo': result[5], 'id_comprador': [6]}
+            content = { 'id_tarjeta':result[0], 'nombre_propietario':result[1], 'numero_tarjeta':result[2], 'codigo_cvv':result[3], 'fecha_vence':result[4], 'saldo': result[5], 'id_comprador': result[6]}
             json_items.append(content)
             content = {}
         

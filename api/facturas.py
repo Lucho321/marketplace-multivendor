@@ -16,7 +16,7 @@ def get_facturas(id=None): #funcion que sera invoada por la ruta anterior
         json_items = []
         content = {}
         for result in rows: #obtenemos el arreglo de resultados de la consulta
-            content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4] }
+            content = content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4], 'id_comprador':result[5], 'id_tarjeta':result[6] }
             json_items.append(content)
             content = {}
         
@@ -41,7 +41,7 @@ def get_facturasByTienda(id=None): #funcion que sera invoada por la ruta anterio
         json_items = []
         content = {}
         for result in rows: #obtenemos el arreglo de resultados de la consulta
-            content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4] }
+            content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4], 'id_comprador':result[5], 'id_tarjeta':result[6] }
             json_items.append(content)
             content = {}
         
@@ -66,7 +66,7 @@ def get_facturasByProducto(id=None): #funcion que sera invoada por la ruta anter
         json_items = []
         content = {}
         for result in rows: #obtenemos el arreglo de resultados de la consulta
-            content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4] }
+            content = { 'id_factura':result[0], 'descripcion':result[1], 'direccion_url':result[2], 'fecha_generada':result[3], 'id_tienda':result[4], 'id_comprador':result[5], 'id_tarjeta':result[6] }
             json_items.append(content)
             content = {}
         
@@ -85,8 +85,10 @@ def insert_facturas():
         _direccion_url = _json['direccion_url']
         _fecha_generada = _json['fecha_generada']
         _id_tienda = _json['id_tienda']
-        query = "INSERT INTO tbl_facturas(descripcion, direccion_url, fecha_generada, id_tienda) VALUES(%s, %s, %s, %s)"
-        data = (_descripcion, _direccion_url, _fecha_generada, _id_tienda,)
+        _id_comprador = _json['id_comprador']
+        _id_tarjeta = _json['id_tarjeta']
+        query = "INSERT INTO tbl_facturas(descripcion, direccion_url, fecha_generada, id_tienda, id_comprador, id_tarjeta) VALUES(%s, %s, %s, %s, %s, %s)"
+        data = (_descripcion, _direccion_url, _fecha_generada, _id_tienda, _id_comprador, _id_tarjeta)
         print(data)
         conn = mysql.connect()
         cur = conn.cursor()
@@ -111,8 +113,10 @@ def update_facturas():
         _direccion_url = _json['direccion_url']
         _fecha_generada = _json['fecha_generada']
         _id_tienda = _json['id_tienda']
-        query = "UPDATE tbl_facturas SET descripcion=%s, direccion_url=%s, fecha_generada=%s, id_tienda=%s WHERE id_factura=%s"
-        data = (_descripcion, _direccion_url, _fecha_generada, _id_tienda, _id_factura,)
+        _id_comprador = _json['id_comprador']
+        _id_tarjeta = _json['id_tarjeta']
+        query = "UPDATE tbl_facturas SET descripcion=%s, direccion_url=%s, fecha_generada=%s, id_tienda=%s, id_comprador=%s, id_tarjeta=%s WHERE id_factura=%s"
+        data = (_descripcion, _direccion_url, _fecha_generada, _id_tienda, _id_comprador, _id_tarjeta, _id_factura,)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)

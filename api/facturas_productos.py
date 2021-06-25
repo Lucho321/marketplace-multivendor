@@ -30,9 +30,10 @@ def insert_facturas_productos():
         _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
         _id_factura = _json['id_factura']
         _id_producto = _json['id_producto']
+        _cantidad = _json['cantidad_producto']
 
-        query = "INSERT INTO tbl_factura_producto(id_factura, id_producto) VALUES(%s, %s)"
-        data = (_id_factura, _id_producto)
+        query = "INSERT INTO tbl_factura_producto(id_factura, id_producto, cantidad_producto) VALUES(%s, %s, %s)"
+        data = (_id_factura, _id_producto, _cantidad)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)

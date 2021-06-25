@@ -178,16 +178,15 @@ def get_productosByFactura(id=None): #funcion que sera invoada por la ruta anter
         print(e)
     finally:
         cur.close()
-        
-@app.route('/get_productosByReporte/')#para obtener todos los productos
-@app.route('/get_productosByReporte/<int:id>') #por id
-def get_productosByReporte(id=None): #funcion que sera invoada por la ruta anterior
+
+@app.route('/get_productosByListaTiendas/<int:id_comprador>/<int:id_tienda>') #por id
+def get_productosByListaTienda(id_comprador, id_tienda): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if id == None:
             cur.execute("SELECT * FROM tbl_productos")
         else:
-            cur.execute("SELECT * FROM tbl_productos p JOIN tbl_productos_reportes pr ON p.id_producto = pr.id_producto WHERE pr.id_reportes_compras = %s",(id,))
+            cur.execute("SELECT p.* FROM tbl_productos p JOIN tbl_productos_carrito pc ON pc.id_producto = p.id_producto JOIN tbl_compradores_tiendas ct ON p.id_tienda = ct.id_tienda WHERE p.id_tienda=%s AND ct.id_comprador=%s",(id_tienda, id_comprador))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []
@@ -204,14 +203,13 @@ def get_productosByReporte(id=None): #funcion que sera invoada por la ruta anter
     finally:
         cur.close()
 
-@app.route('/get_productosByListaTiendas/<int:id_comprador>/<int:id_tienda>') #por id
-def get_productosByListaTienda(id_comprador, id_tienda): #funcion que sera invoada por la ruta anterior
+@app.route('/get_productosBaratos/<int:id_categoria>/<int:fecha1>/<int:fecha2>/<float:precio>') #por id
+def get_productosBaratos(id_categoria, fecha1, fecha2, precio): #funcion que sera invoada por la ruta anterior
     try:
-        cur = mysql.connect().cursor() #Nos conectamos a mysql
-        if id == None:
-            cur.execute("SELECT * FROM tbl_productos")
-        else:
-            cur.execute("SELECT p.* FROM tbl_productos p JOIN tbl_productos_carrito pc ON pc.id_producto = p.id_producto JOIN tbl_compradores_tiendas ct ON p.id_tienda = ct.id_tienda WHERE p.id_tienda=%s AND ct.id_comprador=%s",(id_tienda, id_comprador))
+        fecha1 = str(fecha1)
+        fecha2 = str(fecha2)
+        cur = mysql.connect().cursor()
+        cur.execute("SELECT p.* FROM tbl_productos p JOIN tbl_productos_categorias pc ON pc.id_producto = p.id_producto WHERE pc.id_categoria=%s AND p.fecha_publicacion BETWEEN %s AND %s AND p.precio < %s",(id_categoria, fecha1, fecha2, precio))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []
