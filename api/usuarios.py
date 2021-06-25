@@ -72,10 +72,7 @@ def insert_usuarios():
         cur.execute(query, data)
         conn.commit()
 
-        print('Hola mundo')
-
         cur.execute("SELECT u.id_usuario, u.nombre_usuario ,u.contrasena FROM tbl_usuarios u WHERE u.nombre_usuario=%s",(_nombre_usuario,))
-        print('Hola mundo2')
         rows = cur.fetchall()
         json_items = []
         content = {}
@@ -86,16 +83,13 @@ def insert_usuarios():
                     content = {'id_usuario':result[0]}
                     json_items.append(content)
                     content = {}
-                    print('Hola mundo3')
 
-        print(_tipo_usuario)
         if (_tipo_usuario == 1):
-            print('Hola mundo4')
+
             print(_tipo_usuario)
             insert_compradores(_id_usuario)
             return jsonify(_id_usuario) 
         if (_tipo_usuario == 0):
-            print('Hola mundo4')
             print(_tipo_usuario)
             insert_tiendas(_id_usuario, _descripcion)
             return jsonify(_id_usuario) 
@@ -172,6 +166,9 @@ def login():
         _tipo_usuario = ''
         _id_usuario = ''
         _nombre = ''
+        _id_comprador = ''
+        _deseos = ''
+        _carrito = ''
 
         json_items = []
         content = {}
@@ -193,13 +190,24 @@ def login():
             cur2.execute("SELECT c.id_comprador FROM tbl_compradores c WHERE c.id_usuario=%s",( _id_usuario,))
             rows2 = cur2.fetchall()
             for result in rows2: 
-                content = {
-                    'id_usuario':_id_usuario,
-                    'id_comprador': result[0],
-                    'nombre_usuario': _nombre,
-                    'tipo_usuario': _tipo_usuario}  
-                json_items.append(content)
-                content = {}
+                _id_comprador = result[0]
+
+            cur2.execute("SELECT c.* FROM tbl_carrito_deseos c WHERE id_comprador=%s",(_id_comprador,))
+            rows2 = cur2.fetchall()
+            for result in rows2: 
+                if (result[1] == 1):
+                    _carrito = result[0]
+                if (result[1] == 0): 
+                    _deseos = result[0]
+            content = {
+                'id_usuario':_id_usuario,
+                'id_comprador': _id_comprador,
+                'nombre_usuario': _nombre,
+                'tipo_usuario': _tipo_usuario,
+                'deseos':_deseos,
+                'carrito':_carrito}  
+            json_items.append(content)
+            content = {}
             print("comprador")
             
         if(_tipo_usuario == 0): #tienda
