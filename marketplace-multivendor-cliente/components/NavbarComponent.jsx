@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 export const NavbarComponent = () => {
     const router = useRouter();
-
+    const [ tipoUsuario, setTipoUsuario ] = useState();
     const [ usuario, setUsuario ] = useState({});
     let usuarioLogeado;
     useEffect(() => {
@@ -14,6 +14,7 @@ export const NavbarComponent = () => {
             usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
             if(usuarioLogeado != undefined){
                 if(usuarioLogeado.nombre_usuario){
+                    setTipoUsuario(usuarioLogeado.tipo_usuario);
                     setUsuario(usuarioLogeado);
                 }
             }else{
@@ -38,23 +39,36 @@ export const NavbarComponent = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link href="/productos">Productos</Nav.Link>
-                    <Nav.Link href="/tiendas">Tiendas</Nav.Link>
+                    {
+                        tipoUsuario === 1 &&    <>
+                                                    <Nav.Link href="/productos">Productos</Nav.Link>
+                                                    <Nav.Link href="/tiendas">Tiendas</Nav.Link>
+                                                </>
+                    }
                 </Nav>
                 <Nav>
                     <NavDropdown title={usuario.nombre_usuario} id="collasible-nav-dropdown">
                         <NavDropdown.Item href="/miperfil">Mi Perfil</NavDropdown.Item>
-                        <NavDropdown.Item href="/listadeseos">Mis deseos</NavDropdown.Item>
-                        <NavDropdown.Item href="/micarrito">Mi carrito</NavDropdown.Item>
+                        {
+                            tipoUsuario === 1 &&    <>
+                                                        <NavDropdown.Item href="/listadeseos">Mis deseos</NavDropdown.Item>
+                                                        <NavDropdown.Item href="/micarrito">Mi carrito</NavDropdown.Item>
+                                                    </>
+                        }
                         <NavDropdown.Divider />
                         <NavDropdown.Item onClick={handleLogout}>Cerrar sesión</NavDropdown.Item>
                     </NavDropdown>
-                    <Nav.Link href="/listadeseos">
-                        <img className="d-inline-block align-top" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="25"/>
-                    </Nav.Link>
-                    <Nav.Link href="/micarrito">
-                        <img className="d-inline-block align-top" src="/images/micarrito.png" title="Mi carrito de compras" alt="logo" height="25"/>
-                    </Nav.Link>
+                    {
+                        tipoUsuario === 1 &&    <>
+                                                    <Nav.Link href="/listadeseos">
+                                                        <img className="d-inline-block align-top" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="25"/>
+                                                    </Nav.Link>
+                                                    <Nav.Link href="/micarrito">
+                                                        <img className="d-inline-block align-top" src="/images/micarrito.png" title="Mi carrito de compras" alt="logo" height="25"/>
+                                                    </Nav.Link>
+                                                </>
+                    }
+                    
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

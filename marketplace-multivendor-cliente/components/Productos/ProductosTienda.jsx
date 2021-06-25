@@ -26,9 +26,18 @@ export const ProductosTienda = () => {
 
     return (
         <>
-        <Row>
-            <Col md={2}></Col>
+        <Row className="mb-2 mt-4">
+            <Col md={1}></Col>
             <Col md={8}>
+                <h2 style={{color:"#1abc9c"}}>Mis productos</h2>
+            </Col>
+            <Col md={2} className="text-right">
+                <Button variant="info">Agregar producto</Button>
+            </Col>
+        </Row>
+        <Row>
+            <Col md={1}></Col>
+            <Col md={10}>
                 <InputGroup className="mb-3 mt-3">
                     <FormControl
                         placeholder="Escribe el nombre del tu producto"
@@ -46,8 +55,8 @@ export const ProductosTienda = () => {
             <Col md={2}></Col>
         </Row>
         <Row>
-            <Col md={2}></Col>
-            <Col md={8} className='pt-3' style={{color:'yellow'}}>
+            <Col md={1}></Col>
+            <Col md={10} className='pt-3' style={{color:'yellow'}}>
                 <Table responsive>
                     <thead>
                         <tr>
