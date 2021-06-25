@@ -4,6 +4,8 @@ import { useForm } from '../../context/hooks/useForm';
 import { useRouter } from 'next/router';
 import { login } from '../../services/auth.service';
 import Swal from 'sweetalert2'
+import Link from 'next/link';
+
 
 
 
@@ -82,7 +84,7 @@ export const Login = () => {
                         </Col>
                     </Row>
                     <Row className="d-flex justify-content-center">
-                        <Col md={8} className="mt-3 mb-5 pb-5 pl-5 pr-5 pt-3 bg-light" style={{borderRadius:"10px"}}>
+                        <Col md={8} className="mt-3 mb-5 pb-4 pl-5 pr-5 pt-3 bg-light" style={{borderRadius:"10px"}}>
                             <Row>
                                 <Col className="pt-3 pb-3 text-center">
                                     <h2>Login</h2>
@@ -113,11 +115,18 @@ export const Login = () => {
                                     </Form>
                                 </Col>
                             </Row>
-                            
+                            <Row>
+                                <Col className="text-center mt-4" style={{fontSize:"0.75rem"}}>
+                                    <Link href="/auth/registro">
+                                        <a style={{color:"#212529"}}>Aún no tengo una cuenta</a>
+                                    </Link>
+                                </Col>
+                            </Row>
                         </Col>
                     </Row>
+                    
                     <Row>
-                        <Col className="text-center mt-5" style={{fontSize:"0.75rem"}}>
+                        <Col className="text-center mt-4" style={{fontSize:"0.75rem"}}>
                             &copy; 2021 lujepamarket.com - Todos los derechos reservados.
                         </Col>
                     </Row>
