@@ -66,10 +66,18 @@ def insert_productos_fotos():
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('Foto agregada exitosamente.') #Se retorna un mensaje de éxito en formato JSON
-        res.status_code = 200
+
         
-        return res
+        cur.execute("SELECT p.id_foto FROM tbl_productos_fotos p WHERE p.nombre=%s AND p.url_foto=%s AND p.id_producto=%s",(_nombre,_url_foto,_id_producto,))
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_foto':result[0]}
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
 
     except Exception as e:
         print(e)
