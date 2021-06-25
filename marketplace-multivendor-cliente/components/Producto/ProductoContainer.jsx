@@ -7,6 +7,9 @@ import { OpinionComentar } from '../Opiniones/OpinionComentar';
 import { OpinionComentario } from '../Opiniones/OpinionComentario';
 import { getProductoById, getCategoriaByProductos } from '../../services/productos.service';
 import Link from 'next/link'
+import { DeseoComponent } from '../Productos/DeseoComponent';
+import { CarritoComponent } from '../Productos/CarritoComponent';
+
 
 export const ProductoContainer = ({productoId}) => {
 
@@ -122,8 +125,8 @@ export const ProductoContainer = ({productoId}) => {
                     </Row>
                     <Row className="pt-5">
                         <Col>
-                            <img className="d-inline-block align-top" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="25"/>
-                            <img className="ml-2 d-inline-block align-top" src="/images/micarrito.png" title="Mi carrito de compras" alt="logo" height="25"/>
+                            <DeseoComponent idProducto={productoId} altura={25} />
+                            <CarritoComponent idProducto={productoId} altura={25} />
                         </Col>
                         <Col className="text-right">
                             <Button variant="info">Comprar</Button>

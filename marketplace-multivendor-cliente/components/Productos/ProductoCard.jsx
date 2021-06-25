@@ -53,7 +53,7 @@ export const ProductoCard = ({producto}) => {
                 </Col>
                 <Col className="mr-2 mt-1 text-right">
                     <DeseoComponent idProducto={producto.id_producto} altura={15} />
-                    <CarritoComponent altura={15} />
+                    <CarritoComponent idProducto={producto.id_producto} altura={15} />
                 </Col>
             </Row>
             <Row className="mt-2">
