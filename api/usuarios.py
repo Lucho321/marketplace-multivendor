@@ -75,13 +75,13 @@ def insert_usuarios():
         json_items = []
         content = {}
         for result in rows:
-            if result[1]==_nombre_usuario:
+            if (result[1]==_nombre_usuario):
                 if check_password_hash(result[2], password):
                     _id_usuario = result[0]
                     content = {'id_usuario':result[0]}
                     json_items.append(content)
                     content = {}
-        if(_tipo_usuario == "0"): #tienda
+        if _tipo_usuario == "0": #tienda
             query2 = "INSERT INTO tbl_tiendas(calificacion, descripcion, id_usuario) VALUES(%s,%s,%s)"
             data2 = (_calificacion, _descripcion, _id_usuario)
             cur = conn.cursor()
@@ -165,8 +165,9 @@ def login():
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         cur.execute("SELECT u.nombre_usuario, u.contrasena, u.id_usuario, u.tipo_usuario FROM tbl_usuarios u")
         bandera = False
-        _tipo_usuario = ""
-        _id_usuario = ""
+        _tipo_usuario = ''
+        _id_usuario = ''
+        _nombre = ''
 
         json_items = []
         content = {}
@@ -175,48 +176,42 @@ def login():
             if result[0]==_nombre_usuario:
                 if check_password_hash(result[1], _contrasena):
                     print("Password correcta")
-                    _tipo_usuario: result[3]
-                    _id_usuario: result[2]
-                    bandera=True
-                    content = { 
-                    'nombre_usuario':result[0], 
-                    'id_usuario':result[2], 
-                    'tipo_usuario':result[3]}
-                    json_items.append(content)
-                    content = {}
-                    
+                    _tipo_usuario = result[3]
+                    _id_usuario = result[2]
+                    _nombre = result[0]
+                    bandera=True              
                 else:
                     print("Password INCORRECTA")  
         
-        if (_tipo_usuario == "1"): #comprador
+        
+        if (_tipo_usuario == 1): #comprador
             cur2 = mysql.connect().cursor() #Nos conectamos a mysql
             cur2.execute("SELECT c.id_comprador FROM tbl_compradores c WHERE c.id_usuario=%s",( _id_usuario,))
             rows2 = cur2.fetchall()
             for result in rows2: 
-                print(result[0])
-                content = {"id_comprador": result[0]}  
+                content = {
+                    'id_usuario':_id_usuario,
+                    'id_comprador': result[0],
+                    'nombre_usuario': _nombre,
+                    'tipo_usuario': _tipo_usuario}  
                 json_items.append(content)
                 content = {}
             print("comprador")
             
-        else: #else: #tienda
+        if(_tipo_usuario == 0): #tienda
             cur2 = mysql.connect().cursor() #Nos conectamos a mysql
             cur2.execute("SELECT t.id_tienda FROM tbl_tiendas t WHERE t.id_usuario=%s",( _id_usuario,))  
             rows2 = cur2.fetchall() 
-            print(rows2)
             for result in rows2: 
-                print("for")
-                print(result[0])
-                content = {"id_tienda": result[0]}  
+                content = {
+                    'id_usuario':_id_usuario,
+                    'id_tienda': result[0],
+                    'nombre_usuario': _nombre,
+                    'tipo_usuario': _tipo_usuario
+
+                    }  
                 json_items.append(content)
                 content = {}
-            print("tienda")
-
-
-
-
-
-
 
         if bandera:
             return jsonify(json_items) 
