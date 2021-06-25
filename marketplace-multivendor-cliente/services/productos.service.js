@@ -83,3 +83,39 @@ export const insertarCompra = async(compra) => {
 
     return res;
 }
+
+
+export const insertarDeseosOCarrito = async(carrito_deseo) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id_carrito_deseo: carrito_deseo.id_carrito_deseo,
+            id_producto: carrito_deseo.id_producto,
+            cantidad: carrito_deseo.cantidad
+        })
+    };
+    const res = await fetch(`${API_URL}/insert_productos_carritos`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+
+export const getDeseoCarrito = async(productoId, carritoId) => {
+    try {
+        const response = await fetch(`${API_URL}/get_productos_carritosByCarritoAndProducto/${carritoId}/${productoId}`)
+            .then(response => response.json());
+
+        return response;
+    } catch (e) {
+        return [];
+    }
+}
+
+export const deleteDeseoCarrito = async(carritoId, productoId) => {
+    const response = await fetch(`${API_URL}/delete_productos_carritos/${carritoId}/${productoId}`, { method: 'DELETE' })
+        .then(response => response.json());
+
+    return response;
+}

@@ -103,7 +103,7 @@ export const ProductosComprador = () => {
             </Row>
             <Row className="mb-5 pt-4">
                 {productos.map( producto => (
-                    <Col md={3} className="d-flex justify-content-center">
+                    <Col key={producto.id_producto} md={3} className="d-flex justify-content-center">
                         <ProductoCard key={producto.id_producto} producto={producto}/>
                     </Col>
                 ))}
