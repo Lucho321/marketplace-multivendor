@@ -3,6 +3,7 @@ from init import app
 from init import mysql
 import bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
+from compradores import insert_compradores
 
 @app.route('/get_usuarios/')#para obtener todos los usuarios
 @app.route('/get_usuarios/<int:id>') #por id
@@ -70,6 +71,8 @@ def insert_usuarios():
         cur.execute(query, data)
         conn.commit()
 
+        
+
         cur.execute("SELECT u.id_usuario, u.nombre_usuario ,u.contrasena FROM tbl_usuarios u WHERE u.nombre_usuario=%s",(_nombre_usuario,))
         rows = cur.fetchall()
         json_items = []
@@ -81,21 +84,8 @@ def insert_usuarios():
                     content = {'id_usuario':result[0]}
                     json_items.append(content)
                     content = {}
-        if _tipo_usuario == "0": #tienda
-            query2 = "INSERT INTO tbl_tiendas(calificacion, descripcion, id_usuario) VALUES(%s,%s,%s)"
-            data2 = (_calificacion, _descripcion, _id_usuario)
-            cur = conn.cursor()
-            cur.execute(query2, data2)
-            conn.commit()
-            print("tienda creada exitosamente")
-        else: #comprador    
-            query3 = "INSERT INTO tbl_compradores(id_usuario) VALUES(%s)"
-            data3 = (_id_usuario)
-            cur = conn.cursor()
-            cur.execute(query3, data3)
-            conn.commit()
-            print("usuario creado exitosamente")
-        return jsonify(json_items) 
+        insert_compradores(_id_usuario)
+        return jsonify("Usuario creado exitosamente") 
 
     except Exception as e:
         print(e)
@@ -208,8 +198,8 @@ def login():
                     'id_tienda': result[0],
                     'nombre_usuario': _nombre,
                     'tipo_usuario': _tipo_usuario
-
                     }  
+
                 json_items.append(content)
                 content = {}
 

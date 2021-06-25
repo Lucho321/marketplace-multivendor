@@ -2,6 +2,7 @@ from flask import jsonify, request #nos permite formatear los resultados en JSON
 from init import app
 from init import mysql
 
+
 @app.route('/get_compradores/')
 @app.route('/get_compradores/<int:id>')
 def get_compradores(id=None):
@@ -82,29 +83,31 @@ def get_compradoresbyTienda(id=None):
         cur.close()
 
 @app.route('/insert_compradores', methods=['POST']) #Sólo podrá ser accedida vía POST
-def insert_compradores():
+def insert_compradores(id_usuario):
     try:
-        _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
-        _id_usuario = _json['id_usuario']
+        print("pasamos")
+        print(id_usuario)
+        #_json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
+        #_id_usuario = _json['id_usuario']
         query = "INSERT INTO tbl_compradores(id_usuario) VALUES(%s)"
-        data = (_id_usuario)
+        data = (id_usuario)
         conn = mysql.connect()
         cur = conn.cursor()
+        comprador=''
         cur.execute(query, data)
 
-        cur.execute("SELECT id_comprador from tbl_compradores WHERE id_usuario=%s", (_id_usuario,))
-        json_items = []
-        content = {}
+        cur.execute("SELECT id_comprador from tbl_compradores WHERE id_usuario=%s", (id_usuario,))
         rows = cur.fetchall() 
         for result in rows: 
-            comprador = {'id_comprador':result[0]}
+            comprador = result[0]
 
+        print(comprador)
         query2 = "INSERT INTO tbl_carrito_deseos(es_deseo, id_comprador) VALUES(%s, %s)";
-        data2 = (1, comprador["id_comprador"])
+        data2 = (1, comprador)
         cur.execute(query2, data2)
 
         query3 = "INSERT INTO tbl_carrito_deseos(es_deseo, id_comprador) VALUES(%s, %s)";
-        data3 = (0, comprador["id_comprador"])
+        data3 = (0, comprador)
         cur.execute(query3, data3)
 
         conn.commit()
