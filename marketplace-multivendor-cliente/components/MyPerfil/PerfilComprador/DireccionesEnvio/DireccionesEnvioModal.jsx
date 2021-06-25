@@ -91,8 +91,7 @@ export const DireccionesEnvioModal = (props) => {
                     <Col md={6}>
                         País
                         <Select
-                            onChange={handlePais}
-                            value={pais}
+                            onChange={(e)=>{setPais(e.value)}}
                             name="pais"
                             className="mt-2 basic-single"
                             classNamePrefix="select"

@@ -119,3 +119,15 @@ export const deleteDeseoCarrito = async(carritoId, productoId) => {
 
     return response;
 }
+
+
+export const getProductosCarritoByCarrito = async(carritoId) => {
+    try {
+        const response = await fetch(`${API_URL}/get_productos_carritosByCarrito/${carritoId}`)
+            .then(response => response.json());
+
+        return response;
+    } catch (e) {
+        return [];
+    }
+}

@@ -46,6 +46,29 @@ def get_productos_carritosByCarritoAndProducto(id_carrito, id_producto):
     finally:
         cur.close()
 
+
+@app.route('/get_productos_carritosByCarrito/<int:id_carrito>')
+def get_productos_carritosByCarrito(id_carrito):
+    try:
+        cur = mysql.connect().cursor()
+        cur.execute("SELECT * from tbl_productos_carrito WHERE id_carrito_deseo=%s", (id_carrito))
+        rows = cur.fetchall()
+        json_items = []
+        content = {}
+        for result in rows:
+            content = { 'id_carrito_deseo':result[0], 'id_producto':result[1], 'cantidad':result[2] }
+            json_items.append(content)
+            content = {}
+        
+        print(result)
+        return jsonify(json_items) 
+
+        
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
 @app.route('/insert_productos_carritos', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_productos_carritos():
     try:

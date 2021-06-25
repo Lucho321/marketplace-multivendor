@@ -72,9 +72,10 @@ def insert_usuarios():
         cur.execute(query, data)
         conn.commit()
 
-        
+        print('Hola mundo')
 
         cur.execute("SELECT u.id_usuario, u.nombre_usuario ,u.contrasena FROM tbl_usuarios u WHERE u.nombre_usuario=%s",(_nombre_usuario,))
+        print('Hola mundo2')
         rows = cur.fetchall()
         json_items = []
         content = {}
@@ -85,13 +86,19 @@ def insert_usuarios():
                     content = {'id_usuario':result[0]}
                     json_items.append(content)
                     content = {}
+                    print('Hola mundo3')
 
-        if (_tipo_usuario == '1'):
+        print(_tipo_usuario)
+        if (_tipo_usuario == 1):
+            print('Hola mundo4')
+            print(_tipo_usuario)
             insert_compradores(_id_usuario)
-            return jsonify("Comprador creado exitosamente") 
-        if (_tipo_usuario == '0'):
+            return jsonify(_id_usuario) 
+        if (_tipo_usuario == 0):
+            print('Hola mundo4')
+            print(_tipo_usuario)
             insert_tiendas(_id_usuario, _descripcion)
-            return jsonify("Tienda creada exitosamente") 
+            return jsonify(_id_usuario) 
 
 
     except Exception as e:

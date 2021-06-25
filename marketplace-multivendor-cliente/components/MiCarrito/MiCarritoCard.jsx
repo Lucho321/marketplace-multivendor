@@ -1,7 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button, Card, Col, Row, Image, Form } from 'react-bootstrap'
+import { getProductoById, getImageByProducto, deleteDeseoCarrito } from '../../services/productos.service';
+import Link from 'next/link'
+import Swal from 'sweetalert2'
 
-export const MiCarritoCard = () => {
+
+export const MiCarritoCard = ({productoId, productoCarrito}) => {
+    const [ producto, setProducto ] = useState({});
+    const [ images, setImages ] = useState([]);
+    const [ deseoCarritoId, setDeseoCarritoId ] = useState();
+    
+    let usuarioLogeado;
+    useEffect(() => {
+        getProducto();
+        getImages();
+        if (typeof window !== 'undefined') {
+            usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
+            if(usuarioLogeado != undefined){
+                if(usuarioLogeado.deseos){
+                    setDeseoCarritoId(usuarioLogeado.deseos);
+                }
+            }
+        }
+    }, [])
+
+
+    const getProducto = () =>{ 
+        getProductoById(productoId).then(res=>{
+            if(res[0]){
+                setProducto(res[0]);
+            }
+            
+        })
+    }
+    const getImages = ()=>{
+        getImageByProducto(productoId).then(i=>setImages(i));
+    }
+  
+
+    const getImageToShow = ()=>{
+        if(images.length > 0){
+            return images[0].url_foto;
+        }else{
+            return 'no-disponible.jpg';
+        }
+    }
+
+
     return (
         <Card className="bg-light">
             <Card.Body>
