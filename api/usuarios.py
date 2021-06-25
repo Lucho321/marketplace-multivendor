@@ -4,6 +4,7 @@ from init import mysql
 import bcrypt
 from werkzeug.security import generate_password_hash, check_password_hash
 from compradores import insert_compradores
+from tiendas import insert_tiendas
 
 @app.route('/get_usuarios/')#para obtener todos los usuarios
 @app.route('/get_usuarios/<int:id>') #por id
@@ -84,8 +85,14 @@ def insert_usuarios():
                     content = {'id_usuario':result[0]}
                     json_items.append(content)
                     content = {}
-        insert_compradores(_id_usuario)
-        return jsonify(_id_usuario) 
+
+        if (_tipo_usuario == '1'):
+            insert_compradores(_id_usuario)
+            return jsonify("Comprador creado exitosamente") 
+        if (_tipo_usuario == '0'):
+            insert_tiendas(_id_usuario, _descripcion)
+            return jsonify("Tienda creada exitosamente") 
+
 
     except Exception as e:
         print(e)

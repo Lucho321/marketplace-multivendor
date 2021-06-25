@@ -77,14 +77,15 @@ def get_tiendasByComprador(id=None): #funcion que sera invoada por la ruta anter
         cur.close()
 
 @app.route('/insert_tiendas', methods=['POST']) #Sólo podrá ser accedida vía POST
-def insert_tiendas():
+def insert_tiendas(id_usuario, descripcion):
     try:
-        _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
-        _calificacion = _json['calificacion']
-        _descripcion = _json['descripcion']
-        _id_usuario = _json['id_usuario']
+        #_json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
+        #_calificacion = _json['calificacion']
+        #_descripcion = _json['descripcion']
+        #_id_usuario = _json['id_usuario']
+        _calificacion = 0
         query = "INSERT INTO tbl_tiendas(calificacion, descripcion, id_usuario) VALUES(%s, %s, %s)"
-        data = (_calificacion, _descripcion, _id_usuario,)
+        data = (_calificacion, descripcion, id_usuario,)
         print(data)
         conn = mysql.connect()
         cur = conn.cursor()
