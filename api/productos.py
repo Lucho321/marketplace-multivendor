@@ -1,6 +1,8 @@
 from flask import jsonify, request #nos permite formatear los resultados en JSON
 from init import app
 from init import mysql
+from datetime import datetime
+
 
 @app.route('/get_productos/')#para obtener todos los productos
 @app.route('/get_productos/<int:id>') #por id
@@ -235,7 +237,7 @@ def insert_productos():
         _nombre_producto = _json['nombre_producto']
         _descripcion = _json['descripcion']
         _cantidad_disponible = _json['cantidad_disponible']
-        _fecha_publicacion = _json['fecha_publicacion']
+        _fecha_publicacion = datetime.date(datetime.now())
         _ubicacion = _json['ubicacion']
         _precio = _json['precio']
         _tiempo_envio = _json['tiempo_envio']
@@ -249,10 +251,22 @@ def insert_productos():
         cur = conn.cursor()
         cur.execute(query, data)
         conn.commit()
-        res = jsonify('Producto agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
-        res.status_code = 200
+
+        cur.execute("SELECT p.id_producto FROM tbl_productos p WHERE p.nombre_producto=%s AND p.descripcion=%s AND p.id_tienda=%s",(_nombre_producto,_descripcion,_id_tienda,))
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_producto':result[0]}
+            json_items.append(content)
+            content = {}
         
-        return res
+        return jsonify(json_items) 
+
+
+        #res = jsonify('Producto agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
+        #res.status_code = 200
+        #return res
 
     except Exception as e:
         print(e)
