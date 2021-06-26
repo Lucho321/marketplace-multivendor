@@ -129,7 +129,7 @@ export const EditarProducto = ({productoId}) => {
                 }
             }
         }
-    }, [])
+    }, [productoId])
 
     const validarAlgoCambio=()=>{
         if((validarCambioSelect() || nombre != producto.nombre_producto || parseInt(precioEnvio) != producto.costo_envio || ubicacion != producto.ubicacion || parseInt(precio) != producto.precio || parseInt(tiempoEnvio) != producto.tiempo_envio|| descripcion != producto.descripcion || parseInt(cantidad)!=producto.cantidad_disponible)&& categoriasEscogiendo.length>0){
