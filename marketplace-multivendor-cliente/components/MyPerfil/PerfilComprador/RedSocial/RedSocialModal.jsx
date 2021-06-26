@@ -127,7 +127,7 @@ export const RedSocialModal = (props) => {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button onClick={handleSaveRedSocial} variant="primary" disabled={!socialRedInput || /^\s*$/.test(socialRedInput)}>Guardar</Button>
+                <Button onClick={handleSaveRedSocial} variant="info" disabled={!socialRedInput || /^\s*$/.test(socialRedInput)}>Guardar</Button>
             </Modal.Footer>
         </Modal>
     )

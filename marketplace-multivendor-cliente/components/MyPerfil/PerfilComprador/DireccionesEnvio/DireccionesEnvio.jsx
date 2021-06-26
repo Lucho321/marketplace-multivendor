@@ -41,7 +41,7 @@ export const DireccionesEnvio = () => {
                         <h5>Direcciones de envío</h5>
                     </Col>
                     <Col md={3} className="text-right">
-                        <Button variant="primary" onClick={() => setModalShow(true)}>
+                        <Button variant="info" onClick={() => setModalShow(true)}>
                             Agregar dirección
                         </Button>
                     </Col>

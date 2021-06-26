@@ -147,7 +147,7 @@ export const InformacionGeneral = () => {
                             </Row>
                             <Row>
                                 <Col className="mt-2 text-right">
-                                    <Button variant="primary" type="submit" disabled={!validarAlgoCambio()}>
+                                    <Button variant="info" type="submit" disabled={!validarAlgoCambio()}>
                                         Guardar cambios
                                     </Button>
                                 </Col>
@@ -162,7 +162,7 @@ export const InformacionGeneral = () => {
                         <h5>Redes Sociales</h5>
                     </Col>
                     <Col md={3} className="text-right">
-                        <Button variant="primary" onClick={() => setModalShow(true)}>
+                        <Button variant="info" onClick={() => setModalShow(true)}>
                             Agregar red social
                         </Button>
                     </Col>
