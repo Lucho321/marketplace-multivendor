@@ -273,3 +273,23 @@ def get_usuarioByComprador(id_comprador): #funcion que sera invoada por la ruta 
         print(e)
     finally:
         cur.close()
+
+
+@app.route('/get_cantCompradoresProductoDeseo/<int:id_producto>') #por id
+def get_listaDeseos(id_producto): #funcion que sera invoada por la ruta anterior
+    try:
+        _cantidad=0
+        cur = mysql.connect().cursor()
+        cur.execute("SELECT COUNT(d.id_carrito_deseo) FROM tbl_carrito_deseos d JOIN tbl_productos_carrito p ON d.id_carrito_deseo=p.id_carrito_deseo WHERE p.id_producto=%s AND d.es_deseo=1",(id_producto,))
+        rows = cur.fetchall()
+        for result in rows:
+            _cantidad=result[0]
+
+        return jsonify(_cantidad) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+
