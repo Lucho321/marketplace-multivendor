@@ -51,6 +51,9 @@ export const ComunidadTienda = ({Producto}) => {
                 </Col>
             </Row>
             <Row className="mt-2">
+                <Col className="mb-3">
+                    <strong>Comentarios:</strong>
+                </Col>
                 {comentarios.map(t => (
                     <OpinionComentario modalidad="producto" idUsuario={t.id_usuario} comentario={t}/> 
                 ))}
