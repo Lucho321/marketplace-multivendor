@@ -1,6 +1,7 @@
 from flask import jsonify, request #nos permite formatear los resultados en JSON
 from init import app
 from init import mysql
+from productos_categorias import insert_productos_categorias
 
 @app.route('/get_categorias/')
 @app.route('/get_categorias/<int:id>')
@@ -77,6 +78,40 @@ def insert_categorias():
         print(e)
     finally:
         cur.close()
+
+
+@app.route('/insertar_categorias', methods=['POST']) #Sólo podrá ser accedida vía POST
+def insertar_categorias():
+    try:
+        _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
+        _nombre = _json['nombre']
+        _descripcion = _json['descripcion']
+        _id_producto = _json['id_producto']
+        _id_categoria = 0
+
+        query = "INSERT INTO tbl_categorias(nombre, descripcion) VALUES(%s, %s)"
+        data = (_nombre, _descripcion)
+        conn = mysql.connect()
+        cur = conn.cursor()
+        cur.execute(query, data)
+        conn.commit()
+
+
+        cur.execute("SELECT c.id_categoria from tbl_categorias c WHERE nombre=%s AND descripcion=%s",(_nombre,_descripcion,))
+        rows = cur.fetchall()
+        for result in rows:
+            _id_categoria = result[0]
+
+        insert_productos_categorias(_id_producto,_id_categoria)
+
+        res = jsonify('Categoria agregada exitosamente.') #Se retorna un mensaje de éxito en formato JSON
+        res.status_code = 200
+        return res
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()        
 
 @app.route('/update_categorias', methods=['PUT']) #Sólo podrá ser accedida vía PUT
 def update_categorias():

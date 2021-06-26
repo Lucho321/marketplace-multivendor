@@ -55,8 +55,32 @@ def get_productos_categoriasByCategoria(id=None):
     finally:
         cur.close()
 
-@app.route('/insert_productos_categorias', methods=['POST']) #Sólo podrá ser accedida vía POST
-def insert_productos_categorias():
+
+def insert_productos_categorias(id_producto, id_categoria):
+    try:
+        _id_producto = id_producto
+        _id_categoria = id_categoria
+
+        query = "INSERT INTO tbl_productos_categorias(id_producto, id_categoria) VALUES(%s, %s)"
+        data = (_id_producto, _id_categoria)
+        conn = mysql.connect()
+        cur = conn.cursor()
+        cur.execute(query, data)
+        conn.commit()
+        res = jsonify('Registro agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
+        res.status_code = 200
+        
+        return res
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+
+
+@app.route('/insertar_productos_categorias', methods=['POST']) #Sólo podrá ser accedida vía POST
+def insertar_productos_categorias():
     try:
         _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
         _id_producto = _json['id_producto']
@@ -77,6 +101,8 @@ def insert_productos_categorias():
         print(e)
     finally:
         cur.close()
+
+
 
 @app.route('/update_productos_categorias', methods=['PUT']) #Sólo podrá ser accedida vía PUT
 def update_productos_categorias():
