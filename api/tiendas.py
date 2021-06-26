@@ -34,10 +34,10 @@ def get_tiendasByNombre(nombre=None): #funcion que sera invoada por la ruta ante
         
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if nombre == None:
-            cur.execute("SELECT DISTINCT t.*, u.nombre_real, u.fotografia, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda")
+            cur.execute("SELECT DISTINCT t.*, u.nombre_real, u.fotografia, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda WHERE t.abusos<10")
         else:
             nom = '%' + nombre + '%'
-            cur.execute("SELECT DISTINCT t.*, u.nombre_real, u.fotografia, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda WHERE u.nombre_real LIKE %s or u.nombre_usuario LIKE %s",(nom, nom))
+            cur.execute("SELECT DISTINCT t.*, u.nombre_real, u.fotografia, (SELECT count(p.id_producto) FROM tbl_productos p WHERE p.id_tienda = t.id_tienda) AS cant_productos FROM tbl_tiendas t JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario JOIN tbl_productos p ON p.id_tienda = t.id_tienda WHERE (u.nombre_real LIKE %s or u.nombre_usuario LIKE %s) AND t.abusos<10",(nom, nom))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []

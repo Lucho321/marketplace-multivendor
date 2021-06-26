@@ -10,7 +10,7 @@ def get_productos(id=None): #funcion que sera invoada por la ruta anterior
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if id == None:
-            cur.execute("SELECT p.*, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON t.id_tienda = p.id_tienda JOIN tbl_usuarios u ON u.id_usuario = t.id_tienda")
+            cur.execute("SELECT p.*, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON t.id_tienda = p.id_tienda JOIN tbl_usuarios u ON u.id_usuario = t.id_tienda WHERE t.abusos<10")
         else:
             cur.execute("SELECT p.*, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON t.id_tienda = p.id_tienda JOIN tbl_usuarios u ON u.id_usuario = t.id_tienda WHERE p.id_producto = %s; ",(id,))
 
@@ -60,10 +60,10 @@ def get_productosByTiendaOrNombre(cadena=None): #funcion que sera invoada por la
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if cadena == None:
-            cur.execute("SELECT * FROM tbl_productos t ORDER BY t.id_producto DESC")
+            cur.execute("SELECT * FROM tbl_productos p JOIN tbl_tiendas t ON t.id_tienda = p.id_tienda WHERE t.abusos<10")
         else:
             nom = '%'+cadena+'%'
-            cur.execute("SELECT p.*, t.id_tienda, t.id_usuario, u.id_usuario, u.nombre_usuario, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON p.id_tienda = t.id_tienda JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario WHERE p.nombre_producto like %s OR u.nombre_usuario like %s OR u.nombre_real like %s", (nom, nom, nom))
+            cur.execute("SELECT p.*, t.id_tienda, t.id_usuario, u.id_usuario, u.nombre_usuario, u.nombre_real FROM tbl_productos p JOIN tbl_tiendas t ON p.id_tienda = t.id_tienda JOIN tbl_usuarios u ON t.id_usuario = u.id_usuario WHERE (p.nombre_producto like %s OR u.nombre_usuario like %s OR u.nombre_real like %s) AND t.abusos<10", (nom, nom, nom))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []
@@ -112,9 +112,9 @@ def get_productosByCategoria(id=None): #funcion que sera invoada por la ruta ant
     try:
         cur = mysql.connect().cursor() #Nos conectamos a mysql
         if id == None:
-            cur.execute("SELECT * FROM tbl_productos")
+            cur.execute("SELECT * FROM tbl_productos p JOIN tbl_tiendas t ON t.id_tienda = p.id_tienda WHERE t.abusos<10")
         else:
-            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_productos_categorias pc ON t.id_producto = pc.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria WHERE c.id_categoria  = %s ",(id,))
+            cur.execute("SELECT * FROM tbl_productos t JOIN tbl_tiendas tx ON tx.id_tienda = t.id_tienda JOIN tbl_productos_categorias pc ON t.id_producto = pc.id_producto JOIN tbl_categorias c ON pc.id_categoria = c.id_categoria WHERE c.id_categoria  = %s AND tx.abusos<10 ",(id,))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []
@@ -139,7 +139,7 @@ def get_productosByCarrito(id=None): #funcion que sera invoada por la ruta anter
         if id == None:
             cur.execute("SELECT * FROM tbl_productos")
         else:
-            cur.execute("SELECT t.*, pc.cantidad FROM tbl_productos t JOIN tbl_productos_carrito pc ON t.id_producto = pc.id_producto JOIN tbl_carrito_deseos c ON pc.id_carrito_deseo = c.id_carrito_deseo WHERE c.id_carrito_deseo = %s",(id,))
+            cur.execute("SELECT t.*, pc.cantidad FROM tbl_productos t JOIN tbl_tiendas tx ON tx.id_tienda = t.id_tienda JOIN tbl_productos_carrito pc ON t.id_producto = pc.id_producto JOIN tbl_carrito_deseos c ON pc.id_carrito_deseo = c.id_carrito_deseo WHERE (c.id_carrito_deseo = %s) AND tx.abusos<10",(id,))
 
         rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
         json_items = []

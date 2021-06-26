@@ -52,14 +52,23 @@ def get_reportesAbusosByCompradorAndTienda(id_tienda, id_comprador):
 def insert_reportes_abusos():
     try:
         _json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
-        _id_producto = _json['id_comprador']
-        _id_categoria = _json['id_tienda']
+        _id_comprador= _json['id_comprador']
+        _id_tienda = _json['id_tienda']
+        _abusos = 0
 
         query = "INSERT INTO tbl_reportes_abusos(id_comprador, id_tienda) VALUES(%s, %s)"
-        data = (_id_producto, _id_categoria)
+        data = (_id_comprador, _id_tienda)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
+
+        cur.execute("SELECT t.abusos from tbl_tiendas t WHERE t.id_tienda=%s",(_id_tienda,))
+        rows = cur.fetchall()
+        for result in rows:
+            _abusos = result[0]
+
+        cur.execute("UPDATE tbl_tiendas t set abusos=%s WHERE t.id_tienda=%s",(_abusos+1,_id_tienda,))
+
         conn.commit()
         res = jsonify('Reporte de abuso agregado exitosamente.') #Se retorna un mensaje de éxito en formato JSON
         res.status_code = 200
@@ -102,6 +111,14 @@ def delete_reportes_abusos(id_comprador, id_tienda):
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute("DELETE FROM tbl_reportes_abusos WHERE id_comprador=%s AND id_tienda=%s", (id_comprador, id_tienda))
+        
+        cur.execute("SELECT t.abusos from tbl_tiendas t WHERE t.id_tienda=%s",(id_tienda,))
+        rows = cur.fetchall()
+        for result in rows:
+            _abusos = result[0]
+
+        cur.execute("UPDATE tbl_tiendas t set abusos=%s WHERE t.id_tienda=%s",(_abusos-1,id_tienda))
+
         conn.commit()
         res = jsonify('Reporte de abuso eliminado exitosamente.')
         res.status_code = 200

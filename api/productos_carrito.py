@@ -51,7 +51,7 @@ def get_productos_carritosByCarritoAndProducto(id_carrito, id_producto):
 def get_productos_carritosByCarrito(id_carrito):
     try:
         cur = mysql.connect().cursor()
-        cur.execute("SELECT * from tbl_productos_carrito WHERE id_carrito_deseo=%s", (id_carrito))
+        cur.execute("SELECT * from tbl_productos_carrito pc JOIN tbl_productos p ON pc.id_producto=p.id_producto JOIN tbl_tiendas t ON p.id_tienda=t.id_tienda WHERE id_carrito_deseo=%s AND t.abusos<10", (id_carrito))
         rows = cur.fetchall()
         json_items = []
         content = {}
