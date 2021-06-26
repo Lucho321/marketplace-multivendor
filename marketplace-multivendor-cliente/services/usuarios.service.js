@@ -10,6 +10,14 @@ export const getUsuarioById = async(idUsuario) => {
 }
 
 
+export const getUsuarioByComprador = async(idComprador) => {
+    const response = await fetch(`${API_URL}/get_usuarioByComprador/${idComprador}`)
+        .then(response => response.json());
+
+    return response;
+}
+
+
 export const updateUsuario = async(usuario) => {
     const requestOptions = {
         method: 'PUT',
@@ -158,7 +166,7 @@ export const insertDireccion = async(direccion) => {
         })
     }
     const res = await fetch(`${API_URL}/insert_direcciones`, requestOptions)
-    .then(response => response.json())
+        .then(response => response.json())
 
     return res;
 }
