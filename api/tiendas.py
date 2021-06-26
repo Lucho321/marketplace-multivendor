@@ -16,7 +16,7 @@ def get_tiendas(id=None): #funcion que sera invoada por la ruta anterior
         json_items = []
         content = {}
         for result in rows: #obtenemos el arreglo de resultados de la consulta
-            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'nombre_tienda':result[4], 'fotografia':result[5], 'cant_productos':result[5]}
+            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'abusos':result[4], 'nombre_tienda':result[5], 'fotografia':result[6], 'cant_productos':result[7] }
             json_items.append(content)
             content = {}
         
@@ -43,7 +43,7 @@ def get_tiendasByNombre(nombre=None): #funcion que sera invoada por la ruta ante
         json_items = []
         content = {}
         for result in rows: #obtenemos el arreglo de resultados de la consulta
-            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'nombre_tienda':result[4], 'fotografia':result[5], 'cant_productos':result[6]}
+            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'abusos':result[4], 'nombre_tienda':result[5], 'fotografia':result[6], 'cant_productos':result[7] }
             json_items.append(content)
             content = {}
         
@@ -65,7 +65,29 @@ def get_tiendasByComprador(id=None): #funcion que sera invoada por la ruta anter
         json_items = []
         content = {}
         for result in rows: #obtenemos el arreglo de resultados de la consulta
-            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'nombre_tienda':result[4]}
+            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'abusos':result[4], 'nombre_tienda':result[5], 'fotografia':result[6], 'cant_productos':result[7] }
+            json_items.append(content)
+            content = {}
+        
+        return jsonify(json_items) 
+
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()
+
+@app.route('/get_tiendaByUsuario/<int:id>') #por id
+def get_tiendaByUsuario(id=None): #funcion que sera invoada por la ruta anterior
+    try:
+        
+        cur = mysql.connect().cursor() #Nos conectamos a mysql
+        cur.execute("SELECT t.*, u.nombre_real FROM tbl_tiendas t JOIN tbl_compradores_tiendas ct ON t.id_tienda = ct.id_tienda JOIN tbl_usuarios u ON u.id_usuario = t.id_usuario WHERE u.id_usuario=%s",(id))
+
+        rows = cur.fetchall() #obtenemos el arreglo de resultados de la consulta
+        json_items = []
+        content = {}
+        for result in rows: #obtenemos el arreglo de resultados de la consulta
+            content = { 'id_tienda':result[0], 'calificacion':result[1], 'descripcion':result[2], 'id_usuario':result[3] , 'abusos':result[4], 'nombre_tienda':result[5], 'fotografia':result[6], 'cant_productos':result[7] }
             json_items.append(content)
             content = {}
         

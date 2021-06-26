@@ -279,3 +279,14 @@ export const deleteCategoriaProducto = async(idproducto, idcategoria) => {
 
     return response;
 }
+
+export const getProductosCalificacionesByProductoAndUsuario = async(idProducto, idUsuario) => {
+    try {
+        const response = await fetch(`${API_URL}/get_productosCalificacionesByProductoByUsuario/${idProducto}/${idUsuario}`)
+            .then(response => response.json());
+
+        return response;
+    } catch (e) {
+        return [];
+    }
+}

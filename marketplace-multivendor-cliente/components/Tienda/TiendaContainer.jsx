@@ -12,7 +12,6 @@ export const TiendaContainer = ({tiendaId}) => {
     const [ loading, setLoading ] = useState(true);
     const [ suscripcion, setSuscripcion ] = useState('');
     const [ idUsuario, setIdUsuario ] = useState();
-
     const getTienda = async()=>{
         getTiendaById(tiendaId).then(t=>{setTienda(t[0]); setLoading(false);});
     }
@@ -64,6 +63,7 @@ export const TiendaContainer = ({tiendaId}) => {
         }
         
     };
+
 
     let usuarioLogeado;
     useEffect(() => {
@@ -138,7 +138,7 @@ export const TiendaContainer = ({tiendaId}) => {
                             <ProductosTienda tienda={tiendaId} />
                         </Tab>
                         <Tab eventKey="opiniones" title="Comentarios y más">
-                            <OpinionesTienda />
+                            <OpinionesTienda tiendaId={tiendaId}/>
                         </Tab>
                     </Tabs>
                 </Col>
