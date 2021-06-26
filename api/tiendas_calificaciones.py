@@ -73,9 +73,8 @@ def insert_tiendas_calificaciones():
         cur.execute(query, data)
         conn.commit()
 
-        cur1 = mysql.connect().cursor() #Nos conectamos a mysql
-        cur1.execute("SELECT t.calificacion FROM tbl_tiendas_calificaciones t WHERE id_tienda=%s",(_id_tienda,))
-        rows = cur1.fetchall() 
+        cur.execute("SELECT t.calificacion FROM tbl_tiendas_calificaciones t WHERE id_tienda=%s",(_id_tienda,))
+        rows = cur.fetchall() 
         for result in rows: 
             _cont = _cont + 1 
             calificacionBD = calificacionBD+result[0]
@@ -114,9 +113,8 @@ def update_tienda_calificacion():
         cur.execute(query, data)
         conn.commit()
 
-        cur1 = mysql.connect().cursor() #Nos conectamos a mysql
-        cur1.execute("SELECT t.calificacion FROM tbl_tiendas_calificaciones t WHERE id_tienda=%s",(_id_tienda,))
-        rows = cur1.fetchall() 
+        cur.execute("SELECT t.calificacion FROM tbl_tiendas_calificaciones t WHERE id_tienda=%s",(_id_tienda,))
+        rows = cur.fetchall() 
         for result in rows: 
             _cont = _cont + 1 
             calificacionBD = calificacionBD+result[0]
