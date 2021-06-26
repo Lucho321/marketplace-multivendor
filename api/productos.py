@@ -317,3 +317,21 @@ def delete_productos(id):
     finally:
         cur.close()
 
+
+@app.route('/update_productos_calificaciones', methods=['PUT']) #Sólo podrá ser accedida vía PUT
+def update_productos_calificaciones(newCalificacion, _id_tienda):
+    try:
+        query = "UPDATE tbl_productos SET calificacion=%s WHERE id_producto=%s"
+        data = (newCalificacion, _id_tienda,)
+        conn = mysql.connect()
+        cur = conn.cursor()
+        cur.execute(query, data)
+        conn.commit()
+        
+        res = jsonify('Calificación del producto actualizada exitosamente.')
+        res.status_code = 200
+        return res
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()        
