@@ -1,5 +1,4 @@
 import fetch from 'node-fetch';
-
 const API_URL = "http://127.0.0.1:5000";
 
 export const getComentariosByProducto = async(id_producto) => {
@@ -19,7 +18,9 @@ export const insertComentario = async(comentario) => {
             id_producto: comentario.id_producto,
             padre: comentario.padre
         })
+        
     };
+    console.log(requestOptions)
     const res = await fetch(`${API_URL}/insert_comentarios`, requestOptions)
         .then(response => response.json())
 

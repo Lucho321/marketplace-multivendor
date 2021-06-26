@@ -22,7 +22,7 @@ export const ProductoContainer = ({productoId}) => {
     const [ loading, setLoading ] = useState(true);
     const [ comentarios, setComentarios ] = useState([]);
     const [ usuario, setUsuario ] = useState([]);
-    const[ idUsuario, setIdUsuario ] = useState();
+    const[ id_usuario, setIdUsuario ] = useState();
     const[ comentario, setComentario ] = useState('');
 
     const getProducto = async()=>{
@@ -70,13 +70,13 @@ export const ProductoContainer = ({productoId}) => {
 
     const handleComentar = (e)=>{
         let comentarioG = {
-            id_usuario: idUsuario,
+            id_usuario: id_usuario,
             comentario: comentario,
             nivel: null,
             id_producto: productoId,
             padre: null
         }
-        console.log(idUsuario);
+        console.log(comentarioG);
 
         insertComentario(comentarioG)
             .then(res=>{
