@@ -79,10 +79,6 @@ def get_tiendasByComprador(id=None): #funcion que sera invoada por la ruta anter
 @app.route('/insert_tiendas', methods=['POST']) #Sólo podrá ser accedida vía POST
 def insert_tiendas(id_usuario, descripcion):
     try:
-        #_json = request.get_json(force=True) #Obtiene en formato JSON los datos enviados desde el front-End
-        #_calificacion = _json['calificacion']
-        #_descripcion = _json['descripcion']
-        #_id_usuario = _json['id_usuario']
         _calificacion = 0
         query = "INSERT INTO tbl_tiendas(calificacion, descripcion, id_usuario) VALUES(%s, %s, %s)"
         data = (_calificacion, descripcion, id_usuario,)
@@ -123,6 +119,24 @@ def update_tiendas():
         print(e)
     finally:
         cur.close()
+
+@app.route('/update_tiendas_calificaciones', methods=['PUT']) #Sólo podrá ser accedida vía PUT
+def update_tiendas_calificaciones(newCalificacion, _id_tienda):
+    try:
+        query = "UPDATE tbl_tiendas SET calificacion=%s WHERE id_tienda=%s"
+        data = (newCalificacion, _id_tienda,)
+        conn = mysql.connect()
+        cur = conn.cursor()
+        cur.execute(query, data)
+        conn.commit()
+        
+        res = jsonify('Calificación tienda actualizada exitosamente.')
+        res.status_code = 200
+        return res
+    except Exception as e:
+        print(e)
+    finally:
+        cur.close()        
 
 @app.route('/delete_tiendas/<int:id>', methods=['DELETE']) #Sólo podrá ser accedida vía DELETE
 def delete_tiendas(id):

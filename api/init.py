@@ -17,5 +17,5 @@ mysql.init_app(app)
 
 import usuarios, tiendas, compradores, tarjetas, direcciones_envios, reporte_ventas, reporte_compras
 import facturas, productos, carritos, redes_sociales, productos_fotos, comentarios, categorias, reportes_compras, productos_categorias
-import compradores_tiendas, productos_reportes, facturas_productos, productos_carrito, compras
+import compradores_tiendas, productos_reportes, facturas_productos, productos_carrito, compras, tiendas_calificaciones
 #Aquí se agregarían los demás archivos vía import en caso de tener otras API’s
