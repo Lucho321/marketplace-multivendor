@@ -60,17 +60,17 @@ export const HomeComponent = () => {
                                             <Button id="btn_comprar_home" variant="outline-info" style={{color:"white", fontSize:"1.5rem", marginRight:"20%"}}>COMIENZA A COMPRAR</Button>
                                         </Col>
                                     </Row>
-                                    <Row className="p-4 mt-4 mr-2 ml-2" style={{background:"#eee"}}>
+                                    <Row className="p-4 mt-4 mr-2 ml-2">
                                         <Col md={12} >
                                         </Col>
                                     </Row>
-                                    <Row className="pr-4 pl-4 pb-4 mr-2 ml-2" style={{background:"#eee"}}>
+                                    <Row className="pr-4 pl-4 pb-4 mr-2 ml-2">
                                         
                                         <Col md={4} className="text-center">
                                             <img src="/images/image1.png" width="80%" />
                                         </Col>
                                         <Col md={8}>
-                                            <Button style={{height:"100px", width:"300px", paddingTop:"30px"}} href="/productos" size="lg" variant="primary">Ver Productos</Button>
+                                            <Button style={{height:"100px", marginTop:"5rem"}} className="pt-4" href="/productos" size="lg" variant="outline-info" block>Ver Productos</Button>
                                         </Col>
                                     </Row>
 
@@ -94,10 +94,10 @@ export const HomeComponent = () => {
                                             </InputGroup>
                                         </Col>
                                     </Row>
-                                    <Row className="p-4 mr-2 ml-2 mb-5" style={{background:"#eee"}}>
+                                    <Row className="p-4 mr-2 ml-2 mb-5 d-flex justify-content-center">
                                         <Col md={12} className="p-2" style={{justifyContent:"center"}}>
                                         {tiendas.map( tienda => (
-                                            <Col  md={10} className="mb-3">
+                                            <Col  md={12} className="mb-3">
                                                 <TiendaCard key={tienda.id_tienda} tienda={tienda}/>
                                             </Col>
                                         ))}
