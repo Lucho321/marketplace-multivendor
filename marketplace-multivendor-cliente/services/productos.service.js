@@ -279,3 +279,23 @@ export const deleteCategoriaProducto = async(idproducto, idcategoria) => {
 
     return response;
 }
+
+
+export const deleteProducto = async(idproducto) => {
+    const response = await fetch(`${API_URL}/delete_productos/${idproducto}`, { method: 'DELETE' })
+        .then(response => response.json());
+
+    return response;
+}
+
+
+export const getCantidadProductoDeseo = async(productoId) => {
+    try {
+        const response = await fetch(`${API_URL}/get_cantCompradoresProductoDeseo/${productoId}`)
+            .then(response => response.json());
+        console.log(response);
+        return response;
+    } catch (e) {
+        return 0;
+    }
+}

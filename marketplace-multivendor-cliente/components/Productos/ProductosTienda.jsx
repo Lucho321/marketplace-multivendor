@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { Table, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
-import { getAllProductos, getProductosByTienda, getProductosByNombreAndTienda } from '../../services/productos.service';
+import { getAllProductos, getProductosByTienda, getProductosByNombreAndTienda, deleteProducto } from '../../services/productos.service';
 import { useForm } from '../../context/hooks/useForm';
 import Link from 'next/link';
+import Swal from 'sweetalert2'
+
 
 export const ProductosTienda = () => {
     
@@ -12,18 +14,47 @@ export const ProductosTienda = () => {
         buscador: ''
     });
 
+    const [ idUsuario, setIdUsuario ] = useState();
+
+    let usuarioLogeado;
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
+            if(usuarioLogeado != undefined){
+                if(usuarioLogeado.nombre_usuario){
+                    setIdUsuario(usuarioLogeado.id_tienda);
+                    getProductos(usuarioLogeado.id_tienda);
+                }
+            }
+        }
+    }, [])
+
     const { buscador } = formValues;
 
-    const getProductos = ()=>{
-        getProductosByTienda(1).then(p=>setProductos(p));
+    const getProductos = (idt)=>{
+        getProductosByTienda(idt).then(p=>setProductos(p));
     }
-    useEffect(() => {
-        getProductos();
-    }, [])
 
     const handleBuscar = (e)=>{
         getProductosByNombreAndTienda(buscador, 1).then(p=>setProductos(p));
     };
+
+    const handleDeleteProducto = (idproducto)=>{
+        deleteProducto(idproducto)
+            .then(res=>{
+                if(res==="Producto actualizada exitosamente."){
+                    Swal.fire({
+                        icon: 'success',
+                        title: `Excelente`,
+                        text: `Producto eliminado correctamente`,
+                        showConfirmButton: false,
+                        timer: 4000
+                    });
+                    getProductos(idUsuario);
+                }
+            });
+    }
 
     return (
         <>
@@ -83,12 +114,11 @@ export const ProductosTienda = () => {
                                     <td>${p.precio}</td>
                                     <td>
                                         <>
-                                        <Link href={`/editarproducto/${p.id_producto}`}>
-                                            <a>
-                                                <Button className='pl-4 pr-4' variant="outline-info">Ver</Button>{' '}
-                                            </a>
-                                        </Link>
-                                        <Button variant="outline-danger">Eliminar</Button>{' '}
+                                            <Link href={`/editarproducto/${p.id_producto}`}>
+                                                <a>
+                                                    <Button className='pl-4 pr-4' variant="outline-info">Ver</Button>{' '}
+                                                </a>
+                                            </Link>
                                         </>
                                     </td>
                                 </tr>
