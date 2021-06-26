@@ -33,31 +33,31 @@ export const DireccionesEnvioCard = ({direccion, onDelete}) => {
                     <Col md={9} className="text-left pl-0 ml-0">
                         <Row>
                             <Col>
-                                <p  className="mb-0 pb-0"><strong>{`Detalle: ${direccion.observaciones}`}</strong></p>
+                                <p  className="mb-0 pb-0"><strong>{`Detalle: `}</strong>{direccion.observaciones}</p>
                             </Col>
                         </Row>
                         <Row className="mt-3">
                             <Col md={6} style={{fontSize:"0.8rem"}}>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>{`Provincia: ${direccion.provincia}`}</strong></p>
+                                        <p className="mb-0 pb-0"><strong>{`Provincia: `}</strong>{direccion.provincia}</p>
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>{`Pais: ${direccion.pais}`}</strong></p>
+                                        <p className="mb-0 pb-0"><strong>{`País: `}</strong>{direccion.pais}</p>
                                     </Col>
                                 </Row>
                             </Col>
                             <Col md={6} style={{fontSize:"0.8rem"}}>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>{`Código postal: ${direccion.codigo_postal}`}</strong></p>
+                                        <p className="mb-0 pb-0"><strong>{`Código postal: `}</strong>{direccion.codigo_postal}</p>
                                     </Col>
                                 </Row>
                                 <Row>
                                     <Col>
-                                        <p className="mb-0 pb-0"><strong>{`Número casillero: ${direccion.numero_casillero}`}</strong></p>
+                                        <p className="mb-0 pb-0"><strong>{`Número casillero: `}</strong>{direccion.numero_casillero}</p>
                                     </Col>
                                 </Row>
                             </Col>

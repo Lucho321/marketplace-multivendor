@@ -158,7 +158,7 @@ export const TarjetasAsociadasModal = (props) => {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button onClick={handleGuardarTarjeta} disabled={!validarCamposVacios()} variant="primary">Guardar</Button>
+                <Button onClick={handleGuardarTarjeta} disabled={!validarCamposVacios()} variant="info">Guardar</Button>
             </Modal.Footer>
         </Modal>
     )

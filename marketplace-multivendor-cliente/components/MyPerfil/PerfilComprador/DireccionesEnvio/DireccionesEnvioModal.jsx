@@ -138,7 +138,7 @@ export const DireccionesEnvioModal = (props) => {
             </Modal.Body>
 
             <Modal.Footer>
-                <Button onClick={handleGuardarDireccion} disabled={!validarCamposVacios()} variant="primary">Guardar</Button>
+                <Button onClick={handleGuardarDireccion} disabled={!validarCamposVacios()} variant="info">Guardar</Button>
             </Modal.Footer>
         </Modal>
     )
