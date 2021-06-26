@@ -43,7 +43,7 @@ def get_comentariosByProducto(id=None):
         json_items = []
         content = {}
         for result in rows:
-            content = { 'id_comentario':result[0], 'comentario':result[1], 'padre':result[2], 'nivel':result[3], 'id_producto':result[4] }
+            content = { 'id_comentario':result[0], 'comentario':result[1], 'padre':result[2], 'nivel':result[3], 'id_producto':result[4], 'id_usuario':result[5]}
             json_items.append(content)
             content = {}
         
