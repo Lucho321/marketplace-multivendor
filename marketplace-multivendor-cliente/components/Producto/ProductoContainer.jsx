@@ -11,52 +11,24 @@ import { DeseoComponent } from '../Productos/DeseoComponent';
 import { CarritoComponent } from '../Productos/CarritoComponent';
 import { CompraModal } from '../Compra/CompraModal';
 
-import { getComentariosByProducto } from '../../services/comentarios.service';
-import { getUsuarioById } from '../../services/usuarios.service';
-import { insertComentario } from '../../services/comentarios.service';
-import Swal from 'sweetalert2';
 
 export const ProductoContainer = ({productoId}) => {
     const [modalShow, setModalShow] = useState(false);
     const [ producto, setProducto ] = useState({});
     const [ categorias, setCategorias ] = useState([]);
     const [ loading, setLoading ] = useState(true);
-    const [ comentarios, setComentarios ] = useState([]);
-    const [ usuario, setUsuario ] = useState([]);
-    const[ id_usuario, setIdUsuario ] = useState('');
-    const[ comentario, setComentario ] = useState('');
 
     const getProducto = async()=>{
         let pro = await getProductoById(productoId);
         return pro;
     }
 
-    const getCategorias = async(producto)=>{
-        getCategoriaByProductos(producto).then(c=>{setCategorias(c)});
+    const getCategorias = async()=>{
+        getCategoriaByProductos(producto.id_producto).then(c=>{setCategorias(c)});
     }
 
-    const getComentarios = (producto) => {
-        console.log(producto);
-        getComentariosByProducto(producto).then(r=>{
-            setComentarios(r);
-        })
-    }
-
-    let usuarioLogeado;
     useEffect(() => {
-        if (typeof window !== 'undefined') {
-            usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
-            if(usuarioLogeado != undefined){
-                if(usuarioLogeado.nombre_usuario){
-                    console.log(productoId)
-                    getComentarios(productoId);
-                    getUsuarioById(usuarioLogeado.id_usuario);
-                    setIdUsuario(usuarioLogeado.id_usuario);
-                }
-            }
-        }
-
-        getCategorias(productoId);
+        getCategorias();
         let pro = getProducto().then(p=>{setProducto(p[0]); setLoading(false);});
     }, [])
 
@@ -66,33 +38,6 @@ export const ProductoContainer = ({productoId}) => {
                 </Spinner>
     }
 
-    const handleComentar = (e)=>{
-        let comentarioG = {
-            id_usuario: id_usuario,
-            comentario: comentario,
-            nivel: null,
-            id_producto: productoId,
-            padre: null
-        }
-        console.log(comentarioG)
-        insertComentario(comentarioG)
-            
-            .then(res=>{
-                if(res==="Comentario agregado exitosamente."){
-                    Swal.fire({
-                        icon: 'success',
-                        title: `Excelente`,
-                        text: `Comentario agregado exitosamente`,
-                        showConfirmButton: false,
-                        timer: 2500
-                    });
-                    getComentarios(productoId);
-                    setComentario('');
-                    setProducto('');
-                }
-            });
-            
-    }
 
     return (
         <>
@@ -208,34 +153,7 @@ export const ProductoContainer = ({productoId}) => {
                                     <h5>¡Escribe un comentario de este producto!</h5>
                                 </Col>
                             </Row>
-                            <Row>
-                                <Col md={12}>
-                                    <Form>
-                                        <Form.Row className="align-items-center">
-                                            <Col md="10">
-                                                <Form.Group style={{width:"100%"}}>
-                                                    <Form.Label htmlFor="inlineFormInput" srOnly>
-                                                        Escribe aquí tu comentario
-                                                    </Form.Label>
-                                                    <Form.Control
-                                                        onChange={(e)=>{setComentario(e.target.value)}}
-                                                        value={comentario}
-                                                        name="comentario"
-                                                        className="mb-2"
-                                                        id="inlineFormInput"
-                                                        placeholder="Escribe aquí tu comentario"
-                                                    />
-                                                </Form.Group>
-                                            </Col>
-                                            <Col md="2">
-                                                <Button variant="outline-info" onClick={handleComentar} className="mb-3" block>
-                                                    Comentar
-                                                </Button>
-                                            </Col>
-                                        </Form.Row>
-                                    </Form>
-                                </Col>
-                            </Row>
+                            <OpinionComentar modalidad="producto" />
                         </Col>
                     </Row>
                 </Col>
@@ -246,9 +164,8 @@ export const ProductoContainer = ({productoId}) => {
                         </Col>
                     </Row>
                     <Row>
-                        {comentarios.map(t => (
-                            <OpinionComentario modalidad="producto" idUsuario={t.id_usuario} comentario={t}/> 
-                        ))}
+                        <OpinionComentario modalidad="producto" nombre="alvarado" />
+                        <OpinionComentario modalidad="producto" nombre="cristiano" />
                     </Row>
                 </Col>
             </Row>
