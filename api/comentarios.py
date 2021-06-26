@@ -43,10 +43,11 @@ def get_comentariosByProducto(id=None):
         json_items = []
         content = {}
         for result in rows:
-            content = { 'id_comentario':result[0], 'comentario':result[1], 'padre':result[2], 'nivel':result[3], 'id_producto':result[4] }
+            content = { 'id_comentario':result[0], 'comentario':result[1], 'padre':result[2], 'nivel':result[3], 'id_producto':result[4] , 'id_usuario':result[5]}
             json_items.append(content)
             content = {}
         
+        print(content)
         return jsonify(json_items) 
 
     except Exception as e:
@@ -62,9 +63,10 @@ def insert_comentarios():
         _padre = _json['padre']
         _nivel = _json['nivel']
         _id_producto = _json['id_producto']
+        _id_usuario = _json['id_usuario']
 
-        query = "INSERT INTO tbl_comentarios(comentario, padre, nivel, id_producto) VALUES(%s, %s, %s, %s)"
-        data = (_comentario, _padre, _nivel, _id_producto)
+        query = "INSERT INTO tbl_comentarios(comentario, padre, nivel, id_producto, id_usuario) VALUES(%s, %s, %s, %s, %s)"
+        data = (_comentario, _padre, _nivel, _id_producto, _id_usuario)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
@@ -88,9 +90,10 @@ def update_comentarios():
         _padre = _json['padre']
         _nivel = _json['nivel']
         _id_producto = _json['id_producto']
+        _id_usuario = _json['id_usuario']
 
-        query = "UPDATE tbl_comentarios SET comentario=%s, padre=%s, nivel=%s, id_producto=%s WHERE id_comentario=%s"
-        data = (_comentario, _padre, _nivel, _id_producto, _id_comentario)
+        query = "UPDATE tbl_comentarios SET comentario=%s, padre=%s, nivel=%s, id_producto=%s, id_comentario=%s WHERE id_comentario=%s"
+        data = (_comentario, _padre, _nivel, _id_producto, _id_comentario, _id_usuario)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
