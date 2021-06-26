@@ -27,7 +27,6 @@ export const PerfilComprador = ({numComponent}) => {
     }, [])
 
     const getUsuario = (id)=>{
-        console.log(id);
         getUsuarioById(id).then(res=>{
             console.log(res);
             set_Usuario(res[0]);
@@ -70,36 +69,41 @@ export const PerfilComprador = ({numComponent}) => {
                             {" "}Información general
                         </a>
                     </Col>
-                    <Col md={12} className={getClassName(2)} onClick={()=>{setComponentToShow(2)}}>
-                        <a>
-                            <img className="d-inline-block" src="/images/card.png" title="Mi lista de deseos" alt="logo" height="20"/>
-                            {" "}Tarjetas asociadas
-                        </a>
-                    </Col>
-                    <Col md={12} className={getClassName(3)} onClick={()=>{setComponentToShow(3)}}>
-                        <a>
-                            <img className="d-inline-block" src="/images/address.png" title="Mi lista de deseos" alt="logo" height="20"/>
-                            {" "}Direcciones de envío
-                        </a>
-                    </Col>
-                    <Col md={12} className={getClassName(4)} onClick={()=>{setComponentToShow(4)}}>
-                        <a>
-                            <img className="d-inline-block" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="20"/>
-                            {" "}Lista de deseos
-                        </a>
-                    </Col>
-                    <Col md={12} className={getClassName(5)} onClick={()=>{setComponentToShow(5)}}>
-                        <a>
-                            <img className="d-inline-block" src="/images/micarrito.png" title="Mi lista de deseos" alt="logo" height="20"/>
-                            {" "}Carrito de compras
-                        </a>
-                    </Col>
-                    <Col md={12} className={getClassName(6)} onClick={()=>{setComponentToShow(6)}}>
-                        <a>
-                            <img className="d-inline-block" src="/images/reporte.png" title="Mi lista de deseos" alt="logo" height="20"/>
-                            {" "}Reporte de compras
-                        </a>
-                    </Col>
+                    {
+                        usuario.tipo_usuario === 1 &&    <>
+                                                            <Col md={12} className={getClassName(2)} onClick={()=>{setComponentToShow(2)}}>
+                                                                <a>
+                                                                    <img className="d-inline-block" src="/images/card.png" title="Mi lista de deseos" alt="logo" height="20"/>
+                                                                    {" "}Tarjetas asociadas
+                                                                </a>
+                                                            </Col>
+                                                            <Col md={12} className={getClassName(3)} onClick={()=>{setComponentToShow(3)}}>
+                                                                <a>
+                                                                    <img className="d-inline-block" src="/images/address.png" title="Mi lista de deseos" alt="logo" height="20"/>
+                                                                    {" "}Direcciones de envío
+                                                                </a>
+                                                            </Col>
+                                                            <Col md={12} className={getClassName(4)} onClick={()=>{setComponentToShow(4)}}>
+                                                                <a>
+                                                                    <img className="d-inline-block" src="/images/misdeseos.png" title="Mi lista de deseos" alt="logo" height="20"/>
+                                                                    {" "}Lista de deseos
+                                                                </a>
+                                                            </Col>
+                                                            <Col md={12} className={getClassName(5)} onClick={()=>{setComponentToShow(5)}}>
+                                                                <a>
+                                                                    <img className="d-inline-block" src="/images/micarrito.png" title="Mi lista de deseos" alt="logo" height="20"/>
+                                                                    {" "}Carrito de compras
+                                                                </a>
+                                                            </Col>
+                                                            <Col md={12} className={getClassName(6)} onClick={()=>{setComponentToShow(6)}}>
+                                                                <a>
+                                                                    <img className="d-inline-block" src="/images/reporte.png" title="Mi lista de deseos" alt="logo" height="20"/>
+                                                                    {" "}Reporte de compras
+                                                                </a>
+                                                            </Col>
+                                                        </>
+                    }
+                    
                 </Row>
                 
             </Col>

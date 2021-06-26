@@ -9,10 +9,11 @@ import { getProductoById, getCategoriaByProductos } from '../../services/product
 import Link from 'next/link'
 import { DeseoComponent } from '../Productos/DeseoComponent';
 import { CarritoComponent } from '../Productos/CarritoComponent';
+import { CompraModal } from '../Compra/CompraModal';
 
 
 export const ProductoContainer = ({productoId}) => {
-
+    const [modalShow, setModalShow] = useState(false);
     const [ producto, setProducto ] = useState({});
     const [ categorias, setCategorias ] = useState([]);
     const [ loading, setLoading ] = useState(true);
@@ -129,7 +130,7 @@ export const ProductoContainer = ({productoId}) => {
                             <CarritoComponent idProducto={productoId} altura={25} />
                         </Col>
                         <Col className="text-right">
-                            <Button variant="info">Comprar</Button>
+                            <Button variant="info" onClick={() => setModalShow(true)}>Comprar</Button>
                         </Col>
                     </Row>
                 </Col>
@@ -168,6 +169,7 @@ export const ProductoContainer = ({productoId}) => {
                     </Row>
                 </Col>
             </Row>
+            <CompraModal show={modalShow} producto={producto} onHide={() => {setModalShow(false)}}/>
         </>
     )
 }

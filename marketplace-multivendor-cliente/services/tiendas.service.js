@@ -30,6 +30,21 @@ export const getSuscripcionByTiendaComprador = async(idTienda, idComprador) => {
 
 }
 
+
+export const getSuscripcionByTienda = async(idTienda) => {
+    try {
+        const response = await fetch(`${API_URL}/get_compradores_tiendasByTienda/${idTienda}`)
+            .then(response => response.json());
+
+        return response;
+    } catch (e) {
+        return [];
+    }
+
+}
+
+
+
 export const insertSuscripcion = async(idTienda, idComprador) => {
     const requestOptions = {
         method: 'POST',

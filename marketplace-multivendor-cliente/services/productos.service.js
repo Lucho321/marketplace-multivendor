@@ -147,3 +147,92 @@ export const getProductosCarritoByCarrito = async(carritoId) => {
         return [];
     }
 }
+
+export const guardarProducto = async(producto) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            nombre_producto: producto.nombre_producto,
+            descripcion: producto.descripcion,
+            cantidad_disponible: producto.cantidad_disponible,
+            ubicacion: producto.ubicacion,
+            precio: producto.precio,
+            tiempo_envio: producto.tiempo_envio,
+            costo_envio: producto.costo_envio,
+            calificacion: 0,
+            id_tienda: producto.id_tienda
+        })
+    };
+    const res = await fetch(`${API_URL}/insert_productos`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+export const updateProducto = async(producto) => {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id_producto: producto.id_producto,
+            nombre_producto: producto.nombre_producto,
+            descripcion: producto.descripcion,
+            cantidad_disponible: producto.cantidad_disponible,
+            ubicacion: producto.ubicacion,
+            precio: producto.precio,
+            tiempo_envio: producto.tiempo_envio,
+            costo_envio: producto.costo_envio,
+            calificacion: producto.calificacion,
+            id_tienda: producto.id_tienda,
+            fecha_publicacion: producto.fecha_publicacion
+        })
+    };
+    const res = await fetch(`${API_URL}/update_productos`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+
+export const guardarImagenProducto = async(imagen) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            nombre: imagen.nombre,
+            url_foto: imagen.url_foto,
+            id_producto: imagen.id_producto,
+        })
+    };
+    const res = await fetch(`${API_URL}/insert_productos_fotos`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+
+export const updateImagenProducto = async(imagen) => {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id_foto: imagen.id_foto,
+            nombre: imagen.nombre,
+            url_foto: imagen.url_foto,
+            id_producto: imagen.id_producto,
+        })
+    };
+    const res = await fetch(`${API_URL}/update_productos_fotos`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+
+export const deleteImagenProducto = async(idFoto) => {
+    const response = await fetch(`${API_URL}/delete_productos_fotos/${idFoto}`, { method: 'DELETE' })
+        .then(response => response.json());
+
+    return response;
+}

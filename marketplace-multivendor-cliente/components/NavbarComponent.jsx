@@ -45,6 +45,12 @@ export const NavbarComponent = () => {
                                                     <Nav.Link href="/tiendas">Tiendas</Nav.Link>
                                                 </>
                     }
+                    {
+                        tipoUsuario === 0 &&    <>
+                                                    <Nav.Link href="/">Productos</Nav.Link>
+                                                    <Nav.Link href="/suscriptores">Suscripciones</Nav.Link>
+                                                </>
+                    }
                 </Nav>
                 <Nav>
                     <NavDropdown title={usuario.nombre_usuario} id="collasible-nav-dropdown">

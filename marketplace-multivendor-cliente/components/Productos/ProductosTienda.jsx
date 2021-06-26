@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Table, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
 import { getAllProductos, getProductosByTienda, getProductosByNombreAndTienda } from '../../services/productos.service';
 import { useForm } from '../../context/hooks/useForm';
+import Link from 'next/link';
 
 export const ProductosTienda = () => {
     
@@ -32,7 +33,10 @@ export const ProductosTienda = () => {
                 <h2 style={{color:"#1abc9c"}}>Mis productos</h2>
             </Col>
             <Col md={2} className="text-right">
-                <Button variant="info">Agregar producto</Button>
+                <Link href="/agregarproducto">
+                    <Button variant="info">Agregar producto</Button>
+                </Link>
+                
             </Col>
         </Row>
         <Row>
@@ -73,13 +77,19 @@ export const ProductosTienda = () => {
                             productos.map(p => (
                                 <tr>
                                     <td>{p.nombre_producto}</td>
-                                    <td>{p.cantidad_disponible}</td>
-                                    <td>{p.costo_envio}</td>
-                                    <td>{p.tiempo_envio}</td>
-                                    <td>{p.precio}</td>
+                                    <td>{p.cantidad_disponible} unidades</td>
+                                    <td>${p.costo_envio}</td>
+                                    <td>{p.tiempo_envio} días</td>
+                                    <td>${p.precio}</td>
                                     <td>
-                                        <Button className='pl-4 pr-4' variant="outline-info">Editar</Button>{' '}
+                                        <>
+                                        <Link href={`/editarproducto/${p.id_producto}`}>
+                                            <a>
+                                                <Button className='pl-4 pr-4' variant="outline-info">Ver</Button>{' '}
+                                            </a>
+                                        </Link>
                                         <Button variant="outline-danger">Eliminar</Button>{' '}
+                                        </>
                                     </td>
                                 </tr>
                             ))
