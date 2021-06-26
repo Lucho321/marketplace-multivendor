@@ -236,3 +236,46 @@ export const deleteImagenProducto = async(idFoto) => {
 
     return response;
 }
+
+
+export const agregarCategoria = async(categoria, producto) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            nombre: categoria,
+            descripcion: "",
+            id_producto: producto,
+
+        })
+    };
+    const res = await fetch(`${API_URL}/insertar_categorias`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+
+
+export const agregarCategoriaProducto = async(categoria, producto) => {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            id_producto: producto,
+            id_categoria: categoria
+        })
+    };
+    const res = await fetch(`${API_URL}/insertar_productos_categorias`, requestOptions)
+        .then(response => response.json())
+
+    return res;
+}
+
+
+export const deleteCategoriaProducto = async(idproducto, idcategoria) => {
+    const response = await fetch(`${API_URL}/delete_productos_categorias/${idproducto}/${idcategoria}`, { method: 'DELETE' })
+        .then(response => response.json());
+
+    return response;
+}

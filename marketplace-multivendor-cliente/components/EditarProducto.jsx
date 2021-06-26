@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Col, Row, Form, Button, Modal, Image } from 'react-bootstrap'
-import { RedSocialCard } from './MyPerfil/PerfilComprador/RedSocial/RedSocialCard'
+import CreatableSelect from 'react-select/creatable';
 import Swal from 'sweetalert2'
-import { guardarProducto, getImageByProducto, guardarImagenProducto, updateImagenProducto, deleteImagenProducto, getProductoById, updateProducto } from '../services/productos.service'
+import { guardarProducto, getImageByProducto, guardarImagenProducto, updateImagenProducto, deleteImagenProducto, getProductoById, updateProducto, getAllCategorias, agregarCategoria, agregarCategoriaProducto, getCategoriaByProductos, deleteCategoriaProducto } from '../services/productos.service'
 
 
 export const EditarProducto = ({productoId}) => {
@@ -20,9 +20,14 @@ export const EditarProducto = ({productoId}) => {
     const [ image, setImage ] = useState(null);
     const [createObjectURL, setCreateObjectURL] = useState();
     const [ producto, setProducto ] = useState({});
+    const [ categorias, setCategorias ] = useState();
+    const [ categoriasSeleccionadas, setCategoriasSeleccionadas ] = useState([]);
+    const [ categoriasNuevas, setCategoriasNuevas ] = useState([]);
+    const [ categoriasViejas, setCategoriasViejas ] = useState([]);
+    const [ categoriasEscogiendo, setCategoriasEscogiendo ] = useState([]);
+
 
     const uploadToClient = (event) => {
-        console.log(event.target.files[0]);
         if (event.target.files && event.target.files[0]) {
           const i = event.target.files[0];
     
@@ -30,6 +35,64 @@ export const EditarProducto = ({productoId}) => {
           setCreateObjectURL(URL.createObjectURL(i));
         }
     };
+
+    const getCategorias = ()=>{
+        getAllCategorias()
+            .then(res=>{
+                let cats = [];
+                for(let i in res){
+                    let ob = {
+                        value: res[i].id_categoria,
+                        label: res[i].nombre
+                    };
+                    cats.push(ob);
+                };
+                setCategorias(cats);
+            })
+    }
+
+    const getCategoriasDelProducto = ()=>{
+        getCategoriaByProductos(productoId)
+            .then(res=>{
+                let cats = [];
+                for(let i in res){
+                    let ob = {
+                        value: res[i].id_categoria,
+                        label: res[i].nombre
+                    };
+                    cats.push(ob);
+                };
+                setCategoriasViejas(cats);
+                setCategoriasEscogiendo(cats);
+            })
+    }
+
+    const handleChange = (newValue, actionMeta) => {
+        if(newValue.length > 0 ){
+            let cs = [];
+            let cn = [];
+            console.log(newValue);
+            for(let i in newValue){
+                let nuevo = true;
+                for(let j in categorias){
+                    if(newValue[i].value == categorias[j].value && newValue[i].label == categorias[j].label){
+                        nuevo = false;
+                    }
+                }
+                if(nuevo){
+                    cn.push(newValue[i]);
+                }else{
+                    cs.push(newValue[i]);
+                }
+            }
+            setCategoriasSeleccionadas(cs);
+            setCategoriasNuevas(cn);
+        }else{
+            setCategoriasSeleccionadas([]);
+            setCategoriasNuevas([]);
+        }
+        setCategoriasEscogiendo(newValue);
+      };
 
     const uploadToServer = async (_name) => {
         const body = new FormData();
@@ -51,6 +114,8 @@ export const EditarProducto = ({productoId}) => {
     let usuarioLogeado;
     useEffect(() => {
         getProducto();
+        getCategorias();
+        getCategoriasDelProducto();
         getImages(productoId);
         if (typeof window !== 'undefined') {
             usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
@@ -65,15 +130,7 @@ export const EditarProducto = ({productoId}) => {
     }, [])
 
     const validarAlgoCambio=()=>{
-        console.log(producto);
-        console.log(nombre);
-        console.log(precioEnvio);
-        console.log(ubicacion);
-        console.log(precio);
-        console.log(tiempoEnvio);
-        console.log(descripcion);
-        console.log(cantidad);
-        if(nombre != producto.nombre_producto || parseInt(precioEnvio) != producto.costo_envio || ubicacion != producto.ubicacion || parseInt(precio) != producto.precio || parseInt(tiempoEnvio) != producto.tiempo_envio|| descripcion != producto.descripcion || parseInt(cantidad)!=producto.cantidad_disponible){
+        if((validarCambioSelect() || nombre != producto.nombre_producto || parseInt(precioEnvio) != producto.costo_envio || ubicacion != producto.ubicacion || parseInt(precio) != producto.precio || parseInt(tiempoEnvio) != producto.tiempo_envio|| descripcion != producto.descripcion || parseInt(cantidad)!=producto.cantidad_disponible)&& categoriasEscogiendo.length>0){
             return true;
         }
         return false;
@@ -86,8 +143,71 @@ export const EditarProducto = ({productoId}) => {
        return true;
    }
 
+   const validarCambioSelect = ()=>{
+
+        let huboCambio = false;
+        if(categoriasEscogiendo.length === categoriasViejas.length)
+        {
+            for(let i in categoriasEscogiendo){
+                let borrar = true;
+                for(let j in categoriasViejas){
+                    if(categoriasEscogiendo[i].value == categoriasViejas[j].value && categoriasEscogiendo[i].label == categoriasViejas[j].label){
+                        borrar = false;
+                    }
+                }
+                if(borrar){
+                    huboCambio=true;
+                }
+            }
+        }else{
+            return true;
+        }
+        return huboCambio;
+        
+   }
+
 
     const handleSaveProducto = (e)=>{
+
+        let catBorrar = [];
+        for(let i in categoriasViejas){
+            let borrar = true;
+            for(let j in categoriasSeleccionadas){
+                if(categoriasViejas[i].value == categoriasSeleccionadas[j].value && categoriasViejas[i].label == categoriasSeleccionadas[j].label){
+                    borrar = false;
+                }
+            }
+            if(borrar){
+                catBorrar.push(categoriasViejas[i]);
+            }
+        }
+
+        let catAgregar = [];
+        for(let i in categoriasSeleccionadas){
+            let agregar = true;
+            for(let j in categoriasViejas){
+                if(categoriasSeleccionadas[i].value == categoriasViejas[j].value && categoriasSeleccionadas[i].label == categoriasViejas[j].label){
+                    agregar = false;
+                }
+            }
+            if(agregar){
+                catAgregar.push(categoriasSeleccionadas[i]);
+            }
+        }
+
+        if(catBorrar.length > 0){
+            console.log(catBorrar)
+        }
+
+        if(catAgregar.length > 0){
+            console.log(catAgregar)
+        }
+
+        if(categoriasNuevas.length > 0){
+            console.log(categoriasNuevas)
+        }
+        
+
         e.preventDefault();
 
         let productoG = {
@@ -106,8 +226,29 @@ export const EditarProducto = ({productoId}) => {
 
         updateProducto(productoG)
             .then(res=>{
-                console.log(res);
                 if(res==="Producto actualizada exitosamente."){
+                    if(catAgregar.length>0){
+                        for(let i in catAgregar){
+                            agregarCategoriaProducto(catAgregar[i].value, producto.id_producto);
+                        }
+                    }
+                    if(categoriasNuevas.length>0){
+                        for(let i in categoriasNuevas){
+                            agregarCategoria(categoriasNuevas[i].label, producto.id_producto);
+                        }
+                    }
+                    if(catBorrar.length>0){
+                        for(let i in catBorrar){
+                            deleteCategoriaProducto(producto.id_producto, catBorrar[i].value);
+                        }
+                    }
+                    getCategorias();
+                    setTimeout(function(){
+                        getCategoriasDelProducto();
+                    }, 3000);
+                    
+                    setCategoriasSeleccionadas([]);
+                    setCategoriasNuevas([]);
                     Swal.fire({
                         icon: 'success',
                         title: `Excelente`,
@@ -127,7 +268,6 @@ export const EditarProducto = ({productoId}) => {
             url_foto:"no-disponible.jpg",
             id_producto: productoId
         };
-        console.log(img);
         guardarImagenProducto(img)
                 .then(res=>{
                     if(res[0].id_foto > 0){
@@ -137,7 +277,6 @@ export const EditarProducto = ({productoId}) => {
                             id_foto: res[0].id_foto
                         };
                         img2.url_foto= `pro-${productoId}-ima-${res[0].id_foto}-${image.name}`;
-                        console.log(img2);
                         updateImagenProducto(img2).then(rex=>{
                             if(rex==="Foto actualizada exitosamente."){
                                 Swal.fire({
@@ -147,7 +286,9 @@ export const EditarProducto = ({productoId}) => {
                                     showConfirmButton: false,
                                     timer: 2500
                                 });
-                                getImages(productoId);
+                                setTimeout(function(){
+                                    getImages(productoId);
+                                }, 3000);
                                 setModalShow(false);
                             }
                         });
@@ -210,7 +351,15 @@ export const EditarProducto = ({productoId}) => {
                                         <Form.Text className="text-muted"></Form.Text>
                                     </Form.Group>
                                 </Col>
-                                
+                                <Col className="pt-1">
+                                    <div style={{marginBottom:"0.45rem!important"}}>Categorías</div>
+                                    <CreatableSelect
+                                        isMulti
+                                        onChange={handleChange}
+                                        options={categorias}
+                                        value={categoriasEscogiendo}
+                                    />
+                                </Col>
                             </Row>
                             <Row>
                                 <Col>

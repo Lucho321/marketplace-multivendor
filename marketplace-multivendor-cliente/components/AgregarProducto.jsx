@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Col, Row, Form, Button, Modal, Image } from 'react-bootstrap'
-import { RedSocialCard } from './MyPerfil/PerfilComprador/RedSocial/RedSocialCard'
+import CreatableSelect from 'react-select/creatable';
 import Swal from 'sweetalert2'
-import { guardarProducto, getImageByProducto, guardarImagenProducto, updateImagenProducto, deleteImagenProducto } from '../services/productos.service'
+import { guardarProducto, getImageByProducto, guardarImagenProducto, updateImagenProducto, deleteImagenProducto, getAllCategorias, agregarCategoria, agregarCategoriaProducto } from '../services/productos.service'
 
 export const AgregarProducto = () => {
     const [modalShow, setModalShow] = useState(false);
@@ -19,10 +19,11 @@ export const AgregarProducto = () => {
     const [ imagenes, setImagenes ] = useState([]);
     const [ image, setImage ] = useState(null);
     const [createObjectURL, setCreateObjectURL] = useState();
-
+    const [ categorias, setCategorias ] = useState();
+    const [ categoriasSeleccionadas, setCategoriasSeleccionadas ] = useState([]);
+    const [ categoriasNuevas, setCategoriasNuevas ] = useState([]);
 
     const uploadToClient = (event) => {
-        console.log(event.target.files[0]);
         if (event.target.files && event.target.files[0]) {
           const i = event.target.files[0];
     
@@ -41,6 +42,21 @@ export const AgregarProducto = () => {
         });
     };
 
+    const getCategorias = ()=>{
+        getAllCategorias()
+            .then(res=>{
+                let cats = [];
+                for(let i in res){
+                    let ob = {
+                        value: res[i].id_categoria,
+                        label: res[i].nombre
+                    };
+                    cats.push(ob);
+                };
+                setCategorias(cats);
+            })
+    }
+
     const getImages = async(pid)=>{
         getImageByProducto(pid).then(r=>{
             setImagenes(r);
@@ -50,6 +66,7 @@ export const AgregarProducto = () => {
 
     let usuarioLogeado;
     useEffect(() => {
+        getCategorias();
         if (typeof window !== 'undefined') {
             usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
             if(usuarioLogeado != undefined){
@@ -61,7 +78,7 @@ export const AgregarProducto = () => {
     }, [])
 
     const validarAlgoCambio=()=>{
-        if((nombre.length>0 && precioEnvio.length>0 && ubicacion.length>0 && precio.length>0 && tiempoEnvio.length>0 && descripcion.length>0)&&productoId===null){
+        if((categoriasSeleccionadas.length>0 || categoriasNuevas.length>0) && (nombre.length>0 && precioEnvio.length>0 && ubicacion.length>0 && precio.length>0 && tiempoEnvio.length>0 && descripcion.length>0)&&productoId===null){
             return true;
         }
         return false;
@@ -91,8 +108,17 @@ export const AgregarProducto = () => {
 
         guardarProducto(productoG)
             .then(res=>{
-                console.log(res);
                 if(res[0].id_producto > 0){
+                    if(categoriasSeleccionadas.length>0){
+                        for(let i in categoriasSeleccionadas){
+                            agregarCategoriaProducto(categoriasSeleccionadas[i].value, res[0].id_producto);
+                        }
+                    }
+                    if(categoriasNuevas.length>0){
+                        for(let i in categoriasNuevas){
+                            agregarCategoria(categoriasNuevas[i].label, res[0].id_producto);
+                        }
+                    }
                     Swal.fire({
                         icon: 'success',
                         title: `Excelente`,
@@ -101,7 +127,11 @@ export const AgregarProducto = () => {
                         timer: 4000
                     });
                     setProductoId(res[0].id_producto);
-                    getImages(res[0].id_producto);
+                    
+                        getImages(res[0].id_producto);
+                        getCategorias();
+                    
+                    
                 }
             });
     }
@@ -113,7 +143,6 @@ export const AgregarProducto = () => {
             url_foto:"no-disponible.jpg",
             id_producto: productoId
         };
-        console.log(img);
         guardarImagenProducto(img)
                 .then(res=>{
                     if(res[0].id_foto > 0){
@@ -123,7 +152,6 @@ export const AgregarProducto = () => {
                             id_foto: res[0].id_foto
                         };
                         img2.url_foto= `pro-${productoId}-ima-${res[0].id_foto}-${image.name}`;
-                        console.log(img2);
                         updateImagenProducto(img2).then(rex=>{
                             if(rex==="Foto actualizada exitosamente."){
                                 Swal.fire({
@@ -133,13 +161,45 @@ export const AgregarProducto = () => {
                                     showConfirmButton: false,
                                     timer: 2500
                                 });
-                                getImages(productoId);
+                                setTimeout(function(){
+                                    getImages(productoId);
+                                }, 3000);
+
+                                
                                 setModalShow(false);
                             }
                         });
                     }
                 });
     }
+
+    
+
+    const handleChange = (newValue, actionMeta) => {
+        if(newValue.length > 0 ){
+            let cs = [];
+            let cn = [];
+            console.log(newValue);
+            for(let i in newValue){
+                let nuevo = true;
+                for(let j in categorias){
+                    if(newValue[i].value == categorias[j].value && newValue[i].label == categorias[j].label){
+                        nuevo = false;
+                    }
+                }
+                if(nuevo){
+                    cn.push(newValue[i]);
+                }else{
+                    cs.push(newValue[i]);
+                }
+            }
+            setCategoriasSeleccionadas(cs);
+            setCategoriasNuevas(cn);
+        }else{
+            setCategoriasSeleccionadas([]);
+            setCategoriasNuevas([]);
+        }
+      };
 
 
     const handleEliminarIma = (e, idFoto)=>{
@@ -183,7 +243,14 @@ export const AgregarProducto = () => {
                                         <Form.Text className="text-muted"></Form.Text>
                                     </Form.Group>
                                 </Col>
-                                
+                                <Col className="pt-1">
+                                    <div style={{marginBottom:"0.45rem!important"}}>Categorías</div>
+                                    <CreatableSelect
+                                        isMulti
+                                        onChange={handleChange}
+                                        options={categorias}
+                                    />
+                                </Col>
                             </Row>
                             <Row>
                                 <Col>
