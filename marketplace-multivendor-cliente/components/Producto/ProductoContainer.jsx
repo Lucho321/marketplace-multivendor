@@ -13,6 +13,7 @@ import { CarritoComponent } from '../Productos/CarritoComponent';
 import { getComentariosByProducto } from '../../services/comentarios.service';
 import { getUsuarioById } from '../../services/usuarios.service';
 import { insertComentario } from '../../services/comentarios.service';
+import { CompraModal } from '../Compra/CompraModal';
 import Swal from 'sweetalert2'
 
 export const ProductoContainer = ({productoId}) => {
@@ -24,6 +25,7 @@ export const ProductoContainer = ({productoId}) => {
     const [ usuario, setUsuario ] = useState([]);
     const[ id_usuario, setIdUsuario ] = useState();
     const[ comentario, setComentario ] = useState('');
+    const [modalShow, setModalShow] = useState(false);
 
     const getProducto = async()=>{
         let pro = await getProductoById(productoId);
@@ -187,7 +189,7 @@ export const ProductoContainer = ({productoId}) => {
                             <CarritoComponent idProducto={productoId} altura={25} />
                         </Col>
                         <Col className="text-right">
-                            <Button variant="info">Comprar</Button>
+                            <Button variant="info" onClick={() => setModalShow(true)}>Comprar</Button>
                         </Col>
                     </Row>
                 </Col>
@@ -254,6 +256,8 @@ export const ProductoContainer = ({productoId}) => {
                     </Row>
                 </Col>
             </Row>
+            <CompraModal show={modalShow} producto={producto} onHide={() => {setModalShow(false)}}/>
         </>
+        
     )
 }
