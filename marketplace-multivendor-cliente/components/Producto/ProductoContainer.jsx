@@ -58,7 +58,7 @@ export const ProductoContainer = ({productoId}) => {
 
         getCategorias(productoId);
         let pro = getProducto().then(p=>{setProducto(p[0]); setLoading(false);});
-    }, [])
+    }, [productoId])
 
     if(loading){
         return  <Spinner animation="border" role="status">

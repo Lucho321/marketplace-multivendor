@@ -131,7 +131,7 @@ export const TiendaContainer = ({tiendaId}) => {
             }
         }
         
-    }, [])
+    }, [tiendaId])
 
 
 
