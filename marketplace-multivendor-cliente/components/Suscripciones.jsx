@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Col, Row, Form, Button, Modal, Image } from 'react-bootstrap'
 import { getSuscripcionByTienda } from '../services/tiendas.service'
+import { getUsuarioByComprador } from '../services/usuarios.service';
 import { SuscriptorCard } from './Suscriptores/SuscriptorCard';
 
 export const Suscripciones = () => {
+    
     const [ suscripciones, setSuscripciones ] = useState([]);
     const [ idUsuario, setIdUsuario ] = useState();
 
@@ -20,46 +22,25 @@ export const Suscripciones = () => {
         }
     }, [])
 
+    const getUsuario = async(idComprador)=>{
+        let u = await getUsuarioByComprador(idComprador);
+        return u[0];
+    }
 
-    const getSuscripciones = (id)=>{
-        getSuscripcionByTienda(parseInt(id))
-        .then(t=>{
-            setSuscripciones(t);
-        });
+    const getSuscripciones = async(id)=>{
+        let t = await getSuscripcionByTienda(parseInt(id));
+        if(t.length > 0){
+            let sus = [];
+            for(let i in t){
+                let usu = await getUsuario(t[i].id_comprador);
+                sus.push(usu);
+            }
+            setSuscripciones(sus);
+        }
     
     };
 
 
-    const suscripcioness = [
-        {
-            nombre_usuario: "pablove",
-            pais:"Costa Rica",
-            fotografia:"usr-4-2130.jpg",
-            email:"pablo@gmail.com",
-            id_usuario:4
-        },
-        {
-            nombre_usuario: "pablove",
-            pais:"Costa Rica",
-            fotografia:"usr-4-2130.jpg",
-            email:"pablo@gmail.com",
-            id_usuario:4
-        },
-        {
-            nombre_usuario: "pablove",
-            pais:"Costa Rica",
-            fotografia:"usr-4-2130.jpg",
-            email:"pablo@gmail.com",
-            id_usuario:4
-        },
-        {
-            nombre_usuario: "pablove",
-            pais:"Costa Rica",
-            fotografia:"usr-4-2130.jpg",
-            email:"pablo@gmail.com",
-            id_usuario:4
-        }
-    ]
 
     return (
         <Row className="p-4 mb-3">
@@ -69,41 +50,21 @@ export const Suscripciones = () => {
                         <h4  style={{color:"#1abc9c"}}>Suscriptores</h4>
                     </Col>
                 </Row>
-                <Row className="pt-1 mb-3">
-                    <Col md={6} style={{borderRight:"solid 2px #b3e7df"}}>
+                <Row className="pt-2 mb-5">
+                    <Col md={12} >
                         <Row>
                             {
-                                suscripcioness.map(s=>(
-                                    <Col md={12} className="mb-4">
-                                        <Row>
-                                            <Col md={2} className="text-center">
-                                                <Image src={`/images/files/${s.fotografia}`} style={{width:"68px", height:"59px"}} roundedCircle />
-                                            </Col>
-                                            <Col md={10}>
-                                                <Row>
-                                                    <Col>
-                                                        <h5>@{s.nombre_usuario}<small> - {s.pais}</small></h5>
-                                                    </Col>
-                                                </Row>
-                                                <Row>
-                                                    <Col>
-                                                        <small>{s.email}</small>
-                                                    </Col>
-                                                </Row>
-                                                
-                                            </Col>
-                                        </Row>
-                                    </Col>
+                                suscripciones.map(s=>(
+                                    <SuscriptorCard s={s} key={s.id_usuario}/>
+                                    
                                 ))
                             }
                         </Row>
                     </Col>
-                    <Col md={6}>
-
-                    </Col>
-                    
                 </Row>
             </Col>
+            
         </Row>
     )
 }
+

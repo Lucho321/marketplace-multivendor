@@ -48,7 +48,7 @@ export const NavbarComponent = () => {
                     {
                         tipoUsuario === 0 &&    <>
                                                     <Nav.Link href="/">Productos</Nav.Link>
-                                                    <Nav.Link href="/suscriptores">Suscripciones</Nav.Link>
+                                                    <Nav.Link href="/suscriptores">Suscriptores</Nav.Link>
                                                 </>
                     }
                 </Nav>
