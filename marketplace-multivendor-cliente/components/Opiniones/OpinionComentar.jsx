@@ -3,6 +3,25 @@ import { Button, Col, Row, Form,  } from 'react-bootstrap'
 
 export const OpinionComentar = () => {
 
+    const[ id_usuario, setIdUsuario ] = useState('');
+    const[ comentario, setComentario ] = useState('');
+    const[ nivel, setNivel ] = useState('');
+    const[ id_producto, setProducto ] = useState('');
+    const[ padre, setPadre ] = useState('');
+
+
+    let usuarioLogeado;
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            usuarioLogeado = JSON.parse(localStorage.getItem('_user'));
+            if(usuarioLogeado != undefined){
+                if(usuarioLogeado.nombre_usuario){
+                    setIdUsuario(usuarioLogeado.id_usuario);
+                }
+            }
+        }
+    }, [])
+
     const handleComentar = (e)=>{
         let comentarioG = {
             id_usuario: id_usuario,

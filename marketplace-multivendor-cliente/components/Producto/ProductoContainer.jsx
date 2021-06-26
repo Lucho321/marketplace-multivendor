@@ -37,12 +37,8 @@ export const ProductoContainer = ({productoId}) => {
     }
 
     const getComentarios = (producto) => {
-        console.log(producto);
-        console.log('aaaaaaaaaaaaaaaaaaaaaa');
         getComentariosByProducto(producto).then(r=>{
             setComentarios(r);
-            console.log(r);
-            console.log('bbbbbbbbbbbbbbbbbbbb');
         })
     }
 
@@ -78,7 +74,6 @@ export const ProductoContainer = ({productoId}) => {
             id_producto: productoId,
             padre: null
         }
-        console.log(comentarioG);
 
         insertComentario(comentarioG)
             .then(res=>{
@@ -204,7 +199,7 @@ export const ProductoContainer = ({productoId}) => {
                                 </Col>
                             </Row>
                             
-                            <OpinionCalificar modalidad="producto" />
+                            <OpinionCalificar modalidad="producto" idProducto={productoId}/>
                         </Col> 
                         <Col md={9} className="pl-5" style={{borderLeft:"1px solid #343a40"}}>
                             <Row className="mb-2">

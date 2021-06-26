@@ -299,3 +299,13 @@ export const getCantidadProductoDeseo = async(productoId) => {
         return 0;
     }
 }
+export const getProductosCalificacionesByProductoAndUsuario = async(idProducto, idUsuario) => {
+    try {
+        const response = await fetch(`${API_URL}/get_productosCalificacionesByProductoByUsuario/${idProducto}/${idUsuario}`)
+            .then(response => response.json());
+
+        return response;
+    } catch (e) {
+        return [];
+    }
+}

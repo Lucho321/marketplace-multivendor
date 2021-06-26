@@ -46,7 +46,7 @@ def get_productosCalificacionesByProductoByUsuario(id_producto,id_usuario): #fun
             content = {}
         
         return jsonify(json_items) 
-
+ 
     except Exception as e:
         print(e)
     finally:
@@ -102,7 +102,7 @@ def insert_productos_calificaciones():
 def update_producto_calificacion():
     try:
         _json = request.get_json(force=True)
-        _id_tienda_calificacion = _json['id_producto_calificacion']
+        _id_producto_calificacion = _json['id_producto_calificacion']
         _calificacion = _json['calificacion']
         _id_producto= _json['id_producto']
         newCalificacion = 0
@@ -110,7 +110,7 @@ def update_producto_calificacion():
         calificacionBD=0
         
         query = "UPDATE tbl_productos_calificaciones SET calificacion=%s WHERE id_producto_calificacion=%s"
-        data = (_calificacion, _id_tienda_calificacion,)
+        data = (_calificacion, _id_producto_calificacion,)
         conn = mysql.connect()
         cur = conn.cursor()
         cur.execute(query, data)
