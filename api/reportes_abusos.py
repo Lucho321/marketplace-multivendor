@@ -44,7 +44,7 @@ def get_reportesAbusosByCompradorAndTienda(id_tienda, id_comprador):
 
         
     except Exception as e:
-        print(e)
+        print('error')
     finally:
         cur.close()
 
@@ -101,7 +101,7 @@ def delete_reportes_abusos(id_comprador, id_tienda):
     try:
         conn = mysql.connect()
         cur = conn.cursor()
-        cur.execute("DELETE FROM tbl_compradores_tiendas WHERE id_comprador=%s AND id_tienda=%s", (id_comprador, id_tienda))
+        cur.execute("DELETE FROM tbl_reportes_abusos WHERE id_comprador=%s AND id_tienda=%s", (id_comprador, id_tienda))
         conn.commit()
         res = jsonify('Reporte de abuso eliminado exitosamente.')
         res.status_code = 200

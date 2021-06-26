@@ -4,6 +4,7 @@ import ReactStars from "react-rating-stars-component";
 import { ProductosTienda } from './ProductosTienda';
 import { OpinionesTienda } from './OpinionesTienda';
 import { getTiendaById, getSuscripcionByTiendaComprador, insertSuscripcion, deleteSuscripcion } from '../../services/tiendas.service';
+import { getAbusosByCompradorAndTienda, insertAbuso, deleteAbuso } from '../../services/abusos.service';
 import Swal from 'sweetalert2'
 
 export const TiendaContainer = ({tiendaId}) => {
@@ -11,9 +12,23 @@ export const TiendaContainer = ({tiendaId}) => {
     const [ tienda, setTienda ] = useState({});
     const [ loading, setLoading ] = useState(true);
     const [ suscripcion, setSuscripcion ] = useState('');
-    const [ idUsuario, setIdUsuario ] = useState();
+    const [ idUsuario, setIdUsuario ] = useState('');
+    const [abuso, setAbuso] = useState([]);
+
     const getTienda = async()=>{
         getTiendaById(tiendaId).then(t=>{setTienda(t[0]); setLoading(false);});
+    }
+
+    const getAbuso = async()=>{
+        getAbusosByCompradorAndTienda(parseInt(tiendaId), parseInt(idUsuario))
+        .then(r=>{
+            console.log(r)
+            if(r.length == 0){
+                setAbuso("Reportar Abuso")
+            }else{
+                setAbuso("Eliminar Reporte Abuso")
+            }
+        })
     }
 
     const getSuscripcion = async(id)=>{
@@ -28,6 +43,39 @@ export const TiendaContainer = ({tiendaId}) => {
     
     };
 
+    const handleAbuso = (e)=>{
+        getAbusosByCompradorAndTienda(parseInt(tiendaId), parseInt(idUsuario))
+        .then(r=>{
+            if(r.length == 0){
+                insertAbuso(idUsuario, tiendaId)
+                .then(r2=>{
+                    if(r2==="Reporte de abuso agregado exitosamente."){
+                        Swal.fire({
+                            icon: 'success',
+                            title: `Excelente`,
+                            text: `Has reportado a esta tienda`,
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+                })
+            }else{
+                deleteAbuso(idUsuario, tiendaId)
+                .then(r=>{
+                    if(r==="Reporte de abuso eliminado exitosamente."){
+                        Swal.fire({
+                            icon: 'success',
+                            title: `Excelente`,
+                            text: `Has eliminado tu reporte`,
+                            showConfirmButton: false,
+                            timer: 2500
+                        });
+                    }
+                })
+            }
+        })
+        getAbuso();
+    }
 
     const handleSuscripcion = (e)=>{
         if(suscripcion==="Suscribirme"){
@@ -79,6 +127,7 @@ export const TiendaContainer = ({tiendaId}) => {
                 }
             }
         }
+        getAbuso();
     }, [])
 
 
@@ -122,7 +171,7 @@ export const TiendaContainer = ({tiendaId}) => {
                         </Col>
                         <Col md="4" className="mt-1 mp-2 text-center">
                             <Button onClick={handleSuscripcion} className="mr-2" variant="outline-info" size="sm">{suscripcion}</Button>
-                            <Button variant="outline-info" size="sm">Reportar abuso</Button>
+                            <Button onClick={handleAbuso} variant="outline-info" size="sm">{abuso}</Button>
                         </Col>
                     </Row>
                 </Col>
@@ -145,4 +194,4 @@ export const TiendaContainer = ({tiendaId}) => {
             </Row>
         </>
     )
-}
+} 
