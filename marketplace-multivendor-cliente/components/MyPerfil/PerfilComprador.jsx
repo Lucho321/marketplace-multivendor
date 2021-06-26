@@ -95,12 +95,6 @@ export const PerfilComprador = ({numComponent}) => {
                                                                     {" "}Carrito de compras
                                                                 </a>
                                                             </Col>
-                                                            <Col md={12} className={getClassName(6)} onClick={()=>{setComponentToShow(6)}}>
-                                                                <a>
-                                                                    <img className="d-inline-block" src="/images/reporte.png" title="Mi lista de deseos" alt="logo" height="20"/>
-                                                                    {" "}Reporte de compras
-                                                                </a>
-                                                            </Col>
                                                         </>
                     }
                     
@@ -113,7 +107,6 @@ export const PerfilComprador = ({numComponent}) => {
                 {componentToShow === 3 && <DireccionesEnvio />}
                 {componentToShow === 4 && <ListaDeseos />}
                 {componentToShow === 5 && <MiCarritoPerfil />}
-                {componentToShow === 6 && <ReporteCompras />}
             </Col>
         </Row>
     )

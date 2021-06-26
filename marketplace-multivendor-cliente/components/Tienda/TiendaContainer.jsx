@@ -19,8 +19,8 @@ export const TiendaContainer = ({tiendaId}) => {
         getTiendaById(tiendaId).then(t=>{setTienda(t[0]); setLoading(false);});
     }
 
-    const getAbuso = async()=>{
-        getAbusosByCompradorAndTienda(parseInt(tiendaId), parseInt(idUsuario))
+    const getAbuso = async(idu)=>{
+        getAbusosByCompradorAndTienda(parseInt(tiendaId), parseInt(idu))
         .then(r=>{
             console.log(r)
             if(r.length == 0){
@@ -57,6 +57,7 @@ export const TiendaContainer = ({tiendaId}) => {
                             showConfirmButton: false,
                             timer: 2500
                         });
+                        getAbuso(idUsuario);
                     }
                 })
             }else{
@@ -70,11 +71,12 @@ export const TiendaContainer = ({tiendaId}) => {
                             showConfirmButton: false,
                             timer: 2500
                         });
+                        getAbuso(idUsuario);
                     }
                 })
             }
         })
-        getAbuso();
+        
     }
 
     const handleSuscripcion = (e)=>{
@@ -124,10 +126,11 @@ export const TiendaContainer = ({tiendaId}) => {
                 if(usuarioLogeado.nombre_usuario){
                     setIdUsuario(usuarioLogeado.id_comprador);
                     getSuscripcion(usuarioLogeado.id_comprador);
+                    getAbuso(usuarioLogeado.id_comprador);
                 }
             }
         }
-        getAbuso();
+        
     }, [])
 
 
